@@ -77,9 +77,11 @@ def transcribe(audio_path: Path) -> str:
         Full transcript as a plain string.
     """
     whisper_cpp_path = os.getenv("WHISPER_CPP_PATH", "")
-    if whisper_cpp_path and Path(whisper_cpp_path).is_file():
-        logger.info("Using whisper.cpp backend at '%s'", whisper_cpp_path)
-        return _transcribe_with_whisper_cpp(audio_path)
+    if whisper_cpp_path:
+        whisper_cpp = Path(whisper_cpp_path)
+        if whisper_cpp.is_file() and os.access(whisper_cpp, os.X_OK):
+            logger.info("Using whisper.cpp backend at '%s'", whisper_cpp_path)
+            return _transcribe_with_whisper_cpp(audio_path)
 
     logger.info("Using openai-whisper Python backend")
     return _transcribe_with_python_whisper(audio_path)

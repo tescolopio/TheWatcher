@@ -132,8 +132,8 @@ async def watch(interaction: discord.Interaction) -> None:
         )
         return
 
-    member = interaction.guild.get_member(interaction.user.id)
-    if member is None or member.voice is None or member.voice.channel is None:
+    member = interaction.user
+    if not isinstance(member, discord.Member) or member.voice is None or member.voice.channel is None:
         await interaction.response.send_message(
             "You must be in a voice channel to start recording.", ephemeral=True
         )

@@ -6,7 +6,7 @@ structured Markdown summary that lands directly in your Obsidian vault—no clou
 services, no subscriptions, no data leaves your machine.
 
 ```
-Voice channel → discord.py recording → Whisper (local) → Ollama (local) → Obsidian vault
+Voice channel → py-cord PCMSink recording → Whisper (local) → Ollama (local) → Obsidian vault
 ```
 
 ---
@@ -130,9 +130,9 @@ pytest
 
 ## How it works
 
-1. `/watch` → bot joins your voice channel and starts a `discord.py` WaveSink
-   recording session, capturing every speaker's audio separately.
-2. `/unwatch` → recording stops; all per-user WAV tracks are mixed into a single
+1. `/watch` → bot joins your voice channel and starts a `discord.py` PCMSink
+   recording session, capturing every speaker's audio separately as PCM.
+2. `/unwatch` → recording stops; all per-speaker PCM tracks are mixed into a single
    stereo WAV file saved to `RECORDINGS_DIR`.
 3. The WAV file is passed to Whisper (whisper.cpp subprocess or Python package)
    which returns a plain-text transcript.

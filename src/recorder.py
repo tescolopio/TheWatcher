@@ -1,4 +1,4 @@
-"""Audio recording via discord.py voice recording API.
+"""Audio recording via Discord voice recording sinks (py-cord PCMSink).
 
 Records per-user raw PCM audio from a Discord voice channel using PCMSink,
 then merges all user tracks into a single stereo WAV file saved to disk.
