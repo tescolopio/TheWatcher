@@ -4,7 +4,7 @@ import io
 import struct
 import wave
 from pathlib import Path
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 
 import pytest
 
@@ -141,4 +141,111 @@ def test_get_recordings_dir_creates_dir(tmp_path, monkeypatch):
     assert not new_dir.exists()
     result = _get_recordings_dir()
     assert result == new_dir
+    assert new_dir.is_dir()
+
+
+# ── merge_audio_data – preprocessing flags ────────────────────────────────────
+
+
+def test_merge_passes_trim_silence_flag_to_preprocess():
+    """trim_silence=True is forwarded to preprocess_track for each user track."""
+    samples = [100, -100, 200, -200]
+    audio_data = _make_audio_data([samples])
+
+    with patch("src.recorder.preprocess_track", wraps=lambda raw, **kw: raw) as mock_pre:
+        merge_audio_data(audio_data, trim_silence=True)
+
+    call_kwargs = mock_pre.call_args[1]
+    assert call_kwargs.get("trim") is True
+
+
+def test_merge_passes_normalize_flag_to_preprocess():
+    """normalize=True is forwarded to preprocess_track for each user track."""
+    samples = [100, -100, 200, -200]
+    audio_data = _make_audio_data([samples])
+
+    with patch("src.recorder.preprocess_track", wraps=lambda raw, **kw: raw) as mock_pre:
+        merge_audio_data(audio_data, normalize=True)
+
+    call_kwargs = mock_pre.call_args[1]
+    assert call_kwargs.get("normalize") is True
+
+
+def test_merge_default_flags_passes_false():
+    """By default trim_silence=False and normalize=False are passed to preprocess_track."""
+    samples = [100, -100, 200, -200]
+    audio_data = _make_audio_data([samples])
+
+    with patch("src.recorder.preprocess_track", wraps=lambda raw, **kw: raw) as mock_pre:
+        merge_audio_data(audio_data)
+
+    call_kwargs = mock_pre.call_args[1]
+    assert call_kwargs.get("trim") is False
+    assert call_kwargs.get("normalize") is False
+
+
+# ── extract_per_speaker_audio ─────────────────────────────────────────────────
+
+from src.recorder import extract_per_speaker_audio  # noqa: E402
+
+
+def test_extract_per_speaker_audio_creates_wav_files(tmp_path, monkeypatch):
+    """Each non-empty speaker track is written as a separate WAV file."""
+    monkeypatch.setenv("RECORDINGS_DIR", str(tmp_path))
+
+    samples_a = [100, -100, 200, -200]
+    samples_b = [50, -50, 150, -150]
+
+    sink = MagicMock()
+    sink.audio_data = _make_audio_data([samples_a, samples_b])
+
+    result = extract_per_speaker_audio(sink, output_dir=tmp_path)
+
+    assert len(result) == 2
+    for uid_str, wav_path in result.items():
+        assert wav_path.exists()
+        assert wav_path.suffix == ".wav"
+        assert f"speaker_{uid_str}" in wav_path.name
+
+
+def test_extract_per_speaker_audio_skips_empty_tracks(tmp_path):
+    """Tracks with no audio data are not written and are absent from the result."""
+    empty_audio = MagicMock()
+    empty_audio.file = io.BytesIO(b"")  # no data
+
+    loud_audio = MagicMock()
+    loud_audio.file = io.BytesIO(_make_raw_pcm([100, -100, 200, -200]))
+
+    sink = MagicMock()
+    sink.audio_data = {0: empty_audio, 1: loud_audio}
+
+    result = extract_per_speaker_audio(sink, output_dir=tmp_path)
+
+    assert "0" not in result
+    assert "1" in result
+
+
+def test_extract_per_speaker_audio_returns_valid_wavs(tmp_path):
+    """Written files are valid WAV containers."""
+    samples = [100, -100, 200, -200]
+    sink = MagicMock()
+    sink.audio_data = _make_audio_data([samples])
+
+    result = extract_per_speaker_audio(sink, output_dir=tmp_path)
+
+    for wav_path in result.values():
+        with wave.open(str(wav_path)) as wf:
+            assert wf.getnframes() > 0
+
+
+def test_extract_per_speaker_audio_creates_output_dir(tmp_path):
+    """output_dir is created if it does not already exist."""
+    new_dir = tmp_path / "speakers"
+    assert not new_dir.exists()
+
+    sink = MagicMock()
+    sink.audio_data = _make_audio_data([[100, -100]])
+
+    extract_per_speaker_audio(sink, output_dir=new_dir)
+
     assert new_dir.is_dir()

@@ -5,6 +5,13 @@ then merges all user tracks into a single stereo WAV file saved to disk.
 
 Discord sends 48 kHz, 16-bit, stereo PCM; those constants are used to write
 the final WAV container.
+
+v0.6 additions:
+  ``finish_recording`` accepts optional *trim_silence* and *normalize* flags
+  that delegate to :mod:`src.audio` pre-processing helpers.
+
+  ``extract_per_speaker_audio`` saves each speaker's audio to a separate WAV
+  file (used for speaker-attributed transcription in v0.5+).
 """
 
 import io
@@ -16,6 +23,8 @@ from pathlib import Path
 from typing import Any
 
 from discord.sinks import PCMSink
+
+from src.audio import preprocess_track, wrap_pcm_as_wav
 
 # Discord Opus decoder constants (16-bit stereo @ 48 kHz)
 _SAMPLE_RATE = 48_000
@@ -34,7 +43,11 @@ class RecordingSink(PCMSink):
     """PCMSink subclass used as the recording sink for TheWatcher sessions."""
 
 
-def merge_audio_data(audio_data: dict[Any, Any]) -> bytes:
+def merge_audio_data(
+    audio_data: dict[Any, Any],
+    trim_silence: bool = False,
+    normalize: bool = False,
+) -> bytes:
     """Mix per-user raw PCM audio into a single stereo WAV file.
 
     Each value in *audio_data* has a ``file`` attribute (``BytesIO``) containing
@@ -44,7 +57,9 @@ def merge_audio_data(audio_data: dict[Any, Any]) -> bytes:
     Mixed samples are clamped to the 16-bit signed range (−32768 … 32767).
 
     Args:
-        audio_data: Mapping of user_id -> AudioData as produced by PCMSink.
+        audio_data:    Mapping of user_id -> AudioData as produced by PCMSink.
+        trim_silence:  Apply silence trimming to each track before mixing.
+        normalize:     Apply RMS normalisation to each track before mixing.
 
     Returns:
         Raw bytes of a merged stereo WAV file.
@@ -58,7 +73,8 @@ def merge_audio_data(audio_data: dict[Any, Any]) -> bytes:
         audio.file.seek(0)
         raw = audio.file.read()
         if raw:
-            pcm_tracks.append(raw)
+            processed = preprocess_track(raw, trim=trim_silence, normalize=normalize)
+            pcm_tracks.append(processed)
 
     if not pcm_tracks:
         raise ValueError("No audio data was recorded.")
@@ -90,11 +106,22 @@ def merge_audio_data(audio_data: dict[Any, Any]) -> bytes:
     return output.getvalue()
 
 
-def finish_recording(sink: RecordingSink) -> Path:
+def finish_recording(
+    sink: RecordingSink,
+    trim_silence: bool = False,
+    normalize: bool = False,
+) -> Path:
     """Save the merged recording to a WAV file on disk and return its path.
 
+    Per-user tracks are optionally pre-processed (silence-trimmed and/or
+    RMS-normalised) before mixing.
+
     Args:
-        sink: A RecordingSink that has already been stopped by the VoiceClient.
+        sink:          A RecordingSink that has already been stopped.
+        trim_silence:  If True, strip leading/trailing silence from each track
+                       before mixing.  Controlled by ``SILENCE_THRESHOLD_DB``.
+        normalize:     If True, RMS-normalise each track before mixing so that
+                       quiet speakers are not drowned out by loud ones.
 
     Returns:
         Path to the saved WAV file.
@@ -103,7 +130,45 @@ def finish_recording(sink: RecordingSink) -> Path:
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     output_path = recordings_dir / f"session_{timestamp}.wav"
 
-    wav_bytes = merge_audio_data(sink.audio_data)
+    wav_bytes = merge_audio_data(
+        sink.audio_data,
+        trim_silence=trim_silence,
+        normalize=normalize,
+    )
     output_path.write_bytes(wav_bytes)
 
     return output_path
+
+
+def extract_per_speaker_audio(
+    sink: RecordingSink,
+    output_dir: Path,
+    trim_silence: bool = False,
+    normalize: bool = False,
+) -> dict[str, Path]:
+    """Save each speaker's audio as an individual WAV file.
+
+    Returns a mapping of ``str(user_id) -> Path`` for non-empty tracks only.
+    Used for speaker-attributed transcription (v0.5+).
+
+    Args:
+        sink:          A stopped RecordingSink.
+        output_dir:    Directory in which to save per-speaker WAV files.
+        trim_silence:  Apply silence trimming to each track.
+        normalize:     Apply RMS normalisation to each track.
+
+    Returns:
+        ``{str(user_id): wav_path}`` for tracks with audio data.
+    """
+    output_dir.mkdir(parents=True, exist_ok=True)
+    paths: dict[str, Path] = {}
+    for user_id, audio_obj in sink.audio_data.items():
+        audio_obj.file.seek(0)
+        raw = audio_obj.file.read()
+        if not raw:
+            continue
+        processed = preprocess_track(raw, trim=trim_silence, normalize=normalize)
+        wav_path = output_dir / f"speaker_{user_id}.wav"
+        wav_path.write_bytes(wrap_pcm_as_wav(processed))
+        paths[str(user_id)] = wav_path
+    return paths
