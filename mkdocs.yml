@@ -1,0 +1,87 @@
+site_name: TheWatcher
+site_description: >
+  A privacy-first Discord bot for TTRPG session recording, transcription, and
+  AI-powered summarisation — all running locally on your own hardware.
+site_author: 3D Tech Solutions
+site_url: https://3d-tech-solutions.github.io/TheWatcher/
+repo_url: https://github.com/3D-Tech-Solutions/TheWatcher
+repo_name: 3D-Tech-Solutions/TheWatcher
+edit_uri: edit/main/docs/
+
+# ── Theme ──────────────────────────────────────────────────────────────────────
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: deep purple
+      accent: purple
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: deep purple
+      accent: purple
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - search.highlight
+    - search.share
+    - content.code.annotate
+    - content.code.copy
+  icon:
+    repo: fontawesome/brands/github
+
+# ── Plugins ────────────────────────────────────────────────────────────────────
+plugins:
+  - search
+
+# ── Extensions ─────────────────────────────────────────────────────────────────
+markdown_extensions:
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+
+# ── Navigation ─────────────────────────────────────────────────────────────────
+nav:
+  - Home: index.md
+  - Getting Started:
+      - Local Deployment: deployment/local.md
+  - Architecture:
+      - Overview: architecture.md
+      - Configuration: configuration.md
+      - ADRs:
+          - Overview: adr/README.md
+          - Local-Only Architecture: adr/0001-local-only-architecture.md
+          - Pycord Discord Library: adr/0002-pycord-discord-library.md
+          - Dual Whisper Backends: adr/0003-dual-whisper-backends.md
+          - Ollama for LLM: adr/0004-ollama-for-llm.md
+          - Obsidian Markdown Notes: adr/0005-obsidian-markdown-notes.md
+  - Research:
+      - Discord Voice: research/discord-voice.md
+      - Whisper Backends: research/whisper-backends.md
+      - LLM Models: research/llm-models.md
+  - Milestones:
+      - v0.2 Foundation: milestones/v0.2-foundation.md
+      - v0.3 Reliability: milestones/v0.3-reliability.md
+      - v0.4 UX & Campaigns: milestones/v0.4-ux-campaigns.md
+  - Roadmap: roadmap.md
+  - Contributing: contributing.md
