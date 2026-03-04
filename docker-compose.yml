@@ -1,0 +1,75 @@
+# docker-compose.yml – TheWatcher + Ollama local stack
+#
+# Services:
+#   thewatcher  – the Discord bot (built from Dockerfile)
+#   ollama      – local LLM server for session summarisation
+#
+# Volumes:
+#   recordings  – WAV files produced by the bot
+#   db_data     – SQLite database persistence
+#   obsidian    – bind-mount to your local Obsidian vault (configure below)
+#   ollama_data – Ollama model weights
+#
+# Quick start:
+#   1. cp .env.example .env && edit .env (add DISCORD_BOT_TOKEN)
+#   2. Set OBSIDIAN_VAULT_PATH in .env to your vault's host path
+#   3. docker compose up -d
+#   4. docker compose exec ollama ollama pull mistral
+
+version: "3.9"
+
+services:
+  # ── TheWatcher bot ──────────────────────────────────────────────────────────
+  thewatcher:
+    build:
+      context: .
+      target: runner
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      OLLAMA_BASE_URL: http://ollama:11434
+      RECORDINGS_DIR: /app/recordings
+      THEWATCHER_DB: /app/data/thewatcher.db
+      LOG_FORMAT: json
+    volumes:
+      - recordings:/app/recordings
+      - db_data:/app/data
+      # Mount the Obsidian vault from the host; path is read from .env.
+      - type: bind
+        source: ${OBSIDIAN_VAULT_PATH:-/tmp/obsidian_vault}
+        target: /vault
+    depends_on:
+      ollama:
+        condition: service_started
+    networks:
+      - internal
+
+  # ── Ollama LLM server ───────────────────────────────────────────────────────
+  ollama:
+    image: ollama/ollama:latest
+    restart: unless-stopped
+    volumes:
+      - ollama_data:/root/.ollama
+    networks:
+      - internal
+    # Expose port 11434 only on localhost; thewatcher uses the internal network.
+    ports:
+      - "127.0.0.1:11434:11434"
+    # Uncomment to enable GPU acceleration:
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - capabilities: [gpu]
+
+# ── Named volumes ────────────────────────────────────────────────────────────
+volumes:
+  recordings:
+  db_data:
+  ollama_data:
+
+# ── Networks ──────────────────────────────────────────────────────────────────
+networks:
+  internal:
+    driver: bridge
