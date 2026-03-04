@@ -1,6 +1,6 @@
 # Local Deployment Guide
 
-This guide walks through everything needed to run TheWatcher on your own machine.  For Docker deployment, see [deployment/docker.md](docker.md) *(planned for v0.8)*.
+This guide walks through everything needed to run TheWatcher on your own machine.  For Docker deployment, see [deployment/docker.md](docker.md).
 
 ---
 

@@ -18,13 +18,20 @@ _Nothing yet — see the [roadmap](docs/roadmap.md) for what's coming next._
 ### Added
 
 - **Stable release** — public API surface declared; slash-command names, env-var names, Obsidian note schema, and module public functions are now stable; breaking changes require a new major version
+- **`.github/workflows/release.yml`** — full release pipeline triggered on `v*.*.*` tags:
+  - `ci-gate` job runs lint + mypy + full test matrix (Python 3.11 & 3.12) as a mandatory gate
+  - `build` job produces sdist and wheel; verifies with `twine check`
+  - `publish-pypi` job publishes to PyPI via OIDC Trusted Publishing (no API token required)
+  - `docker` job builds `linux/amd64` + `linux/arm64` images and pushes to `ghcr.io/tescolopio/thewatcher` with semantic-version tags and OCI provenance/SBOM attestations
+  - `github-release` job creates a GitHub Release with CHANGELOG notes extracted automatically and dist assets (wheel, sdist, `SHA256SUMS.txt`) attached
+- **`.github/workflows/docs.yml`** — deploys the MkDocs Material site to GitHub Pages on every push to `main` and on every release tag; live at <https://tescolopio.github.io/TheWatcher/>
+- `[project.urls]` added to `pyproject.toml` (Homepage, Documentation, Repository, Issues, Changelog)
 - `SECURITY.md` — responsible-disclosure instructions for reporting vulnerabilities
-- `pyproject.toml` Development Status classifier updated to `4 - Beta`
 
 ### Changed
 
-- `version` bumped to `1.0.0` across `pyproject.toml`
-- All CI checks green; test coverage ≥ 80 % enforced via `pytest-cov`
+- `ci.yml` — now also triggers on `v*.*.*` tags so CI runs on every push that creates a release tag
+- `pyproject.toml` Development Status classifier: `4 - Beta`; version: `1.0.0`
 
 ---
 
@@ -44,6 +51,8 @@ _Nothing yet — see the [roadmap](docs/roadmap.md) for what's coming next._
 
 - **`Dockerfile`** — multi-stage build (`builder` stage installs Python deps; `runner` stage uses `python:3.12-slim` + `ffmpeg` + `libopus0`); non-root `watcher` user; `/app/recordings` and `/app/data` volume mount points
 - **`docker-compose.yml`** — `thewatcher` service (built from local `Dockerfile`) + `ollama` service (`ollama/ollama:latest`, port `127.0.0.1:11434`); named volumes `recordings`, `db_data`, `ollama_data`; `internal` bridge network; `${OBSIDIAN_VAULT_PATH}` bind-mount for vault
+- **`docs/deployment/docker.md`** — comprehensive Docker deployment guide covering quick-start, GHCR image usage, volume management, GPU acceleration, and troubleshooting
+- **`.github/workflows/release.yml`** — release pipeline (see v1.0 entry) publishes image to `ghcr.io/tescolopio/thewatcher` on every `v*.*.*` tag
 - Default container env vars: `RECORDINGS_DIR=/app/recordings`, `THEWATCHER_DB=/app/data/thewatcher.db`, `LOG_FORMAT=json`
 
 ---

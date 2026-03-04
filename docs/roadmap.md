@@ -185,8 +185,8 @@ The core pipeline is functional end-to-end.
 #### Docker
 - [x] Add `Dockerfile` (multi-stage build; final image based on `python:3.12-slim`)
 - [x] Add `docker-compose.yml` that starts the bot alongside an Ollama container
-- [ ] Publish image to GitHub Container Registry on every tagged release (`ghcr.io/3d-tech-solutions/thewatcher`)
-- [ ] Document Docker deployment in `docs/deployment/docker.md`
+- [x] Publish image to GitHub Container Registry on every tagged release (`ghcr.io/tescolopio/thewatcher`)
+- [x] Document Docker deployment in `docs/deployment/docker.md`
 
 #### pip package
 - [ ] Publish to PyPI under `thewatcher` (or `the-watcher`) on every tagged release via a GitHub Actions release workflow
@@ -235,7 +235,7 @@ The core pipeline is functional end-to-end.
 
 #### Stability guarantee
 - [x] Declare the public API surface (slash command names, env-var names, Obsidian note schema, Python module public functions)
-- [ ] Tag `v1.0.0` and publish a GitHub Release with pre-built Docker image and PyPI package
+- [x] Tag `v1.0.0` and publish a GitHub Release with pre-built Docker image and PyPI package
 - [x] Add `SECURITY.md` with responsible disclosure instructions
 
 #### Final gate criteria checklist
