@@ -13,6 +13,144 @@ _Nothing yet — see the [roadmap](docs/roadmap.md) for what's coming next._
 
 ---
 
+## [1.0.0] — 2026-03-08
+
+### Added
+
+- **Stable release** — public API surface declared; slash-command names, env-var names, Obsidian note schema, and module public functions are now stable; breaking changes require a new major version
+- `SECURITY.md` — responsible-disclosure instructions for reporting vulnerabilities
+- `pyproject.toml` Development Status classifier updated to `4 - Beta`
+
+### Changed
+
+- `version` bumped to `1.0.0` across `pyproject.toml`
+- All CI checks green; test coverage ≥ 80 % enforced via `pytest-cov`
+
+---
+
+## [0.9.0] — 2026-03-08
+
+### Added
+
+- **`mkdocs.yml`** — MkDocs Material documentation site with full navigation (Home, Getting Started, Architecture, ADRs, Research, Milestones, Roadmap, Contributing, Changelog)
+- Deep-purple Material theme with light / dark mode toggle; `pymdownx` extensions for admonitions and code highlighting
+- `mkdocs>=1.5.0` and `mkdocs-material>=9.0.0` added to `[project.optional-dependencies] dev` in `pyproject.toml`
+
+---
+
+## [0.8.0] — 2026-03-08
+
+### Added
+
+- **`Dockerfile`** — multi-stage build (`builder` stage installs Python deps; `runner` stage uses `python:3.12-slim` + `ffmpeg` + `libopus0`); non-root `watcher` user; `/app/recordings` and `/app/data` volume mount points
+- **`docker-compose.yml`** — `thewatcher` service (built from local `Dockerfile`) + `ollama` service (`ollama/ollama:latest`, port `127.0.0.1:11434`); named volumes `recordings`, `db_data`, `ollama_data`; `internal` bridge network; `${OBSIDIAN_VAULT_PATH}` bind-mount for vault
+- Default container env vars: `RECORDINGS_DIR=/app/recordings`, `THEWATCHER_DB=/app/data/thewatcher.db`, `LOG_FORMAT=json`
+
+---
+
+## [0.7.0] — 2026-03-08
+
+### Added
+
+- **Access control** — `ALLOWED_ROLE_IDS` env var (comma-separated Discord role IDs) restricts `/watch` and `/unwatch` to specific roles; ignored when env var is unset (all members may use the commands)
+- **Disk-space guard** — `/watch` refuses to start a recording when available disk space falls below `MIN_FREE_DISK_MB` (default 500 MB); displays a clear error embed
+- **`_has_required_role()`** helper in `bot.py` centralises role-membership check
+- **`_free_disk_mb()`** helper in `bot.py` returns available megabytes on the recordings filesystem
+- `.env.example` documenting `ALLOWED_ROLE_IDS` and `MIN_FREE_DISK_MB`
+
+### Changed
+
+- All state dictionaries (`_active_recordings`, per-guild config, campaign state) verified keyed by `guild_id`; no shared mutable state between guilds
+- `/config` command restricted to members with `manage_guild` permission
+
+---
+
+## [0.6.0] — 2026-03-08
+
+### Added
+
+- **`src/audio.py`** — pure-Python PCM audio preprocessing (no `pydub` required):
+  - `trim_silence(pcm_bytes, threshold_db, sample_width, channels)` — strips leading/trailing silence frames below the dB threshold
+  - `normalize_rms(pcm_bytes, target_db, sample_width)` — scales audio to a target RMS level
+  - `preprocess_track(pcm_bytes, *, trim, normalize, silence_threshold_db)` — orchestrates trim + normalize
+  - `wrap_pcm_as_wav(pcm_bytes, sample_rate, channels, sample_width)` — wraps raw PCM in an in-memory WAV container
+  - `save_pcm_as_wav(pcm_bytes, path, ...)` — writes WAV file to disk
+- **`/preview`** command — records a 5-second clip and sends it back to the channel as a WAV attachment for mic-check; auto-stops via `asyncio.create_task`
+- `SILENCE_THRESHOLD_DB` env var (default `−40`), `RECORDING_SAMPLE_RATE` env var (default `48000`)
+- **`tests/test_audio.py`** — 25+ unit tests for all audio helpers
+
+### Changed
+
+- `src/recorder.py` — `merge_audio_data()` and `finish_recording()` accept `trim_silence` and `normalize` boolean flags that are forwarded to `preprocess_track()` per track
+- `src/recorder.py` — new `extract_per_speaker_audio(sink, output_dir, trim_silence, normalize)` function saves individual `speaker_{user_id}.wav` files and returns a `dict[str, Path]`
+- `tests/test_recorder.py` — appended tests for preprocessing flags and `extract_per_speaker_audio`
+
+---
+
+## [0.5.0] — 2026-03-08
+
+### Added
+
+- **Character registry** — `/character set <in-game name>`, `/character list`, `/character clear` slash commands; stored per-guild-per-user in the SQLite `characters` table
+- **Per-speaker transcription** — each player's WAV track is transcribed individually; segments are labelled `[CharacterName]: "…"` (or Discord username when no character is registered); labelled transcript passed to the summariser
+- **`characters`** key in Obsidian note YAML front-matter listing all active character names
+- `_SPEAKER_PROMPT_SUFFIX` constant in `src/summarizer.py` that extends the system prompt to leverage the speaker-labelled transcript format and produce a **Party Members** section
+
+### Changed
+
+- `summarize()` accepts optional `speakers: list[str]` parameter; appends speaker suffix to system prompt when provided
+- `save_to_obsidian()` accepts optional `characters: list[str]` parameter; adds `characters` key to front-matter
+- `tests/test_summarizer.py` — appended speaker-prompt tests
+- `tests/test_obsidian.py` — appended characters-in-YAML tests
+
+---
+
+## [0.4.0] — 2026-03-08
+
+### Added
+
+- **Rich embeds** — all pipeline status messages use colour-coded `discord.Embed` objects (🔵 recording, 🟡 processing, 🟢 done, 🔴 error); single "processing" message is edited in-place rather than posting a new message per stage
+- **Campaign management** — `/campaign set <name>` and `/campaign clear` slash commands; active campaign stored per-guild in the SQLite database
+- **"Open in Obsidian" deep-link** — completion embed includes an `obsidian://open?vault=…&file=…` button
+- **Per-guild configuration** — `/config <key> <value>` (guild admin only) allows overriding `OLLAMA_MODEL`, `OBSIDIAN_NOTES_FOLDER`, `campaign`, and `silence_threshold_db` without editing `.env`
+
+### Changed
+
+- `save_to_obsidian()` accepts optional `campaign: str` parameter; stores note in a `campaign/` sub-folder of `OBSIDIAN_NOTES_FOLDER` and includes campaign in YAML front-matter
+- `_get_notes_dir()` helper creates the campaign sub-folder if needed
+- Discord "typing" indicator shown while each pipeline stage runs; removed redundant per-stage `channel.send()` calls
+- `tests/test_obsidian.py` — appended campaign-subfolder and YAML key tests
+
+---
+
+## [0.3.0] — 2026-03-08
+
+### Added
+
+- **`src/database.py`** — SQLite persistence layer (WAL mode):
+  - `SessionStatus` enum: `RECORDING`, `PROCESSING`, `DONE`, `FAILED`
+  - `init_db()` — idempotent `CREATE TABLE IF NOT EXISTS` for `sessions`, `guild_config`, `characters`
+  - Full CRUD for sessions (`create_session`, `update_session`, `get_session`, `get_guild_sessions`, `get_active_recording_sessions`)
+  - Guild key-value config store (`get_config`, `set_config`, `delete_config`, `get_all_config`)
+  - Character registry (`set_character`, `get_character`, `get_all_characters`, `delete_character`)
+- **Ollama retry** — `summarize()` retries the Ollama call up to `OLLAMA_MAX_RETRIES` times (default 3) with exponential back-off starting at `OLLAMA_RETRY_DELAY_S` (default 1.0 s)
+- **Fallback Obsidian note** — when Ollama is unreachable after all retries, `save_fallback_note()` writes the raw transcript as a Markdown note tagged `#needs-summary` with a `> [!warning]` callout
+- **`/sessions` command** — lists recent sessions for the guild with status emoji (🔴 recording, 🟡 processing, ✅ done, ❌ failed)
+- **`/status` command** — displays bot latency, Ollama connectivity, Whisper backend in use, vault path, and available disk space
+- **Structured JSON logging** — opt-in via `LOG_FORMAT=json`; every log record emits a JSON object; recording sessions attach a correlation ID to all log lines
+- **Orphaned-session recovery** — `on_ready` marks any sessions left in `RECORDING` state as `FAILED` after a bot restart
+- `THEWATCHER_DB` env var to configure the SQLite file path (default `thewatcher.db`)
+- **`tests/test_database.py`** — 32+ unit tests for all database operations
+- `tests/test_summarizer.py` — appended retry-logic tests
+
+### Changed
+
+- `src/bot.py` — `_active_recordings` type changed from `dict[int, discord.VoiceClient]` to `dict[int, tuple[discord.VoiceClient, str]]` (now stores voice client + session UUID)
+- Bot calls `init_db()` at startup
+- `_on_recording_finished` updates session status at each pipeline stage; writes fallback note on Ollama failure
+
+---
+
 ## [0.2.0] — 2026-03-04
 
 ### Added
@@ -57,6 +195,14 @@ _Nothing yet — see the [roadmap](docs/roadmap.md) for what's coming next._
 
 ---
 
-[Unreleased]: https://github.com/tescolopio/TheWatcher/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/tescolopio/TheWatcher/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/tescolopio/TheWatcher/compare/v0.9.0...v1.0.0
+[0.9.0]: https://github.com/tescolopio/TheWatcher/compare/v0.8.0...v0.9.0
+[0.8.0]: https://github.com/tescolopio/TheWatcher/compare/v0.7.0...v0.8.0
+[0.7.0]: https://github.com/tescolopio/TheWatcher/compare/v0.6.0...v0.7.0
+[0.6.0]: https://github.com/tescolopio/TheWatcher/compare/v0.5.0...v0.6.0
+[0.5.0]: https://github.com/tescolopio/TheWatcher/compare/v0.4.0...v0.5.0
+[0.4.0]: https://github.com/tescolopio/TheWatcher/compare/v0.3.0...v0.4.0
+[0.3.0]: https://github.com/tescolopio/TheWatcher/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/tescolopio/TheWatcher/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/tescolopio/TheWatcher/releases/tag/v0.1.0

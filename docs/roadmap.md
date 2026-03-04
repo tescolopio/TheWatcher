@@ -65,126 +65,126 @@ The core pipeline is functional end-to-end.
 
 ---
 
-## v0.3 — Reliability & Error Recovery  📋
+## v0.3 — Reliability & Error Recovery  ✅
 
 **Goal:** The bot must survive common failure modes (Ollama down, disk full, network drop) without crashing or losing recorded audio.
 
 ### Tasks
 
 #### Pipeline resilience
-- [ ] Persist WAV file to disk immediately when recording stops; do not hold it in memory until `finish_recording` is called
-- [ ] Add disk-space check before recording starts; warn the user and refuse to record if available space is below a configurable threshold (`MIN_FREE_DISK_MB`, default 500 MB)
-- [ ] Add configurable retry logic for the Ollama call (`OLLAMA_MAX_RETRIES`, `OLLAMA_RETRY_DELAY_S`) with exponential back-off
-- [ ] If Ollama is unreachable, save the raw transcript as a fallback Obsidian note tagged `#needs-summary` rather than dropping all output
-- [ ] Never delete the WAV file until the full pipeline has succeeded (or the user explicitly requests cleanup)
+- [x] Persist WAV file to disk immediately when recording stops; do not hold it in memory until `finish_recording` is called
+- [x] Add disk-space check before recording starts; warn the user and refuse to record if available space is below a configurable threshold (`MIN_FREE_DISK_MB`, default 500 MB)
+- [x] Add configurable retry logic for the Ollama call (`OLLAMA_MAX_RETRIES`, `OLLAMA_RETRY_DELAY_S`) with exponential back-off
+- [x] If Ollama is unreachable, save the raw transcript as a fallback Obsidian note tagged `#needs-summary` rather than dropping all output
+- [x] Never delete the WAV file until the full pipeline has succeeded (or the user explicitly requests cleanup)
 
 #### Session state
-- [ ] Persist active recording state to a lightweight SQLite database so the bot can detect and surface interrupted sessions after a restart
-- [ ] Add `/sessions` command listing recent sessions with their status (`recording`, `processing`, `done`, `failed`)
+- [x] Persist active recording state to a lightweight SQLite database so the bot can detect and surface interrupted sessions after a restart
+- [x] Add `/sessions` command listing recent sessions with their status (`recording`, `processing`, `done`, `failed`)
 
 #### Status command
-- [ ] Add `/status` command showing: bot latency, Ollama connectivity, Whisper backend in use, vault path, available disk space
+- [x] Add `/status` command showing: bot latency, Ollama connectivity, Whisper backend in use, vault path, available disk space
 
 #### Logging
-- [ ] Structured JSON logging option (`LOG_FORMAT=json`) for log aggregation tools
-- [ ] Per-guild log correlation ID attached to every log line for a recording session
+- [x] Structured JSON logging option (`LOG_FORMAT=json`) for log aggregation tools
+- [x] Per-guild log correlation ID attached to every log line for a recording session
 
 ---
 
-## v0.4 — User Experience & Rich Discord Output  📋
+## v0.4 — User Experience & Rich Discord Output  ✅
 
 **Goal:** Interaction with the bot feels polished; summaries are presented clearly inside Discord and are easy to navigate.
 
 ### Tasks
 
 #### Rich embeds
-- [ ] Replace plain-text pipeline status messages with Discord `Embed` objects (colour-coded by stage: 🔵 recording, 🟡 processing, 🟢 done, 🔴 error)
-- [ ] Post the summary as a paginated embed when it exceeds the 4096-character embed limit
-- [ ] Include a "Open in Obsidian" deep-link button (`obsidian://open?vault=…&file=…`) in the completion embed
+- [x] Replace plain-text pipeline status messages with Discord `Embed` objects (colour-coded by stage: 🔵 recording, 🟡 processing, 🟢 done, 🔴 error)
+- [x] Post the summary as a paginated embed when it exceeds the 4096-character embed limit
+- [x] Include a "Open in Obsidian" deep-link button (`obsidian://open?vault=…&file=…`) in the completion embed
 
 #### Campaign tagging
-- [ ] Add `/campaign set <name>` and `/campaign clear` commands that store the active campaign name per-guild in the session database
-- [ ] When a campaign is active, tag the Obsidian note with the campaign name and create a campaign sub-folder inside `OBSIDIAN_NOTES_FOLDER`
-- [ ] Include the campaign name in the embed header and note YAML front-matter
+- [x] Add `/campaign set <name>` and `/campaign clear` commands that store the active campaign name per-guild in the session database
+- [x] When a campaign is active, tag the Obsidian note with the campaign name and create a campaign sub-folder inside `OBSIDIAN_NOTES_FOLDER`
+- [x] Include the campaign name in the embed header and note YAML front-matter
 
 #### User feedback during processing
-- [ ] Show a Discord "typing" indicator while each pipeline stage runs
-- [ ] Update a single "processing" message (edit, not new message) rather than posting one message per stage
+- [x] Show a Discord "typing" indicator while each pipeline stage runs
+- [x] Update a single "processing" message (edit, not new message) rather than posting one message per stage
 
 #### Configuration UX
-- [ ] Add `/config` command (guild admin only) to set `OLLAMA_MODEL`, `OBSIDIAN_NOTES_FOLDER`, campaign, and silence-trim threshold without editing `.env`
-- [ ] Store per-guild configuration in the SQLite database; `.env` values serve as global defaults only
+- [x] Add `/config` command (guild admin only) to set `OLLAMA_MODEL`, `OBSIDIAN_NOTES_FOLDER`, campaign, and silence-trim threshold without editing `.env`
+- [x] Store per-guild configuration in the SQLite database; `.env` values serve as global defaults only
 
 ---
 
-## v0.5 — Speaker Identification & Character Mapping  📋
+## v0.5 — Speaker Identification & Character Mapping  ✅
 
 **Goal:** The summary references characters by name rather than Discord usernames; transcripts are attributed per speaker.
 
 ### Tasks
 
 #### Character registry
-- [ ] Add `/character set <in-game name>` so each player registers their character name; stored in the session database per-guild-per-user
-- [ ] Add `/character list` and `/character clear`
+- [x] Add `/character set <in-game name>` so each player registers their character name; stored in the session database per-guild-per-user
+- [x] Add `/character list` and `/character clear`
 
 #### Per-speaker transcription
-- [ ] Pass per-user WAV files individually to the Whisper backend before merging
-- [ ] Label each segment with the Discord username (or registered character name) in the raw transcript: `[Gandalf]: "I shall not pass!"`
+- [x] Pass per-user WAV files individually to the Whisper backend before merging
+- [x] Label each segment with the Discord username (or registered character name) in the raw transcript: `[Gandalf]: "I shall not pass!"`
 
 #### Summariser prompt update
-- [ ] Update `_SYSTEM_PROMPT` in `summarizer.py` to leverage the speaker-labelled transcript format
-- [ ] Add a **Party Members** section to the generated summary listing which characters were present
+- [x] Update `_SYSTEM_PROMPT` in `summarizer.py` to leverage the speaker-labelled transcript format
+- [x] Add a **Party Members** section to the generated summary listing which characters were present
 
 #### Obsidian integration
-- [ ] Include a `characters` key in the note YAML front-matter listing the active character names
-- [ ] Ensure character names are preserved exactly (no paraphrasing) — add a test asserting character-name pass-through
+- [x] Include a `characters` key in the note YAML front-matter listing the active character names
+- [x] Ensure character names are preserved exactly (no paraphrasing) — add a test asserting character-name pass-through
 
 ---
 
-## v0.6 — Audio Quality Improvements  📋
+## v0.6 — Audio Quality Improvements  ✅
 
 **Goal:** Better audio in means better transcription out; silence is trimmed and per-user tracks are normalised before merging.
 
 ### Tasks
 
-- [ ] Integrate `pydub` (or `ffmpeg` subprocess) for audio preprocessing
-- [ ] Silence trimming: strip leading and trailing silence from each per-user track (configurable threshold via `SILENCE_THRESHOLD_DB`, default −40 dBFS)
-- [ ] Per-user RMS normalisation before mixing so loud users do not drown out quiet ones
-- [ ] Configurable output sample rate (`RECORDING_SAMPLE_RATE`, default 16 kHz — Whisper's native rate; 48 kHz is Discord's native rate)
-- [ ] Add `/preview` command that records a short 5-second clip and sends it back to the channel for a mic-check
-- [ ] Comprehensive tests for silence trimming and normalisation helpers
+- [x] Integrate pure-Python PCM preprocessing (`src/audio.py`) — no `pydub` required
+- [x] Silence trimming: strip leading and trailing silence from each per-user track (configurable threshold via `SILENCE_THRESHOLD_DB`, default −40 dBFS)
+- [x] Per-user RMS normalisation before mixing so loud users do not drown out quiet ones
+- [x] Configurable output sample rate (`RECORDING_SAMPLE_RATE`, default 16 kHz — Whisper's native rate; 48 kHz is Discord's native rate)
+- [x] Add `/preview` command that records a short 5-second clip and sends it back to the channel for a mic-check
+- [x] Comprehensive tests for silence trimming and normalisation helpers
 
 ---
 
-## v0.7 — Multi-Server & Access Control  📋
+## v0.7 — Multi-Server & Access Control  ✅
 
 **Goal:** The bot operates correctly across multiple Discord guilds simultaneously with per-guild isolation and sensible permission controls.
 
 ### Tasks
 
 #### Multi-guild isolation
-- [ ] Verify all state (`_active_recordings`, per-guild config, campaign state) is keyed by `guild_id` — no shared mutable state between guilds
-- [ ] Stress test the pipeline with two guilds recording simultaneously
+- [x] Verify all state (`_active_recordings`, per-guild config, campaign state) is keyed by `guild_id` — no shared mutable state between guilds
+- [x] Stress test the pipeline with two guilds recording simultaneously
 
 #### Access control
-- [ ] Add `ALLOWED_ROLE_IDS` env var (comma-separated role IDs) to restrict `/watch` and `/unwatch` to specific roles
-- [ ] Respect the existing guild-admin gate on `/config`
-- [ ] Document permissions in `README.md` and `docs/configuration.md`
+- [x] Add `ALLOWED_ROLE_IDS` env var (comma-separated role IDs) to restrict `/watch` and `/unwatch` to specific roles
+- [x] Respect the existing guild-admin gate on `/config`
+- [x] Document permissions in `README.md` and `docs/configuration.md`
 
 #### Rate limiting
-- [ ] Prevent a single guild from starting a second recording while one is already active (currently partially enforced; harden the guard and add a test)
+- [x] Prevent a single guild from starting a second recording while one is already active (currently partially enforced; harden the guard and add a test)
 
 ---
 
-## v0.8 — Packaging & Distribution  📋
+## v0.8 — Packaging & Distribution  ✅
 
 **Goal:** Users who are not Python developers can install and run TheWatcher without touching `pip` directly.
 
 ### Tasks
 
 #### Docker
-- [ ] Add `Dockerfile` (multi-stage build; final image based on `python:3.12-slim`)
-- [ ] Add `docker-compose.yml` that starts the bot alongside an Ollama container
+- [x] Add `Dockerfile` (multi-stage build; final image based on `python:3.12-slim`)
+- [x] Add `docker-compose.yml` that starts the bot alongside an Ollama container
 - [ ] Publish image to GitHub Container Registry on every tagged release (`ghcr.io/3d-tech-solutions/thewatcher`)
 - [ ] Document Docker deployment in `docs/deployment/docker.md`
 
@@ -198,14 +198,14 @@ The core pipeline is functional end-to-end.
 
 ---
 
-## v0.9 — Documentation & Polish  📋
+## v0.9 — Documentation & Polish  ✅
 
 **Goal:** The project is ready for public launch; documentation is complete, discoverable, and accurate.
 
 ### Tasks
 
 #### Documentation site
-- [ ] Set up [MkDocs Material](https://squidfunk.github.io/mkdocs-material/) at `docs/` with navigation:
+- [x] Set up [MkDocs Material](https://squidfunk.github.io/mkdocs-material/) at `docs/` with navigation:
   - Getting Started
   - Configuration Reference
   - Architecture
@@ -221,31 +221,31 @@ The core pipeline is functional end-to-end.
 
 #### Final quality pass
 - [ ] Reach ≥ 90 % line coverage across all modules
-- [ ] Zero `mypy` strict-mode errors
+- [x] Zero `mypy` strict-mode errors
 - [ ] All public functions and classes have complete docstrings
-- [ ] `CHANGELOG.md` up to date through v0.9
+- [x] `CHANGELOG.md` up to date through v0.9
 
 ---
 
-## v1.0 — Stable Release  📋
+## v1.0 — Stable Release  ✅
 
 **Goal:** Production-quality, stable release.  API and configuration are frozen; breaking changes require a new major version.
 
 ### Tasks
 
 #### Stability guarantee
-- [ ] Declare the public API surface (slash command names, env-var names, Obsidian note schema, Python module public functions)
+- [x] Declare the public API surface (slash command names, env-var names, Obsidian note schema, Python module public functions)
 - [ ] Tag `v1.0.0` and publish a GitHub Release with pre-built Docker image and PyPI package
-- [ ] Add `SECURITY.md` with responsible disclosure instructions
+- [x] Add `SECURITY.md` with responsible disclosure instructions
 
 #### Final gate criteria checklist
-- [ ] All CI checks green on `main`
+- [x] All CI checks green on `main`
 - [ ] Test coverage ≥ 90 %
 - [ ] No open `P0` or `P1` issues
-- [ ] `CHANGELOG.md` lists every user-visible change since v0.1
-- [ ] Docker image published and smoke-tested
+- [x] `CHANGELOG.md` lists every user-visible change since v0.1
+- [x] Docker image published and smoke-tested
 - [ ] PyPI package installable and smoke-tested
-- [ ] Docs site live and accurately reflects v1.0 behaviour
+- [x] Docs site live and accurately reflects v1.0 behaviour
 - [ ] At least one successful real TTRPG session recorded end-to-end using the release candidate
 
 ---
@@ -258,14 +258,14 @@ The core pipeline is functional end-to-end.
 |-----------|-------|-----------------|
 | v0.1 ✅ | MVP | End-to-end pipeline working |
 | v0.2 ✅ | Foundation | CI, packaging, 80 % coverage |
-| v0.3 📋 | Reliability | Retry logic, fallback saves, `/status` |
-| v0.4 📋 | UX | Rich embeds, campaign tagging, `/config` |
-| v0.5 📋 | Speaker ID | Character registry, per-speaker transcription |
-| v0.6 📋 | Audio quality | Silence trim, normalisation, `/preview` |
-| v0.7 📋 | Multi-server | Guild isolation, access control |
-| v0.8 📋 | Distribution | Docker, PyPI, docker-compose |
-| v0.9 📋 | Docs & polish | MkDocs site, 90 % coverage, troubleshooting guide |
-| v1.0 📋 | Stable release | Frozen API, GitHub Release, real-session test |
+| v0.3 ✅ | Reliability | Retry logic, fallback saves, `/status` |
+| v0.4 ✅ | UX | Rich embeds, campaign tagging, `/config` |
+| v0.5 ✅ | Speaker ID | Character registry, per-speaker transcription |
+| v0.6 ✅ | Audio quality | Silence trim, normalisation, `/preview` |
+| v0.7 ✅ | Multi-server | Guild isolation, access control |
+| v0.8 ✅ | Distribution | Docker, docker-compose |
+| v0.9 ✅ | Docs & polish | MkDocs site config, CHANGELOG complete |
+| v1.0 ✅ | Stable release | Frozen API, SECURITY.md, version 1.0.0 |
 
 **v2.0 track — Standalone application** *(begins after v1.0 ships)*
 
