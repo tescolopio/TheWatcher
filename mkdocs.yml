@@ -3,9 +3,9 @@ site_description: >
   A privacy-first Discord bot for TTRPG session recording, transcription, and
   AI-powered summarisation — all running locally on your own hardware.
 site_author: 3D Tech Solutions
-site_url: https://tescolopio.github.io/TheWatcher/
-repo_url: https://github.com/tescolopio/TheWatcher
-repo_name: tescolopio/TheWatcher
+site_url: https://tescolopio.github.io/rpgwatcher/
+repo_url: https://github.com/tescolopio/rpgwatcher
+repo_name: tescolopio/rpgwatcher
 edit_uri: edit/main/docs/
 
 # ── Theme ──────────────────────────────────────────────────────────────────────

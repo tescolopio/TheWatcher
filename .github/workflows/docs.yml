@@ -3,7 +3,7 @@
 # Builds the MkDocs Material site and deploys it to the gh-pages branch
 # on every push to main and on every release tag.
 #
-# Live URL: https://tescolopio.github.io/TheWatcher/
+# Live URL: https://tescolopio.github.io/rpgwatcher/
 #
 # One-time setup required in the repository settings:
 #   Settings → Pages → Source: Deploy from a branch → Branch: gh-pages / root

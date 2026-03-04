@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 # ── Project metadata (PEP 621) ────────────────────────────────────────────────
 
 [project]
-name = "thewatcher"
+name = "rpgwatcher"
 version = "1.0.0"
 description = "Privacy-first Discord bot that records, transcribes, and summarises TTRPG sessions"
 readme = "README.md"
@@ -33,14 +33,14 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/tescolopio/TheWatcher"
-Documentation = "https://tescolopio.github.io/TheWatcher/"
-Repository = "https://github.com/tescolopio/TheWatcher"
-Issues = "https://github.com/tescolopio/TheWatcher/issues"
-Changelog = "https://github.com/tescolopio/TheWatcher/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/tescolopio/rpgwatcher"
+Documentation = "https://tescolopio.github.io/rpgwatcher/"
+Repository = "https://github.com/tescolopio/rpgwatcher"
+Issues = "https://github.com/tescolopio/rpgwatcher/issues"
+Changelog = "https://github.com/tescolopio/rpgwatcher/blob/main/CHANGELOG.md"
 
 [project.scripts]
-thewatcher = "src.bot:main"
+rpgwatcher = "src.bot:main"
 
 [project.optional-dependencies]
 dev = [

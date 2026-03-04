@@ -22,9 +22,9 @@ _Nothing yet — see the [roadmap](docs/roadmap.md) for what's coming next._
   - `ci-gate` job runs lint + mypy + full test matrix (Python 3.11 & 3.12) as a mandatory gate
   - `build` job produces sdist and wheel; verifies with `twine check`
   - `publish-pypi` job publishes to PyPI via OIDC Trusted Publishing (no API token required)
-  - `docker` job builds `linux/amd64` + `linux/arm64` images and pushes to `ghcr.io/tescolopio/thewatcher` with semantic-version tags and OCI provenance/SBOM attestations
+  - `docker` job builds `linux/amd64` + `linux/arm64` images and pushes to `ghcr.io/tescolopio/rpgwatcher` with semantic-version tags and OCI provenance/SBOM attestations
   - `github-release` job creates a GitHub Release with CHANGELOG notes extracted automatically and dist assets (wheel, sdist, `SHA256SUMS.txt`) attached
-- **`.github/workflows/docs.yml`** — deploys the MkDocs Material site to GitHub Pages on every push to `main` and on every release tag; live at <https://tescolopio.github.io/TheWatcher/>
+- **`.github/workflows/docs.yml`** — deploys the MkDocs Material site to GitHub Pages on every push to `main` and on every release tag; live at <https://tescolopio.github.io/rpgwatcher/>
 - `[project.urls]` added to `pyproject.toml` (Homepage, Documentation, Repository, Issues, Changelog)
 - `SECURITY.md` — responsible-disclosure instructions for reporting vulnerabilities
 
@@ -52,7 +52,7 @@ _Nothing yet — see the [roadmap](docs/roadmap.md) for what's coming next._
 - **`Dockerfile`** — multi-stage build (`builder` stage installs Python deps; `runner` stage uses `python:3.12-slim` + `ffmpeg` + `libopus0`); non-root `watcher` user; `/app/recordings` and `/app/data` volume mount points
 - **`docker-compose.yml`** — `thewatcher` service (built from local `Dockerfile`) + `ollama` service (`ollama/ollama:latest`, port `127.0.0.1:11434`); named volumes `recordings`, `db_data`, `ollama_data`; `internal` bridge network; `${OBSIDIAN_VAULT_PATH}` bind-mount for vault
 - **`docs/deployment/docker.md`** — comprehensive Docker deployment guide covering quick-start, GHCR image usage, volume management, GPU acceleration, and troubleshooting
-- **`.github/workflows/release.yml`** — release pipeline (see v1.0 entry) publishes image to `ghcr.io/tescolopio/thewatcher` on every `v*.*.*` tag
+- **`.github/workflows/release.yml`** — release pipeline (see v1.0 entry) publishes image to `ghcr.io/tescolopio/rpgwatcher` on every `v*.*.*` tag
 - Default container env vars: `RECORDINGS_DIR=/app/recordings`, `THEWATCHER_DB=/app/data/thewatcher.db`, `LOG_FORMAT=json`
 
 ---
@@ -204,14 +204,14 @@ _Nothing yet — see the [roadmap](docs/roadmap.md) for what's coming next._
 
 ---
 
-[Unreleased]: https://github.com/tescolopio/TheWatcher/compare/v1.0.0...HEAD
-[1.0.0]: https://github.com/tescolopio/TheWatcher/compare/v0.9.0...v1.0.0
-[0.9.0]: https://github.com/tescolopio/TheWatcher/compare/v0.8.0...v0.9.0
-[0.8.0]: https://github.com/tescolopio/TheWatcher/compare/v0.7.0...v0.8.0
-[0.7.0]: https://github.com/tescolopio/TheWatcher/compare/v0.6.0...v0.7.0
-[0.6.0]: https://github.com/tescolopio/TheWatcher/compare/v0.5.0...v0.6.0
-[0.5.0]: https://github.com/tescolopio/TheWatcher/compare/v0.4.0...v0.5.0
-[0.4.0]: https://github.com/tescolopio/TheWatcher/compare/v0.3.0...v0.4.0
-[0.3.0]: https://github.com/tescolopio/TheWatcher/compare/v0.2.0...v0.3.0
-[0.2.0]: https://github.com/tescolopio/TheWatcher/compare/v0.1.0...v0.2.0
-[0.1.0]: https://github.com/tescolopio/TheWatcher/releases/tag/v0.1.0
+[Unreleased]: https://github.com/tescolopio/rpgwatcher/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/tescolopio/rpgwatcher/compare/v0.9.0...v1.0.0
+[0.9.0]: https://github.com/tescolopio/rpgwatcher/compare/v0.8.0...v0.9.0
+[0.8.0]: https://github.com/tescolopio/rpgwatcher/compare/v0.7.0...v0.8.0
+[0.7.0]: https://github.com/tescolopio/rpgwatcher/compare/v0.6.0...v0.7.0
+[0.6.0]: https://github.com/tescolopio/rpgwatcher/compare/v0.5.0...v0.6.0
+[0.5.0]: https://github.com/tescolopio/rpgwatcher/compare/v0.4.0...v0.5.0
+[0.4.0]: https://github.com/tescolopio/rpgwatcher/compare/v0.3.0...v0.4.0
+[0.3.0]: https://github.com/tescolopio/rpgwatcher/compare/v0.2.0...v0.3.0
+[0.2.0]: https://github.com/tescolopio/rpgwatcher/compare/v0.1.0...v0.2.0
+[0.1.0]: https://github.com/tescolopio/rpgwatcher/releases/tag/v0.1.0

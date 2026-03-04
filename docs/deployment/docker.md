@@ -21,8 +21,8 @@ This guide covers running TheWatcher using Docker and `docker compose`.  Everyth
 ### 1. Clone and configure
 
 ```bash
-git clone https://github.com/tescolopio/TheWatcher.git
-cd TheWatcher
+git clone https://github.com/tescolopio/rpgwatcher.git
+cd rpgwatcher
 cp .env.example .env
 ```
 
@@ -74,10 +74,10 @@ Instead of building locally, you can pull the image published to the GitHub Cont
 
 ```bash
 # Pull a specific version
-docker pull ghcr.io/tescolopio/thewatcher:1.0.0
+docker pull ghcr.io/tescolopio/rpgwatcher:1.0.0
 
 # Or always-latest stable
-docker pull ghcr.io/tescolopio/thewatcher:latest
+docker pull ghcr.io/tescolopio/rpgwatcher:latest
 ```
 
 To use the pre-built image in `docker-compose.yml`, replace the `build:` block with `image:`:
@@ -85,7 +85,7 @@ To use the pre-built image in `docker-compose.yml`, replace the `build:` block w
 ```yaml
 services:
   thewatcher:
-    image: ghcr.io/tescolopio/thewatcher:latest
+    image: ghcr.io/tescolopio/rpgwatcher:latest
     # remove the build: block
 ```
 

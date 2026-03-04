@@ -1,6 +1,6 @@
 # TheWatcher
 
-![CI](https://github.com/tescolopio/TheWatcher/actions/workflows/ci.yml/badge.svg)
+![CI](https://github.com/tescolopio/rpgwatcher/actions/workflows/ci.yml/badge.svg)
 
 An open-source, **privacy-first** Discord bot that records your tabletop RPG voice
 sessions, transcribes them **entirely on your own hardware**, and generates a
@@ -41,8 +41,8 @@ Voice channel → py-cord PCMSink recording → Whisper (local) → Ollama (loca
 ### 1 — Clone & install
 
 ```bash
-git clone https://github.com/tescolopio/TheWatcher.git
-cd TheWatcher
+git clone https://github.com/tescolopio/rpgwatcher.git
+cd rpgwatcher
 pip install -r requirements.txt
 ```
 

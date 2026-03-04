@@ -100,21 +100,16 @@ jobs:
           retention-days: 7
 
   # ── 3. Publish to PyPI (OIDC Trusted Publishing) ───────────────────────────
-  # Prerequisites (one-time setup on pypi.org):
-  #   1. Create a project named "thewatcher" on pypi.org (first release only).
-  #   2. Publishing → Add a new pending publisher:
-  #        Owner:      tescolopio
-  #        Repository: TheWatcher
-  #        Workflow:   release.yml
-  #        Environment: pypi
-  # No API token or PYPI_TOKEN secret needed — GitHub OIDC handles auth.
+  # Prerequisites (one-time setup):
+  #   1. Add a repository secret named PYPI_API_TOKEN containing the API token
+  #      scoped to the "rpgwatcher" project (Settings → Secrets → Actions).
   publish-pypi:
     name: Publish to PyPI
     needs: build
     runs-on: ubuntu-latest
     environment:
       name: pypi
-      url: https://pypi.org/project/thewatcher/
+      url: https://pypi.org/project/rpgwatcher/
 
     steps:
       - name: Download distribution artifacts
@@ -125,7 +120,8 @@ jobs:
 
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
-        # No username/password needed — OIDC Trusted Publishing handles auth.
+        with:
+          password: ${{ secrets.PYPI_API_TOKEN }}
 
   # ── 4. Build + push Docker image to GHCR ───────────────────────────────────
   docker:
@@ -150,17 +146,17 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/${{ github.repository_owner }}/thewatcher
+          images: ghcr.io/${{ github.repository_owner }}/rpgwatcher
           tags: |
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}}
             type=raw,value=latest,enable={{is_default_branch}}
           labels: |
-            org.opencontainers.image.title=TheWatcher
+            org.opencontainers.image.title=rpgwatcher
             org.opencontainers.image.description=Privacy-first Discord bot for TTRPG session recording and summarisation
-            org.opencontainers.image.url=https://github.com/tescolopio/TheWatcher
-            org.opencontainers.image.source=https://github.com/tescolopio/TheWatcher
+            org.opencontainers.image.url=https://github.com/tescolopio/rpgwatcher
+            org.opencontainers.image.source=https://github.com/tescolopio/rpgwatcher
             org.opencontainers.image.licenses=MIT
 
       - name: Build and push image
@@ -224,7 +220,7 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          name: "TheWatcher ${{ github.ref_name }}"
+          name: "rpgwatcher ${{ github.ref_name }}"
           body: |
             ${{ steps.notes.outputs.body }}
 
@@ -234,15 +230,15 @@ jobs:
 
             **pip (recommended)**
             ```bash
-            pip install thewatcher==${{ github.ref_name }}
+            pip install rpgwatcher==${{ github.ref_name }}
             ```
 
             **Docker**
             ```bash
-            docker pull ghcr.io/${{ github.repository_owner }}/thewatcher:${{ github.ref_name }}
+            docker pull ghcr.io/${{ github.repository_owner }}/rpgwatcher:${{ github.ref_name }}
             ```
 
-            > See the [quick-start guide](https://tescolopio.github.io/TheWatcher/) for full setup instructions.
+            > See the [quick-start guide](https://tescolopio.github.io/rpgwatcher/) for full setup instructions.
           files: |
             dist/*
             dist/SHA256SUMS.txt

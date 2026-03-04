@@ -39,8 +39,8 @@ This guide walks through everything needed to run TheWatcher on your own machine
 ## Step 2 — Install TheWatcher
 
 ```bash
-git clone https://github.com/tescolopio/TheWatcher.git
-cd TheWatcher
+git clone https://github.com/tescolopio/rpgwatcher.git
+cd rpgwatcher
 python -m venv .venv
 source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
