@@ -13,6 +13,7 @@ import struct
 import wave
 from datetime import datetime
 from pathlib import Path
+from typing import Any
 
 from discord.sinks import PCMSink
 
@@ -33,7 +34,7 @@ class RecordingSink(PCMSink):
     """PCMSink subclass used as the recording sink for TheWatcher sessions."""
 
 
-def merge_audio_data(audio_data: dict) -> bytes:
+def merge_audio_data(audio_data: dict[Any, Any]) -> bytes:
     """Mix per-user raw PCM audio into a single stereo WAV file.
 
     Each value in *audio_data* has a ``file`` attribute (``BytesIO``) containing

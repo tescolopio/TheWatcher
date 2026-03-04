@@ -59,7 +59,7 @@ def _transcribe_with_python_whisper(audio_path: Path) -> str:
     logger.info("Loading Whisper model '%s'…", model_name)
     model = whisper.load_model(model_name)
     result = model.transcribe(str(audio_path))
-    return result["text"].strip()
+    return str(result["text"]).strip()
 
 
 def transcribe(audio_path: Path) -> str:

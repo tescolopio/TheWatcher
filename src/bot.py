@@ -15,6 +15,7 @@ import asyncio
 import logging
 import os
 from pathlib import Path
+from typing import Union
 
 import discord
 from discord.ext import commands
@@ -49,7 +50,9 @@ _active_recordings: dict[int, discord.VoiceClient] = {}
 
 @bot.event
 async def on_ready() -> None:
-    logger.info("Logged in as %s (ID: %s)", bot.user, bot.user.id)
+    user = bot.user
+    if user is not None:
+        logger.info("Logged in as %s (ID: %s)", user, user.id)
     try:
         synced = await bot.tree.sync()
         logger.info("Synced %d slash command(s).", len(synced))
@@ -62,10 +65,14 @@ async def on_ready() -> None:
 
 async def _on_recording_finished(
     sink: RecordingSink,
-    channel: discord.abc.Messageable,
+    channel: Union[discord.abc.Messageable, None],
     vc: discord.VoiceClient,
 ) -> None:
     """Full post-recording pipeline: save → transcribe → summarise → save to Obsidian."""
+    if channel is None:  # pragma: no cover
+        logger.error("Recording finished but channel reference is None; cannot post status.")
+        await vc.disconnect()
+        return
     await channel.send("🔄 Saving audio…")
     try:
         audio_path: Path = await asyncio.to_thread(finish_recording, sink)
@@ -140,6 +147,14 @@ async def watch(interaction: discord.Interaction) -> None:
         return
 
     voice_channel = member.voice.channel
+
+    channel = interaction.channel
+    if channel is None:
+        await interaction.response.send_message(
+            "Could not determine the text channel.", ephemeral=True
+        )
+        return
+
     try:
         vc = await voice_channel.connect()
     except discord.ClientException as exc:
@@ -149,7 +164,7 @@ async def watch(interaction: discord.Interaction) -> None:
         return
 
     sink = RecordingSink()
-    vc.start_recording(sink, _on_recording_finished, interaction.channel, vc)
+    vc.start_recording(sink, _on_recording_finished, channel, vc)
     _active_recordings[guild_id] = vc
 
     await interaction.response.send_message(
@@ -197,6 +212,10 @@ def main() -> None:
             "Copy .env.example to .env and fill in your token."
         )
     bot.run(token)
+
+
+if __name__ == "__main__":  # pragma: no cover
+    main()
 
 
 if __name__ == "__main__":

@@ -1,5 +1,7 @@
 # TheWatcher
 
+![CI](https://github.com/tescolopio/TheWatcher/actions/workflows/ci.yml/badge.svg)
+
 An open-source, **privacy-first** Discord bot that records your tabletop RPG voice
 sessions, transcribes them **entirely on your own hardware**, and generates a
 structured Markdown summary that lands directly in your Obsidian vault—no cloud

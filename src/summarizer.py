@@ -6,6 +6,7 @@ structured Markdown summary formatted for an Obsidian note.
 
 import logging
 import os
+from typing import Any
 
 import ollama
 
@@ -56,13 +57,12 @@ def summarize(transcript: str) -> str:
 
     logger.info("Summarising transcript with Ollama model '%s' at %s", model, base_url)
 
-    client = ollama.Client(host=base_url)
-    response = client.chat(
-        model=model,
-        messages=[
-            {"role": "system", "content": _SYSTEM_PROMPT},
-            {"role": "user", "content": f"Here is the session transcript:\n\n{transcript}"},
-        ],
-    )
+    messages: list[dict[str, Any]] = [
+        {"role": "system", "content": _SYSTEM_PROMPT},
+        {"role": "user", "content": f"Here is the session transcript:\n\n{transcript}"},
+    ]
 
-    return response.message.content.strip()
+    client = ollama.Client(host=base_url)
+    response = client.chat(model=model, messages=messages)
+
+    return str(response.message.content).strip()

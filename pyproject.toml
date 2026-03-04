@@ -1,0 +1,113 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+# ── Project metadata (PEP 621) ────────────────────────────────────────────────
+
+[project]
+name = "thewatcher"
+version = "0.2.0"
+description = "Privacy-first Discord bot that records, transcribes, and summarises TTRPG sessions"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.11"
+authors = [{ name = "3D Tech Solutions" }]
+keywords = ["discord", "ttrpg", "whisper", "ollama", "obsidian"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Communications :: Chat",
+    "Typing :: Typed",
+]
+
+dependencies = [
+    "py-cord[voice]>=2.3.0,<3.0.0",
+    "PyNaCl>=1.5.0,<2.0.0",
+    "ollama>=0.1.0,<1.0.0",
+    "openai-whisper>=20231117",
+    "python-dotenv>=1.0.0,<2.0.0",
+]
+
+[project.scripts]
+thewatcher = "src.bot:main"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0,<10.0.0",
+    "pytest-asyncio>=0.23.0,<2.0.0",
+    "pytest-cov>=4.0.0,<6.0.0",
+    "mypy>=1.8.0",
+    "ruff>=0.4.0",
+    "pre-commit>=3.7.0",
+    "types-setuptools",
+]
+
+# ── Package discovery ─────────────────────────────────────────────────────────
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*"]
+
+[tool.setuptools.package-data]
+"src" = ["py.typed"]
+
+# ── Ruff (linting + formatting) ───────────────────────────────────────────────
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "UP",  # pyupgrade
+    "N",   # pep8-naming
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "T20", # flake8-print
+]
+ignore = [
+    "E501", # line-length handled by formatter
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["src"]
+
+[tool.ruff.format]
+quote-style = "double"
+
+# ── Mypy (strict type checking) ───────────────────────────────────────────────
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+files = ["src"]
+# py-cord stubs are not complete; silence missing-import errors for discord
+[[tool.mypy.overrides]]
+module = ["discord.*", "whisper", "ollama", "dotenv"]
+ignore_missing_imports = true
+
+# ── Pytest ────────────────────────────────────────────────────────────────────
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+addopts = "--cov=src --cov-report=term-missing --cov-fail-under=80"
+
+[tool.coverage.run]
+source = ["src"]
+omit = ["src/__init__.py"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "if __name__ == .__main__.:",
+    "raise NotImplementedError",
+]
