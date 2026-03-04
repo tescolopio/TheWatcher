@@ -3,9 +3,9 @@ site_description: >
   A privacy-first Discord bot for TTRPG session recording, transcription, and
   AI-powered summarisation — all running locally on your own hardware.
 site_author: 3D Tech Solutions
-site_url: https://3d-tech-solutions.github.io/TheWatcher/
-repo_url: https://github.com/3D-Tech-Solutions/TheWatcher
-repo_name: 3D-Tech-Solutions/TheWatcher
+site_url: https://tescolopio.github.io/TheWatcher/
+repo_url: https://github.com/tescolopio/TheWatcher
+repo_name: tescolopio/TheWatcher
 edit_uri: edit/main/docs/
 
 # ── Theme ──────────────────────────────────────────────────────────────────────
@@ -65,6 +65,7 @@ nav:
   - Home: index.md
   - Getting Started:
       - Local Deployment: deployment/local.md
+      - Docker Deployment: deployment/docker.md
   - Architecture:
       - Overview: architecture.md
       - Configuration: configuration.md

@@ -1,0 +1,252 @@
+# ── TheWatcher — Release Pipeline ─────────────────────────────────────────────
+#
+# Triggered on semantic-version tags (e.g. v1.0.0, v1.2.3).
+#
+# Jobs (in order):
+#   1. ci-gate        – full lint + test matrix (must pass before any publish)
+#   2. build          – produce sdist + wheel; upload as Action artifact
+#   3. publish-pypi   – push to PyPI via OIDC Trusted Publishing
+#   4. docker         – build + push image to ghcr.io
+#   5. github-release – create GitHub Release with CHANGELOG notes + dist assets
+
+name: Release
+
+on:
+  push:
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+"          # e.g. v1.0.0
+      - "v[0-9]+.[0-9]+.[0-9]+-*"        # e.g. v1.0.0-rc.1
+
+permissions:
+  contents: write   # create GitHub Release + attach assets
+  packages: write   # push image to GHCR
+  id-token: write   # OIDC token for PyPI Trusted Publishing
+
+# ── 1. CI gate ────────────────────────────────────────────────────────────────
+jobs:
+  ci-gate:
+    name: CI gate (${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        python-version: ["3.11", "3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      - name: Install dev dependencies
+        run: pip install -e ".[dev]"
+
+      - name: Ruff – lint
+        if: matrix.python-version == '3.12'
+        run: ruff check src tests
+
+      - name: Ruff – format check
+        if: matrix.python-version == '3.12'
+        run: ruff format --check src tests
+
+      - name: Mypy – type check
+        if: matrix.python-version == '3.12'
+        run: mypy src
+
+      - name: Run tests with coverage
+        run: pytest --cov=src --cov-report=xml --cov-fail-under=80
+
+      - name: Upload coverage (3.12 only)
+        if: matrix.python-version == '3.12'
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage.xml
+          retention-days: 7
+
+  # ── 2. Build distribution ───────────────────────────────────────────────────
+  build:
+    name: Build sdist + wheel
+    needs: ci-gate
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install build frontend
+        run: pip install build
+
+      - name: Build sdist and wheel
+        run: python -m build
+
+      - name: Verify wheel contents (sanity check)
+        run: |
+          pip install twine
+          twine check dist/*
+
+      - name: Upload distribution artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+          retention-days: 7
+
+  # ── 3. Publish to PyPI (OIDC Trusted Publishing) ───────────────────────────
+  # Prerequisites (one-time setup on pypi.org):
+  #   1. Create a project named "thewatcher" on pypi.org (first release only).
+  #   2. Publishing → Add a new pending publisher:
+  #        Owner:      tescolopio
+  #        Repository: TheWatcher
+  #        Workflow:   release.yml
+  #        Environment: pypi
+  # No API token or PYPI_TOKEN secret needed — GitHub OIDC handles auth.
+  publish-pypi:
+    name: Publish to PyPI
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/project/thewatcher/
+
+    steps:
+      - name: Download distribution artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        # No username/password needed — OIDC Trusted Publishing handles auth.
+
+  # ── 4. Build + push Docker image to GHCR ───────────────────────────────────
+  docker:
+    name: Docker – build & push to GHCR
+    needs: ci-gate
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generate Docker image metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository_owner }}/thewatcher
+          tags: |
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+            type=raw,value=latest,enable={{is_default_branch}}
+          labels: |
+            org.opencontainers.image.title=TheWatcher
+            org.opencontainers.image.description=Privacy-first Discord bot for TTRPG session recording and summarisation
+            org.opencontainers.image.url=https://github.com/tescolopio/TheWatcher
+            org.opencontainers.image.source=https://github.com/tescolopio/TheWatcher
+            org.opencontainers.image.licenses=MIT
+
+      - name: Build and push image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          target: runner
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          platforms: linux/amd64,linux/arm64
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          provenance: true
+          sbom: true
+
+  # ── 5. Create GitHub Release ────────────────────────────────────────────────
+  github-release:
+    name: Create GitHub Release
+    needs: [publish-pypi, docker]
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download distribution artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+      - name: Extract release notes from CHANGELOG.md
+        id: notes
+        run: |
+          python - << 'EOF'
+          import re, os, pathlib, sys
+
+          ver = os.environ["REF_NAME"].lstrip("v")
+          text = pathlib.Path("CHANGELOG.md").read_text()
+
+          # Match the section for this version, stopping at the next section.
+          pattern = r"(?ms)^## \[" + re.escape(ver) + r"\][^\n]*\n(.*?)(?=\n^## \[|\Z)"
+          m = re.search(pattern, text)
+          notes = m.group(1).strip() if m else "See [CHANGELOG.md](CHANGELOG.md) for details."
+
+          delim = "RELEASE_BODY_DELIM"
+          with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+              f.write(f"body<<{delim}\n{notes}\n{delim}\n")
+
+          print(f"Extracted {len(notes)} characters of release notes for v{ver}.")
+          EOF
+        env:
+          REF_NAME: ${{ github.ref_name }}
+
+      - name: Compute checksums
+        run: |
+          cd dist
+          sha256sum * > SHA256SUMS.txt
+          cat SHA256SUMS.txt
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "TheWatcher ${{ github.ref_name }}"
+          body: |
+            ${{ steps.notes.outputs.body }}
+
+            ---
+
+            ### Installation
+
+            **pip (recommended)**
+            ```bash
+            pip install thewatcher==${{ github.ref_name }}
+            ```
+
+            **Docker**
+            ```bash
+            docker pull ghcr.io/${{ github.repository_owner }}/thewatcher:${{ github.ref_name }}
+            ```
+
+            > See the [quick-start guide](https://tescolopio.github.io/TheWatcher/) for full setup instructions.
+          files: |
+            dist/*
+            dist/SHA256SUMS.txt
+          draft: false
+          prerelease: ${{ contains(github.ref_name, '-') }}
+          generate_release_notes: false
+          make_latest: ${{ !contains(github.ref_name, '-') }}

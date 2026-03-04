@@ -1,0 +1,51 @@
+# ── TheWatcher — Docs Deployment (GitHub Pages) ────────────────────────────────
+#
+# Builds the MkDocs Material site and deploys it to the gh-pages branch
+# on every push to main and on every release tag.
+#
+# Live URL: https://tescolopio.github.io/TheWatcher/
+#
+# One-time setup required in the repository settings:
+#   Settings → Pages → Source: Deploy from a branch → Branch: gh-pages / root
+
+name: Docs
+
+on:
+  push:
+    branches: [main]
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+"
+      - "v[0-9]+.[0-9]+.[0-9]+-*"
+  # Allow manual trigger from the Actions tab.
+  workflow_dispatch:
+
+permissions:
+  contents: write   # mkdocs gh-deploy pushes to gh-pages branch
+
+jobs:
+  deploy-docs:
+    name: Build & deploy MkDocs site
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Full history so git-revision-date plugin can determine page dates.
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install docs dependencies
+        run: pip install -e ".[dev]"
+
+      - name: Configure git identity for gh-deploy
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Build and deploy to GitHub Pages
+        run: mkdocs gh-deploy --force --clean --verbose

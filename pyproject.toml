@@ -32,6 +32,13 @@ dependencies = [
     "python-dotenv>=1.0.0,<2.0.0",
 ]
 
+[project.urls]
+Homepage = "https://github.com/tescolopio/TheWatcher"
+Documentation = "https://tescolopio.github.io/TheWatcher/"
+Repository = "https://github.com/tescolopio/TheWatcher"
+Issues = "https://github.com/tescolopio/TheWatcher/issues"
+Changelog = "https://github.com/tescolopio/TheWatcher/blob/main/CHANGELOG.md"
+
 [project.scripts]
 thewatcher = "src.bot:main"
 
