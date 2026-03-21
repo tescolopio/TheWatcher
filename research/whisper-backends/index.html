@@ -1,0 +1,2980 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A privacy-first Discord bot for TTRPG session recording, transcription, and AI-powered summarisation — all running locally on your own hardware.
+">
+      
+      
+        <meta name="author" content="3D Tech Solutions">
+      
+      
+        <link rel="canonical" href="https://tescolopio.github.io/rpgwatcher/research/whisper-backends/">
+      
+      
+        <link rel="prev" href="../discord-voice/">
+      
+      
+        <link rel="next" href="../llm-models/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Whisper Backends - RPG Watcher</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="purple">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#research-whisper-transcription-backends" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="RPG Watcher" class="md-header__button md-logo" aria-label="RPG Watcher" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            RPG Watcher
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Whisper Backends
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="purple"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="deep-purple" data-md-color-accent="purple"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/tescolopio/rpgwatcher" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    tescolopio/rpgwatcher
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../deployment/local/" class="md-tabs__link">
+          
+  
+  
+  Getting Started
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../architecture/" class="md-tabs__link">
+          
+  
+  
+  Architecture
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../discord-voice/" class="md-tabs__link">
+          
+  
+  
+  Research
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../milestones/v0.2-foundation/" class="md-tabs__link">
+          
+  
+  
+  Milestones
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../roadmap/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Roadmap
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../contributing/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Contributing
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="RPG Watcher" class="md-nav__button md-logo" aria-label="RPG Watcher" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    RPG Watcher
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/tescolopio/rpgwatcher" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    tescolopio/rpgwatcher
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Getting Started
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deployment/local/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Local Deployment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deployment/docker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker Deployment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADRs
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ADRs
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adr/0001-local-only-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Local-Only Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adr/0002-pycord-discord-library/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pycord Discord Library
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adr/0003-dual-whisper-backends/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dual Whisper Backends
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adr/0004-ollama-for-llm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ollama for LLM
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adr/0005-obsidian-markdown-notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Obsidian Markdown Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Research
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../discord-voice/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Discord Voice
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Whisper Backends
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Whisper Backends
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#query-status-key" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Query Status Key
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#background-established-facts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Background (Established Facts)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#open-research-queries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Open Research Queries
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Open Research Queries">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#q1-wall-clock-time-and-peak-ram-per-backend-and-model-size-measurements-needed-for-our-hardware" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q1 — Wall-clock time and peak RAM per backend and model size 🔬 (measurements needed for our hardware)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q2-transcript-quality-on-ttrpg-style-speech" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q2 — Transcript quality on TTRPG-style speech 🔬
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q3-does-pre-resampling-to-16-khz-mono-improve-speed-or-quality-low-value-not-recommended" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q3 — Does pre-resampling to 16 kHz mono improve speed or quality? � Low value — not recommended
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q4-what-is-the-actual-stdout-format-of-whispercpp-output-txt-answered" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q4 — What is the actual stdout format of whisper.cpp --output-txt -? ✅ Answered
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q5-whispercpp-binary-name-and-model-path-resolution-answered-current-code-has-a-bug" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q5 — whisper.cpp binary name and model path resolution ✅ Answered — current code has a bug
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q6-at-what-input-length-does-openai-whisper-oom-on-8-gb-ram" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q6 — At what input length does openai-whisper OOM on 8 GB RAM? 🔬
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q7-language-auto-detection-accuracy-for-non-english-sessions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q7 — Language auto-detection accuracy for non-English sessions 🔬
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recommended-third-backend-faster-whisper" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recommended Third Backend: faster-whisper
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#chunked-recording-transcription-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chunked Recording &amp; Transcription Architecture 💭
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Chunked Recording &amp; Transcription Architecture 💭">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-this-is-the-right-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this is the right architecture
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#latency-math-with-faster-whisper-small-int8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Latency math (with faster-whisper small int8)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#implementation-design" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Implementation design
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#open-questions-for-this-design" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Open questions for this design
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#summarization-interaction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summarization interaction
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#per-speaker-transcription-character-voice-learning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Per-Speaker Transcription &amp; Character Voice Learning 💭
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Per-Speaker Transcription &amp; Character Voice Learning 💭">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-key-insight-discord-already-does-speaker-separation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The key insight: Discord already does speaker separation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-learn-over-time-concretely-means" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What "learn over time" concretely means
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phase-1-character-name-registry-per-user-transcription-v04" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 1 — Character Name Registry + Per-User Transcription (v0.4)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phase-2-per-server-vocabulary-accumulation-v04v05" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 2 — Per-Server Vocabulary Accumulation (v0.4/v0.5)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phase-3-voice-profile-enrollment-v05" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 3 — Voice Profile Enrollment (v0.5+)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#backend-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Backend Reference
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Backend Reference">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#openai-whisper-code-path" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        openai-whisper — code path
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#whispercpp-code-path" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        whisper.cpp — code path
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#building-whispercpp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Building whisper.cpp
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recommended-direction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recommended Direction
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Recommended Direction">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#q12-futo-whisper-acft-models-are-they-better-for-rpg-watcher-answered-by-design-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q12 — FUTO Whisper ACFT models: are they better for RPG Watcher? 💭 Answered by design analysis
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deferred-queries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deferred Queries
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../llm-models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LLM Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Milestones
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Milestones
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../milestones/v0.2-foundation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v0.2 Foundation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../milestones/v0.3-reliability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v0.3 Reliability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../milestones/v0.4-ux-campaigns/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v0.4 UX & Campaigns
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../roadmap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roadmap
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contributing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contributing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#query-status-key" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Query Status Key
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#background-established-facts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Background (Established Facts)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#open-research-queries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Open Research Queries
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Open Research Queries">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#q1-wall-clock-time-and-peak-ram-per-backend-and-model-size-measurements-needed-for-our-hardware" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q1 — Wall-clock time and peak RAM per backend and model size 🔬 (measurements needed for our hardware)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q2-transcript-quality-on-ttrpg-style-speech" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q2 — Transcript quality on TTRPG-style speech 🔬
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q3-does-pre-resampling-to-16-khz-mono-improve-speed-or-quality-low-value-not-recommended" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q3 — Does pre-resampling to 16 kHz mono improve speed or quality? � Low value — not recommended
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q4-what-is-the-actual-stdout-format-of-whispercpp-output-txt-answered" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q4 — What is the actual stdout format of whisper.cpp --output-txt -? ✅ Answered
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q5-whispercpp-binary-name-and-model-path-resolution-answered-current-code-has-a-bug" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q5 — whisper.cpp binary name and model path resolution ✅ Answered — current code has a bug
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q6-at-what-input-length-does-openai-whisper-oom-on-8-gb-ram" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q6 — At what input length does openai-whisper OOM on 8 GB RAM? 🔬
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q7-language-auto-detection-accuracy-for-non-english-sessions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q7 — Language auto-detection accuracy for non-English sessions 🔬
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recommended-third-backend-faster-whisper" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recommended Third Backend: faster-whisper
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#chunked-recording-transcription-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chunked Recording &amp; Transcription Architecture 💭
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Chunked Recording &amp; Transcription Architecture 💭">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-this-is-the-right-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this is the right architecture
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#latency-math-with-faster-whisper-small-int8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Latency math (with faster-whisper small int8)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#implementation-design" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Implementation design
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#open-questions-for-this-design" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Open questions for this design
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#summarization-interaction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summarization interaction
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#per-speaker-transcription-character-voice-learning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Per-Speaker Transcription &amp; Character Voice Learning 💭
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Per-Speaker Transcription &amp; Character Voice Learning 💭">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-key-insight-discord-already-does-speaker-separation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The key insight: Discord already does speaker separation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-learn-over-time-concretely-means" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What "learn over time" concretely means
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phase-1-character-name-registry-per-user-transcription-v04" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 1 — Character Name Registry + Per-User Transcription (v0.4)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phase-2-per-server-vocabulary-accumulation-v04v05" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 2 — Per-Server Vocabulary Accumulation (v0.4/v0.5)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phase-3-voice-profile-enrollment-v05" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 3 — Voice Profile Enrollment (v0.5+)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#backend-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Backend Reference
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Backend Reference">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#openai-whisper-code-path" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        openai-whisper — code path
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#whispercpp-code-path" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        whisper.cpp — code path
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#building-whispercpp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Building whisper.cpp
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recommended-direction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recommended Direction
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Recommended Direction">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#q12-futo-whisper-acft-models-are-they-better-for-rpg-watcher-answered-by-design-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q12 — FUTO Whisper ACFT models: are they better for RPG Watcher? 💭 Answered by design analysis
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deferred-queries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deferred Queries
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="research-whisper-transcription-backends">Research: Whisper Transcription Backends<a class="headerlink" href="#research-whisper-transcription-backends" title="Permanent link">&para;</a></h1>
+<p><strong>Status:</strong> 🔬 Active — Q1/Q2 need runtime measurement; Q3–Q5 answered; faster-whisper identified as better default<br />
+<strong>Informs:</strong> <a href="../../adr/0003-dual-whisper-backends/">ADR-0003</a>, <code>src/transcriber.py</code></p>
+<blockquote>
+<p>⚠️ <strong>Action needed:</strong> The model path resolution in <code>_transcribe_with_whisper_cpp</code> is fragile and will fail for most real installs.  Recommend adding a <code>WHISPER_CPP_MODEL_PATH</code> env var.  See Q5.</p>
+</blockquote>
+<hr />
+<h2 id="query-status-key">Query Status Key<a class="headerlink" href="#query-status-key" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Symbol</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>✅</td>
+<td>Answered — measured and recorded</td>
+</tr>
+<tr>
+<td>🔬</td>
+<td>Open — experiment designed but not yet run</td>
+</tr>
+<tr>
+<td>💭</td>
+<td>Hypothesis — inferred from published benchmarks or model cards; not measured by us</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="background-established-facts">Background (Established Facts)<a class="headerlink" href="#background-established-facts" title="Permanent link">&para;</a></h2>
+<p><a href="https://github.com/openai/whisper">Whisper</a> is OpenAI's speech recognition model (MIT licence).  Two local implementations are relevant to RPG Watcher:</p>
+<table>
+<thead>
+<tr>
+<th>Implementation</th>
+<th>Language</th>
+<th>GPU required?</th>
+<th>Install</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>openai-whisper</code></td>
+<td>Python / PyTorch</td>
+<td>No (faster with GPU)</td>
+<td><code>pip install openai-whisper</code></td>
+</tr>
+<tr>
+<td><code>whisper.cpp</code></td>
+<td>C++</td>
+<td>No</td>
+<td>Compile or download binary</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Model sizes</strong> (from the OpenAI Whisper paper and model cards — parameters and quantised sizes are fixed facts):</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Parameters</th>
+<th><code>.pt</code> size</th>
+<th>GGML Q5 size</th>
+<th>Published English WER</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tiny</code></td>
+<td>39 M</td>
+<td>75 MB</td>
+<td>32 MB</td>
+<td>~7.7%</td>
+</tr>
+<tr>
+<td><code>base</code></td>
+<td>74 M</td>
+<td>142 MB</td>
+<td>60 MB</td>
+<td>~5.7%</td>
+</tr>
+<tr>
+<td><code>small</code></td>
+<td>244 M</td>
+<td>466 MB</td>
+<td>190 MB</td>
+<td>~3.4%</td>
+</tr>
+<tr>
+<td><code>medium</code></td>
+<td>769 M</td>
+<td>1.5 GB</td>
+<td>515 MB</td>
+<td>~2.1%</td>
+</tr>
+<tr>
+<td><code>large-v3</code></td>
+<td>1 550 M</td>
+<td>3.1 GB</td>
+<td>1.1 GB</td>
+<td>~1.8%</td>
+</tr>
+</tbody>
+</table>
+<p>WER figures are from the <a href="https://arxiv.org/abs/2212.04356">OpenAI Whisper paper</a> on clean English speech.  TTRPG sessions (crosstalk, accents, invented vocabulary) will produce higher WER — measuring this is an open query.</p>
+<p><strong>Whisper's native input format:</strong> 16 kHz, mono, 30-second chunks.  Both backends handle resampling from Discord's 48 kHz stereo internally — whether this introduces quality loss is an open query.</p>
+<hr />
+<h2 id="open-research-queries">Open Research Queries<a class="headerlink" href="#open-research-queries" title="Permanent link">&para;</a></h2>
+<h3 id="q1-wall-clock-time-and-peak-ram-per-backend-and-model-size-measurements-needed-for-our-hardware">Q1 — Wall-clock time and peak RAM per backend and model size 🔬 (measurements needed for our hardware)<a class="headerlink" href="#q1-wall-clock-time-and-peak-ram-per-backend-and-model-size-measurements-needed-for-our-hardware" title="Permanent link">&para;</a></h3>
+<p><strong>Reference benchmark — official faster-whisper data</strong> (13-minute audio, Intel Core i7-12700K, 8 threads):</p>
+<table>
+<thead>
+<tr>
+<th>Backend</th>
+<th>Model</th>
+<th>Precision</th>
+<th>Wall-clock (13 min)</th>
+<th>RAM</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>openai-whisper</td>
+<td>small</td>
+<td>fp32</td>
+<td>6m 58s</td>
+<td>2 335 MB</td>
+<td>faster-whisper README</td>
+</tr>
+<tr>
+<td>whisper.cpp</td>
+<td>small</td>
+<td>fp32</td>
+<td>2m 05s</td>
+<td>1 049 MB</td>
+<td>faster-whisper README</td>
+</tr>
+<tr>
+<td>faster-whisper</td>
+<td>small</td>
+<td>fp32</td>
+<td>2m 37s</td>
+<td>2 257 MB</td>
+<td>faster-whisper README</td>
+</tr>
+<tr>
+<td>faster-whisper</td>
+<td>small</td>
+<td>int8</td>
+<td>1m 42s</td>
+<td>1 477 MB</td>
+<td>faster-whisper README</td>
+</tr>
+<tr>
+<td>faster-whisper (batch=8)</td>
+<td>small</td>
+<td>int8</td>
+<td>0m 51s</td>
+<td>3 608 MB</td>
+<td>faster-whisper README</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Extrapolated to 60 minutes</strong> (4.6× scale — linear approximation; actual may differ for short-segment overhead):</p>
+<table>
+<thead>
+<tr>
+<th>Backend</th>
+<th>Model</th>
+<th>Precision</th>
+<th>~60 min est.</th>
+<th>~60 min RAM</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>openai-whisper</td>
+<td>small</td>
+<td>fp32</td>
+<td>~32 min</td>
+<td>~2.3 GB</td>
+</tr>
+<tr>
+<td>whisper.cpp</td>
+<td>small</td>
+<td>fp32</td>
+<td>~9.6 min</td>
+<td>~1.0 GB</td>
+</tr>
+<tr>
+<td>faster-whisper</td>
+<td>small</td>
+<td>fp32</td>
+<td>~12 min</td>
+<td>~2.3 GB</td>
+</tr>
+<tr>
+<td>faster-whisper</td>
+<td>small</td>
+<td>int8</td>
+<td>~7.9 min</td>
+<td>~1.5 GB</td>
+</tr>
+<tr>
+<td>faster-whisper (batch=8)</td>
+<td>small</td>
+<td>int8</td>
+<td>~3.9 min</td>
+<td>~3.6 GB</td>
+</tr>
+</tbody>
+</table>
+<p><strong>whisper.cpp RAM by model size</strong> (from whisper.cpp README):</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>RAM (whisper.cpp)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>tiny</td>
+<td>~273 MB</td>
+</tr>
+<tr>
+<td>base</td>
+<td>~388 MB</td>
+</tr>
+<tr>
+<td>small</td>
+<td>~852 MB</td>
+</tr>
+<tr>
+<td>medium</td>
+<td>~2.1 GB</td>
+</tr>
+<tr>
+<td>large</td>
+<td>~3.9 GB</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Matrix still needed — measure on RPG Watcher’s actual target hardware:</strong></p>
+<p>The benchmark harness in the original Q1 spec remains valid; run it for the models/backends you plan to recommend and fill this in:</p>
+<table>
+<thead>
+<tr>
+<th>Backend</th>
+<th>Model</th>
+<th>Wall-clock (60 min input)</th>
+<th>RAM delta</th>
+<th>Hardware</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>faster-whisper</td>
+<td>small int8</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>🔬</td>
+</tr>
+<tr>
+<td>faster-whisper</td>
+<td>base int8</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>🔬</td>
+</tr>
+<tr>
+<td>whisper.cpp</td>
+<td>small</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>🔬</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="q2-transcript-quality-on-ttrpg-style-speech">Q2 — Transcript quality on TTRPG-style speech 🔬<a class="headerlink" href="#q2-transcript-quality-on-ttrpg-style-speech" title="Permanent link">&para;</a></h3>
+<p>Published WER figures are measured on clean English speech (LibriSpeech).  TTRPG sessions differ:
+- Multiple simultaneous speakers (crosstalk)
+- Invented proper nouns ("Theron Ashveil", "the Sundering Blade")
+- Theatrical accents and character voices
+- Dice rolls, laughter, side-chatter</p>
+<p><strong>Experiment:</strong> Transcribe the same 60-minute test WAV with each model.  Manually score accuracy against a hand-written reference transcript for 5-minute excerpts covering:
+1. Clean single-speaker narration
+2. 2-person back-and-forth dialogue
+3. A passage containing 4 invented proper nouns
+4. A loud background-noise segment</p>
+<p><strong>Metrics:</strong> WER per excerpt, proper noun accuracy (exact match ÷ total occurrences).</p>
+<p><strong>Decision output:</strong> Determines the recommended default model (<code>base</code> for speed vs <code>small</code> for accuracy).</p>
+<hr />
+<h3 id="q3-does-pre-resampling-to-16-khz-mono-improve-speed-or-quality-low-value-not-recommended">Q3 — Does pre-resampling to 16 kHz mono improve speed or quality? � Low value — not recommended<a class="headerlink" href="#q3-does-pre-resampling-to-16-khz-mono-improve-speed-or-quality-low-value-not-recommended" title="Permanent link">&para;</a></h3>
+<p><strong>Analysis:</strong> Both backends internally resample from 48 kHz stereo to 16 kHz mono before running the model encoder.  For <code>openai-whisper</code>, this is done via <code>ffmpeg</code> or <code>soundfile</code> on the full file before segmenting.  For <code>whisper.cpp</code>, it is done per-30-second chunk in C.</p>
+<p>Pre-resampling externally with <code>ffmpeg</code> saves the Python/C resampling cost, but that cost is already small relative to model inference time.  The official faster-whisper benchmarks show that their int8 implementation — which also handles resampling internally — achieves parity with whisper.cpp speed without pre-resampling.</p>
+<p><strong>Expected saving:</strong> ~5–10% wall-clock reduction for long sessions.  Not worth the added <code>ffmpeg</code> preprocessing step and the extra temp file I/O.</p>
+<p><strong>Decision:</strong> Do not add pre-resampling as a default step.  If users report unusually slow transcription on constrained hardware, offer it as an opt-in <code>WHISPER_PRERESAMPLE=1</code> env var.</p>
+<hr />
+<h3 id="q4-what-is-the-actual-stdout-format-of-whispercpp-output-txt-answered">Q4 — What is the actual stdout format of <code>whisper.cpp --output-txt -</code>? ✅ Answered<a class="headerlink" href="#q4-what-is-the-actual-stdout-format-of-whispercpp-output-txt-answered" title="Permanent link">&para;</a></h3>
+<p><strong>Finding:</strong> <code>whisper.cpp</code>’s <code>whisper-cli</code> behaviour with text output:</p>
+<ul>
+<li><strong>Without output flags:</strong> Outputs timestamped segments to stdout: <code>[00:00:00.000 --&gt; 00:00:11.000]   text text text</code></li>
+<li><strong><code>--output-txt filename.txt</code>:</strong> Writes plain text (no timestamps) to <code>filename.txt</code>.</li>
+<li><strong><code>--output-txt -</code>:</strong> In recent builds, <code>"-"</code> is treated as the literal filename <code>"-"</code>, writing to a file called <code>-</code> in the current directory — <strong>not to stdout</strong>.  This is a known source of confusion.</li>
+</ul>
+<p><strong>Current <code>_transcribe_with_whisper_cpp</code> code uses <code>--output-txt -</code> and reads <code>result.stdout</code>.</strong>  This means the code may be capturing timestamped text from the default console output rather than the plain-text file, and reading an empty stdout if the binary writes output to a file.</p>
+<p><strong>Action required:</strong> Replace the subprocess invocation to use <code>--no-timestamps</code> (or omit <code>-ot</code>) and capture stdout directly without <code>--output-txt</code>:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">result</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="p">[</span><span class="n">whisper_cpp_path</span><span class="p">,</span> <span class="s2">&quot;-m&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">model_file</span><span class="p">),</span> <span class="s2">&quot;-f&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">audio_path</span><span class="p">),</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>     <span class="s2">&quot;--no-timestamps&quot;</span><span class="p">],</span>   <span class="c1"># plain text to stdout</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="n">capture_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    <span class="n">text</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="n">timeout</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="p">)</span>
+</code></pre></div>
+Alternatively, write to a temp file and read it back:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">tempfile</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">(</span><span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;.txt&quot;</span><span class="p">,</span> <span class="n">delete</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="k">as</span> <span class="n">tf</span><span class="p">:</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="n">whisper_cpp_path</span><span class="p">,</span> <span class="s2">&quot;-m&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">model_file</span><span class="p">),</span> <span class="s2">&quot;-f&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">audio_path</span><span class="p">),</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>                    <span class="s2">&quot;--output-txt&quot;</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">name</span><span class="p">[:</span><span class="o">-</span><span class="mi">4</span><span class="p">]],</span> <span class="o">...</span><span class="p">)</span>  <span class="c1"># whisper-cli appends .txt</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">read_text</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+</code></pre></div></p>
+<hr />
+<h3 id="q5-whispercpp-binary-name-and-model-path-resolution-answered-current-code-has-a-bug">Q5 — whisper.cpp binary name and model path resolution ✅ Answered — current code has a bug<a class="headerlink" href="#q5-whispercpp-binary-name-and-model-path-resolution-answered-current-code-has-a-bug" title="Permanent link">&para;</a></h3>
+<p><strong>Binary name:</strong> <code>whisper-cli</code> (renamed from <code>main</code> in a 2024 release, confirmed in whisper.cpp README).  <code>WHISPER_CPP_PATH</code> should point to the binary directly: <code>WHISPER_CPP_PATH=/path/to/whisper.cpp/build/bin/whisper-cli</code>.</p>
+<p><strong>Model path bug in current code:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># src/transcriber.py, current line:</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="n">model_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">whisper_cpp_path</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">&quot;models&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;ggml-</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s2">.bin&quot;</span>
+</code></pre></div>
+<p>If <code>WHISPER_CPP_PATH=/path/to/whisper.cpp/build/bin/whisper-cli</code>, this resolves to:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>/path/to/whisper.cpp/build/bin/models/ggml-base.bin
+</code></pre></div></p>
+<p>But <code>download-ggml-model.sh</code> places models at:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>/path/to/whisper.cpp/models/ggml-base.bin   ← two levels up, not in build/bin/
+</code></pre></div></p>
+<p><strong>This path will not exist for any standard whisper.cpp install.</strong>  The binary will fail with model-not-found.</p>
+<p><strong>Fix — add a dedicated <code>WHISPER_CPP_MODEL_PATH</code> env var:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="n">whisper_cpp_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;WHISPER_CPP_PATH&quot;</span><span class="p">]</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="n">model</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;WHISPER_MODEL&quot;</span><span class="p">,</span> <span class="s2">&quot;base&quot;</span><span class="p">)</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="c1"># New: explicit model path, falling back to the old heuristic for now</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="n">model_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>    <span class="s2">&quot;WHISPER_CPP_MODEL_PATH&quot;</span><span class="p">,</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>    <span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">whisper_cpp_path</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">&quot;models&quot;</span><span class="p">),</span>  <span class="c1"># keep old default as fallback</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="p">)</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="n">model_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">model_dir</span><span class="p">)</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;ggml-</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s2">.bin&quot;</span>
+</code></pre></div></p>
+<p>Document in <code>docs/configuration.md</code>:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>WHISPER_CPP_PATH=/path/to/whisper.cpp/build/bin/whisper-cli
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>WHISPER_CPP_MODEL_PATH=/path/to/whisper.cpp/models   # add this
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>WHISPER_MODEL=small
+</code></pre></div></p>
+<p><strong>Spaces in path:</strong> <code>subprocess.run</code> receives a list, not a shell string, so paths with spaces work correctly with the current code.</p>
+<hr />
+<h3 id="q6-at-what-input-length-does-openai-whisper-oom-on-8-gb-ram">Q6 — At what input length does <code>openai-whisper</code> OOM on 8 GB RAM? 🔬<a class="headerlink" href="#q6-at-what-input-length-does-openai-whisper-oom-on-8-gb-ram" title="Permanent link">&para;</a></h3>
+<p>PyTorch loads the model once and segments audio internally into 30-second chunks.  However, peak RAM also includes the loaded audio waveform tensor.</p>
+<p><strong>Experiment:</strong> Transcribe WAV files of 30 / 60 / 120 / 180 minutes with <code>small</code> model on an 8 GB RAM machine (or <code>ulimit -v</code>).  Record whether OOM occurs and at what input length.</p>
+<p><strong>Decision output:</strong> Feeds the minimum hardware requirements in the README and deployment guide.</p>
+<hr />
+<h3 id="q7-language-auto-detection-accuracy-for-non-english-sessions">Q7 — Language auto-detection accuracy for non-English sessions 🔬<a class="headerlink" href="#q7-language-auto-detection-accuracy-for-non-english-sessions" title="Permanent link">&para;</a></h3>
+<p><strong>Experiment:</strong> Run both backends with no <code>--language</code> flag on:
+- 10-minute French session audio
+- 10-minute German session audio
+- 10-minute English session with a French NPC accent</p>
+<p>Record detected language metadata from <code>result["language"]</code> (openai-whisper Python API) or whisper.cpp verbose output.</p>
+<p><strong>Decision output:</strong> If auto-detection misfires → add <code>WHISPER_LANGUAGE</code> env var as a higher-priority feature (currently deferred).</p>
+<hr />
+<h2 id="recommended-third-backend-faster-whisper">Recommended Third Backend: <code>faster-whisper</code><a class="headerlink" href="#recommended-third-backend-faster-whisper" title="Permanent link">&para;</a></h2>
+<p><code>faster-whisper</code> is a CTranslate2-based reimplementation of Whisper that should replace <code>openai-whisper</code> as the Python fallback.  It uses the same model names and is a near drop-in replacement.</p>
+<p><strong>Why it is better than <code>openai-whisper</code> for RPG Watcher:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>openai-whisper</th>
+<th>faster-whisper</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Speed (small, CPU)</td>
+<td>~32 min / 60 min audio</td>
+<td>~7.9 min / 60 min audio (int8)</td>
+</tr>
+<tr>
+<td>RAM (small model)</td>
+<td>~2.3 GB</td>
+<td>~1.5 GB (int8)</td>
+</tr>
+<tr>
+<td>ffmpeg on PATH required</td>
+<td><strong>Yes</strong></td>
+<td><strong>No</strong> — uses PyAV</td>
+</tr>
+<tr>
+<td>Built-in VAD</td>
+<td>No</td>
+<td><strong>Yes</strong> — Silero VAD</td>
+</tr>
+<tr>
+<td>Word-level timestamps</td>
+<td>No</td>
+<td><strong>Yes</strong></td>
+</tr>
+<tr>
+<td>Python API</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Install:</strong> <code>pip install faster-whisper</code></p>
+<p><strong>Usage in <code>_transcribe_with_python_whisper</code>:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">faster_whisper</span><span class="w"> </span><span class="kn">import</span> <span class="n">WhisperModel</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="n">model_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;WHISPER_MODEL&quot;</span><span class="p">,</span> <span class="s2">&quot;small&quot;</span><span class="p">)</span>  <span class="c1"># upgrade default from base → small</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="n">model</span> <span class="o">=</span> <span class="n">WhisperModel</span><span class="p">(</span><span class="n">model_name</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s2">&quot;cpu&quot;</span><span class="p">,</span> <span class="n">compute_type</span><span class="o">=</span><span class="s2">&quot;int8&quot;</span><span class="p">)</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="c1"># vad_filter=True skips silent segments — significant speedup for TTRPG recordings</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="c1"># (Discord VAD already drops silence, but room noise and open-mic hum accumulates)</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="n">segments</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">transcribe</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">audio_path</span><span class="p">),</span> <span class="n">vad_filter</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="k">return</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">seg</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">seg</span> <span class="ow">in</span> <span class="n">segments</span><span class="p">)</span>
+</code></pre></div></p>
+<p><strong>Add to <code>requirements.txt</code>:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>faster-whisper&gt;=1.0.0
+</code></pre></div></p>
+<p><strong>Remove from <code>requirements.txt</code>:</strong> <code>openai-whisper</code> (keep as optional in <code>requirements-dev.txt</code> if comparison testing is needed)</p>
+<p><strong>Note on default model upgrade:</strong> Change <code>WHISPER_MODEL</code> default from <code>base</code> to <code>small</code>.  With faster-whisper int8, <code>small</code> runs at roughly the same wall-clock time as <code>base</code> on openai-whisper, with meaningfully better TTRPG accuracy (fewer proper noun errors, better handling of overlapping speech).</p>
+<hr />
+<h2 id="chunked-recording-transcription-architecture">Chunked Recording &amp; Transcription Architecture 💭<a class="headerlink" href="#chunked-recording-transcription-architecture" title="Permanent link">&para;</a></h2>
+<p><strong>Core idea:</strong> Instead of buffering the entire session and transcribing at the end, divide the session into fixed-length audio chunks (e.g. 5 minutes), transcribe each chunk as it completes, and accumulate the running transcript throughout the session.</p>
+<h3 id="why-this-is-the-right-architecture">Why this is the right architecture<a class="headerlink" href="#why-this-is-the-right-architecture" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Problem with current (whole-session) approach</th>
+<th>How chunking solves it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>End-of-session spike: all transcription + summarization happens at once</td>
+<td>~90% of transcription completes <em>during</em> the session; end spike is just the last partial chunk</td>
+</tr>
+<tr>
+<td>Memory: hours of 48 kHz stereo PCM buffered in RAM (~90 MB/hr per user)</td>
+<td>Only the current chunk's audio is buffered at any time</td>
+</tr>
+<tr>
+<td>Whisper's 30-second internal chunk limit means it already re-segments long audio internally</td>
+<td>We control segment boundaries explicitly</td>
+</tr>
+<tr>
+<td>If the bot crashes, entire session is lost</td>
+<td>Completed chunk transcripts survive a crash</td>
+</tr>
+</tbody>
+</table>
+<h3 id="latency-math-with-faster-whisper-small-int8">Latency math (with faster-whisper small int8)<a class="headerlink" href="#latency-math-with-faster-whisper-small-int8" title="Permanent link">&para;</a></h3>
+<p>faster-whisper small int8 processes ~7.6× faster than realtime on an i7-12700K (from Q1 benchmarks: 13-min audio → 1m42s ≈ 7.6× RT).</p>
+<table>
+<thead>
+<tr>
+<th>Chunk size</th>
+<th>Transcription time</th>
+<th>Idle time before next chunk starts</th>
+<th>Net overhead at session end</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2 min</td>
+<td>~16 s</td>
+<td>104 s</td>
+<td>16 s</td>
+</tr>
+<tr>
+<td>5 min</td>
+<td>~40 s</td>
+<td>260 s</td>
+<td>40 s</td>
+</tr>
+<tr>
+<td>10 min</td>
+<td>~80 s</td>
+<td>520 s</td>
+<td>80 s</td>
+</tr>
+</tbody>
+</table>
+<p>For a 3-hour session with 5-minute chunks, 35 out of 36 chunks are transcribed before the session ends.  The user waits ~40 s for the last chunk, then a further ~1–2 min for LLM summarization.  Compare to the current approach: 3-hour session → ~14 minutes of transcription blocking at session end before summarization even starts.</p>
+<h3 id="implementation-design">Implementation design<a class="headerlink" href="#implementation-design" title="Permanent link">&para;</a></h3>
+<p><strong>Chunk loop (background <code>asyncio.Task</code> started on recording start):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_chunk_loop</span><span class="p">(</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>    <span class="n">sink</span><span class="p">:</span> <span class="n">discord</span><span class="o">.</span><span class="n">sinks</span><span class="o">.</span><span class="n">PCMSink</span><span class="p">,</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>    <span class="n">transcript_parts</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>    <span class="n">chunk_seconds</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">300</span><span class="p">,</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Every chunk_seconds, snapshot the sink&#39;s audio, write a temp WAV,</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="sd">    transcribe it, append to transcript_parts, then clear the buffer.&quot;&quot;&quot;</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>        <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">chunk_seconds</span><span class="p">)</span>
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>        <span class="c1"># Snapshot and reset each user&#39;s buffer atomically</span>
+<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>        <span class="n">audio_data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">sink</span><span class="o">.</span><span class="n">audio_data</span><span class="p">)</span>       <span class="c1"># shallow copy of references</span>
+<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>        <span class="k">for</span> <span class="n">user_id</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">audio_data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a>            <span class="n">data</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a>            <span class="n">chunk_pcm</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a>            <span class="n">data</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a>            <span class="n">data</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">truncate</span><span class="p">()</span>                 <span class="c1"># reset for next chunk</span>
+<a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">audio_data</span><span class="p">:</span>
+<a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a>            <span class="k">continue</span>
+<a id="__codelineno-9-19" name="__codelineno-9-19" href="#__codelineno-9-19"></a>        <span class="c1"># Write merged chunk to temp WAV, transcribe, accumulate</span>
+<a id="__codelineno-9-20" name="__codelineno-9-20" href="#__codelineno-9-20"></a>        <span class="n">chunk_wav</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">to_thread</span><span class="p">(</span>
+<a id="__codelineno-9-21" name="__codelineno-9-21" href="#__codelineno-9-21"></a>            <span class="n">write_chunk_wav</span><span class="p">,</span> <span class="n">audio_data</span><span class="p">,</span> <span class="n">chunk_seconds</span>
+<a id="__codelineno-9-22" name="__codelineno-9-22" href="#__codelineno-9-22"></a>        <span class="p">)</span>
+<a id="__codelineno-9-23" name="__codelineno-9-23" href="#__codelineno-9-23"></a>        <span class="n">text</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">to_thread</span><span class="p">(</span><span class="n">transcribe</span><span class="p">,</span> <span class="n">chunk_wav</span><span class="p">)</span>
+<a id="__codelineno-9-24" name="__codelineno-9-24" href="#__codelineno-9-24"></a>        <span class="n">transcript_parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+<a id="__codelineno-9-25" name="__codelineno-9-25" href="#__codelineno-9-25"></a>        <span class="n">chunk_wav</span><span class="o">.</span><span class="n">unlink</span><span class="p">(</span><span class="n">missing_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>At session end (<code>_on_recording_finished</code>):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># Cancel the chunk loop</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="n">chunk_task</span><span class="o">.</span><span class="n">cancel</span><span class="p">()</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="c1"># Transcribe whatever remains in the buffer (the final partial chunk)</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="n">final_text</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">to_thread</span><span class="p">(</span><span class="n">transcribe</span><span class="p">,</span> <span class="n">remaining_wav</span><span class="p">)</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="n">transcript_parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">final_text</span><span class="p">)</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="c1"># Join and write full transcript</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="n">full_transcript</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">transcript_parts</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="open-questions-for-this-design">Open questions for this design<a class="headerlink" href="#open-questions-for-this-design" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>sink.audio_data</code> access while py-cord is actively writing to it: need to confirm thread safety or use a lock.  py-cord's sink writes happen in the voice receive thread; the chunk loop runs in the asyncio event loop thread — a threading lock on the buffer swap is required.</li>
+<li>Sentence fragments at chunk boundaries: faster-whisper can be configured with <code>condition_on_previous_text=True</code> and previous segment text passed via <code>initial_prompt</code> to improve cross-boundary coherence.</li>
+<li>Silent chunks (all users muted): PCMSink stores nothing for that window.  The chunk loop must detect empty audio and skip transcription rather than calling Whisper on a silent WAV.</li>
+<li>With WAV output (WaveSink, see <a href="../discord-voice/">discord-voice.md</a>), per-user chunk files can be written directly without the merge step — this is the cleaner architecture for v0.5+.</li>
+</ul>
+<h3 id="summarization-interaction">Summarization interaction<a class="headerlink" href="#summarization-interaction" title="Permanent link">&para;</a></h3>
+<p>Chunked transcription does <strong>not</strong> automatically fix the LLM context window problem — the full accumulated transcript is still fed to the LLM at the end, and it will still be 28k+ tokens for a 3-hour session.  Two strategies:</p>
+<ol>
+<li><strong>Accumulate and summarize once (recommended for v0.3):</strong> Keep chunked transcription, change the default model to <code>llama3.1</code> (128k context), feed full transcript at end.  Clean, simple, accurate.</li>
+<li><strong>Per-chunk summarization (v0.5+):</strong> Summarize each chunk individually ("what happened in the last 5 minutes"), then merge summaries at the end with a final pass.  Enables 8k models, but accuracy suffers — events spanning chunk boundaries can be lost or duplicated.</li>
+</ol>
+<p>See <a href="../llm-models/">llm-models.md</a> Q8 for context window analysis.</p>
+<hr />
+<h2 id="per-speaker-transcription-character-voice-learning">Per-Speaker Transcription &amp; Character Voice Learning 💭<a class="headerlink" href="#per-speaker-transcription-character-voice-learning" title="Permanent link">&para;</a></h2>
+<h3 id="the-key-insight-discord-already-does-speaker-separation">The key insight: Discord already does speaker separation<a class="headerlink" href="#the-key-insight-discord-already-does-speaker-separation" title="Permanent link">&para;</a></h3>
+<p>Conventional speaker diarization problems ("who is speaking when?") are solved by algorithms like pyannote because they start from a <em>single mixed audio stream</em> and must figure out speaker boundaries from acoustic differences alone.  RPG Watcher never faces this problem.</p>
+<p><code>sink.audio_data</code> is <code>dict[int, AudioData]</code> keyed by <strong>Discord <code>user_id</code></strong>.  Each entry is that user's audio, and nothing else.  We know exactly who is speaking at every moment.  No diarization library is needed.  The architecture is simpler than it first appears.</p>
+<p><strong>Standalone note:</strong> This advantage is lost for mic/loopback sources in the v1.3+ standalone application.  Those sources produce a single mixed stream and require diarization to attribute speech to speakers.  A full evaluation of <code>pyannote-audio</code>, <code>tinydiarize</code>, and <code>SpeechBrain ECAPA-TDNN</code> on 8 GB RAM systems is in <a href="../standalone-architecture/#q4--what-is-the-accuracy-and-resource-floor-for-local-speaker-diarization-on-8-gb-ram-systems">standalone-architecture.md Q4</a>.</p>
+<h3 id="what-learn-over-time-concretely-means">What "learn over time" concretely means<a class="headerlink" href="#what-learn-over-time-concretely-means" title="Permanent link">&para;</a></h3>
+<p>There are four layers of learning, each independently useful and incrementally addable:</p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Mechanism</th>
+<th>Sessions to benefit</th>
+<th>Complexity</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Character name list in LLM prompt</strong></td>
+<td>system prompt updated with registered names</td>
+<td>0 — works immediately</td>
+<td>Low</td>
+</tr>
+<tr>
+<td><strong>Vocabulary bias in Whisper</strong></td>
+<td>per-server <code>vocabulary.json</code> fed as <code>initial_prompt</code></td>
+<td>1+ — grows each session</td>
+<td>Low</td>
+</tr>
+<tr>
+<td><strong>Voice profile robustness</strong></td>
+<td>more audio → denser speaker embedding centroid</td>
+<td>3+ sessions</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td><strong>Fantasy word canonicalization</strong></td>
+<td>LLM post-processing accumulates corrections</td>
+<td>5+ sessions</td>
+<td>Medium</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="phase-1-character-name-registry-per-user-transcription-v04">Phase 1 — Character Name Registry + Per-User Transcription (v0.4)<a class="headerlink" href="#phase-1-character-name-registry-per-user-transcription-v04" title="Permanent link">&para;</a></h3>
+<p><strong>Goal:</strong> Every transcript line reads <code>[Theron Ashveil]: I draw my sword.</code> instead of an unlabelled block of text.</p>
+<p><strong>Storage:</strong> A per-guild JSON file (or SQLite row) mapping Discord user IDs to character info:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1">// data/guilds/123456789/characters.json</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="p">{</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">    </span><span class="nt">&quot;987654321&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;character&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Theron Ashveil&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;player&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Alex&quot;</span><span class="w"> </span><span class="p">},</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="w">    </span><span class="nt">&quot;876543210&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;character&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Mira&quot;</span><span class="p">,</span><span class="w">           </span><span class="nt">&quot;player&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Sam&quot;</span><span class="w"> </span><span class="p">},</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="w">    </span><span class="nt">&quot;765432109&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;character&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Narrator&quot;</span><span class="p">,</span><span class="w">        </span><span class="nt">&quot;player&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;GM&quot;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="p">}</span>
+</code></pre></div>
+<p><strong>Bot commands:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>/register-character character:&lt;name&gt;     — registers yourself for this guild
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>/register-character character:&lt;name&gt; player:&lt;name&gt;  — with OOC player name
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>/characters                              — list registered characters
+</code></pre></div></p>
+<p><strong>Transcription loop</strong> (per chunk or per session, with WaveSink):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="n">segments</span> <span class="o">=</span> <span class="p">[]</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="k">for</span> <span class="n">user_id</span><span class="p">,</span> <span class="n">audio</span> <span class="ow">in</span> <span class="n">sink</span><span class="o">.</span><span class="n">audio_data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>    <span class="n">profile</span> <span class="o">=</span> <span class="n">character_registry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">guild_id</span><span class="p">,</span> <span class="n">user_id</span><span class="p">)</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>    <span class="n">name</span> <span class="o">=</span> <span class="n">profile</span><span class="p">[</span><span class="s2">&quot;character&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="n">profile</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;Player</span><span class="si">{</span><span class="n">user_id</span><span class="si">}</span><span class="s2">&quot;</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>    <span class="c1"># Bias Whisper towards this character&#39;s known vocabulary</span>
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a>    <span class="n">vocab_hint</span> <span class="o">=</span> <span class="n">build_vocab_prompt</span><span class="p">(</span><span class="n">guild_id</span><span class="p">,</span> <span class="n">user_id</span><span class="p">)</span>
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a>    <span class="n">result</span> <span class="o">=</span> <span class="n">transcriber</span><span class="o">.</span><span class="n">transcribe</span><span class="p">(</span>
+<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a>        <span class="n">audio_path</span><span class="p">,</span>
+<a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a>        <span class="n">initial_prompt</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;This is </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> speaking. </span><span class="si">{</span><span class="n">vocab_hint</span><span class="si">}</span><span class="s2">&quot;</span>
+<a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a>    <span class="p">)</span>
+<a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a>    <span class="n">segments</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">audio_start_time</span><span class="p">[</span><span class="n">user_id</span><span class="p">],</span> <span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">]: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">))</span>
+<a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a>
+<a id="__codelineno-13-14" name="__codelineno-13-14" href="#__codelineno-13-14"></a><span class="c1"># Sort by timestamp to reconstruct dialogue order</span>
+<a id="__codelineno-13-15" name="__codelineno-13-15" href="#__codelineno-13-15"></a><span class="n">segments</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<a id="__codelineno-13-16" name="__codelineno-13-16" href="#__codelineno-13-16"></a><span class="n">full_transcript</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">text</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">segments</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>LLM system prompt addition:</strong>  Prepend a cast list to the system prompt so the model doesn't confuse character names or invent new ones:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>CAST FOR THIS SESSION:
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>- Theron Ashveil (played by Alex)
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>- Mira (played by Sam)
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>- Narrator / GM (Sam)
+</code></pre></div></p>
+<p><strong>Turn-based TTRPG advantage:</strong> Real TTRPG sessions have very little simultaneous speech — combat is sequential, side-chatter is rare.  Combined with faster-whisper's built-in VAD (<code>vad_filter=True</code>), each user’s audio is already naturally segmented by utterance.  The timestamp-sort above reconstructs the turn order accurately without any diarization.</p>
+<hr />
+<h3 id="phase-2-per-server-vocabulary-accumulation-v04v05">Phase 2 — Per-Server Vocabulary Accumulation (v0.4/v0.5)<a class="headerlink" href="#phase-2-per-server-vocabulary-accumulation-v04v05" title="Permanent link">&para;</a></h3>
+<p><strong>Goal:</strong> After session 1, Whisper already knows how to spell "Theron Ashveil" in session 2.</p>
+<p><strong>Mechanism:</strong> After the LLM produces a summary, extract all named entities (character names, place names, item names, spells) from the summary output.  These are already in the correct spelling because the LLM canonicalized them.  Append to a per-guild vocabulary counter:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="c1"># data/guilds/123456789/vocabulary.json</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="p">{</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>    <span class="s2">&quot;Theron Ashveil&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>      <span class="c1"># seen in 5 sessions</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>    <span class="s2">&quot;the Sundering Blade&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>    <span class="s2">&quot;Mirethaal&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a>    <span class="s2">&quot;Vex</span><span class="se">\&#39;</span><span class="s2">ahlia&quot;</span><span class="p">:</span> <span class="mi">4</span>
+<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="p">}</span>
+</code></pre></div>
+<p>Build the <code>initial_prompt</code> from the top-N most frequent terms:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">build_vocab_prompt</span><span class="p">(</span><span class="n">guild_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">top_n</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>    <span class="n">vocab</span> <span class="o">=</span> <span class="n">load_vocab</span><span class="p">(</span><span class="n">guild_id</span><span class="p">)</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>    <span class="n">top</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">vocab</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">vocab</span><span class="o">.</span><span class="n">get</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)[:</span><span class="n">top_n</span><span class="p">]</span>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">top</span><span class="p">:</span>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a>    <span class="k">return</span> <span class="s2">&quot;Known names and terms: &quot;</span> <span class="o">+</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">top</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span>
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a>
+<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="c1"># Result example:</span>
+<a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a><span class="c1"># &quot;Known names and terms: Theron Ashveil, the Sundering Blade, Mirethaal, Vex&#39;ahlia.&quot;</span>
+</code></pre></div>
+<p>This requires no model training.  It works because Whisper's decoder uses <code>initial_prompt</code> tokens as a soft prior — it will strongly prefer spellings it has been shown.  After 3–5 sessions, invented TTRPG vocabulary converges to consistent spellings automatically.</p>
+<p>Users can also add words manually:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>/vocab add &lt;word&gt;      — add to guild vocabulary
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>/vocab list           — show current vocabulary
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>/vocab remove &lt;word&gt;  — remove incorrect entry
+</code></pre></div></p>
+<hr />
+<h3 id="phase-3-voice-profile-enrollment-v05">Phase 3 — Voice Profile Enrollment (v0.5+)<a class="headerlink" href="#phase-3-voice-profile-enrollment-v05" title="Permanent link">&para;</a></h3>
+<p><strong>Goal:</strong> Identify speakers even when Discord metadata is unavailable — for example, post-processing an audio file captured outside of RPG Watcher, or verifying that the voice speaking matches the registered user.</p>
+<p><strong>Mechanism:</strong> Speaker embedding models (e.g. <a href="https://huggingface.co/speechbrain/spkrec-ecapa-voxceleb">SpeechBrain ECAPA-TDNN</a>, MIT licence) compress a speech segment into a fixed-length embedding vector.  Cosine similarity between embeddings measures speaker similarity.</p>
+<p><strong>Enrollment:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>/enroll     — prompts the user to speak 3 short phrases in voice channel
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>            — records ~30 s, computes embedding, stores against user_id
+</code></pre></div></p>
+<p><strong>How it gets better over time:</strong>  Each session, compute embeddings for all of a user’s audio and average them into a running centroid.  After 5+ sessions, the centroid represents their voice much more robustly than a single 30-second enrollment.</p>
+<p><strong>Practical note for RPG Watcher:</strong>  Phase 3 is <strong>not required</strong> for the core feature — Discord user_id already uniquely identifies speakers.  The main use case is a future "post-process an existing recording" feature where per-user audio tracks aren’t available.  Implementing Phases 1 and 2 delivers the full user-facing value with no ML training pipeline.</p>
+<hr />
+<h2 id="backend-reference">Backend Reference<a class="headerlink" href="#backend-reference" title="Permanent link">&para;</a></h2>
+<h3 id="openai-whisper-code-path"><code>openai-whisper</code> — code path<a class="headerlink" href="#openai-whisper-code-path" title="Permanent link">&para;</a></h3>
+<p><code>src/transcriber._transcribe_with_python_whisper()</code> — lazy model load on first call, <code>model.transcribe(str(audio_path))</code>, returns <code>result["text"]</code>.</p>
+<p>Configuration: <code>WHISPER_MODEL</code> env var (default: <code>base</code>).</p>
+<h3 id="whispercpp-code-path"><code>whisper.cpp</code> — code path<a class="headerlink" href="#whispercpp-code-path" title="Permanent link">&para;</a></h3>
+<p><code>src/transcriber._transcribe_with_whisper_cpp()</code> — <code>subprocess.run([WHISPER_CPP_PATH, "-m", model_file, "-f", audio_path, "--output-txt", "-"])</code>, returns stripped stdout.</p>
+<p>Configuration: <code>WHISPER_CPP_PATH</code> (binary path) + <code>WHISPER_MODEL</code> (default: <code>base</code>).
+Model file expected at: <code>&lt;dirname(WHISPER_CPP_PATH)&gt;/models/ggml-&lt;WHISPER_MODEL&gt;.bin</code>.</p>
+<h3 id="building-whispercpp">Building whisper.cpp<a class="headerlink" href="#building-whispercpp" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/ggerganov/whisper.cpp.git
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="nb">cd</span><span class="w"> </span>whisper.cpp
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>cmake<span class="w"> </span>-B<span class="w"> </span>build
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a>cmake<span class="w"> </span>--build<span class="w"> </span>build<span class="w"> </span>--config<span class="w"> </span>Release
+<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a>bash<span class="w"> </span>models/download-ggml-model.sh<span class="w"> </span>base
+</code></pre></div>
+<hr />
+<h2 id="recommended-direction">Recommended Direction<a class="headerlink" href="#recommended-direction" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Priority</th>
+<th>Action</th>
+<th>Target</th>
+<th>Impact</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>🔴 <strong>Critical</strong></td>
+<td>Fix <code>--output-txt -</code> stdout issue in <code>_transcribe_with_whisper_cpp</code></td>
+<td>v0.2</td>
+<td>whisper.cpp may be returning empty transcripts silently</td>
+</tr>
+<tr>
+<td>🔴 <strong>Critical</strong></td>
+<td>Add <code>WHISPER_CPP_MODEL_PATH</code> env var; fix model path resolution</td>
+<td>v0.2</td>
+<td>whisper.cpp unusable with standard install as-is</td>
+</tr>
+<tr>
+<td>🟡 <strong>High</strong></td>
+<td>Replace <code>openai-whisper</code> with <code>faster-whisper</code> as Python fallback</td>
+<td>v0.3</td>
+<td>4× speed improvement, removes ffmpeg dependency</td>
+</tr>
+<tr>
+<td>🟡 <strong>High</strong></td>
+<td>Change default <code>WHISPER_MODEL</code> from <code>base</code> → <code>small</code></td>
+<td>v0.3</td>
+<td>Meaningfully better accuracy at same effective speed with faster-whisper</td>
+</tr>
+<tr>
+<td>� <strong>High</strong></td>
+<td>Implement chunked transcription architecture</td>
+<td>v0.3</td>
+<td>Eliminates end-of-session latency spike; bounds RAM; transcription runs during the session</td>
+</tr>
+<tr>
+<td>🟢 <strong>Medium</strong></td>
+<td>Enable <code>vad_filter=True</code> in faster-whisper call</td>
+<td>v0.3</td>
+<td>Skips background hum/silence; reduces transcription time — essential for chunked mode where silent chunks must be skipped</td>
+</tr>
+<tr>
+<td>🟢 <strong>Medium</strong></td>
+<td>Run hardware-specific benchmarks and document in README</td>
+<td>v0.3</td>
+<td>Helps users choose model based on their machine</td>
+</tr>
+<tr>
+<td>🟢 <strong>Medium</strong></td>
+<td>Add <code>initial_prompt</code> (previous chunk text) to faster-whisper calls in chunked mode</td>
+<td>v0.3</td>
+<td>Improves cross-boundary transcription coherence</td>
+</tr>
+<tr>
+<td>🟣 <strong>Low</strong></td>
+<td>Evaluate <code>whisper-large-v3-turbo</code> via faster-whisper</td>
+<td>v0.5</td>
+<td>Large accuracy with ~6× less compute than large-v3</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="q12-futo-whisper-acft-models-are-they-better-for-rpg-watcher-answered-by-design-analysis">Q12 — FUTO Whisper ACFT models: are they better for RPG Watcher? 💭 Answered by design analysis<a class="headerlink" href="#q12-futo-whisper-acft-models-are-they-better-for-rpg-watcher-answered-by-design-analysis" title="Permanent link">&para;</a></h3>
+<p><strong>What FUTO ACFT is:</strong>
+<a href="https://futo.org">FUTO</a> developed an open-source fine-tuning technique called <strong>ACFT (Audio Context Fine-Tuning)</strong> for Whisper models.  The problem they solved: Whisper's encoder always processes a fixed 30-second window, even if the spoken audio is only 3 seconds long — the rest is padded with silence.  On a phone, encoding 27 seconds of nothing is slow.  ACFT fine-tunes the model to tolerate a <code>dynamic audio_ctx</code> parameter in whisper.cpp so the encoder only processes the audio that actually exists, dramatically reducing latency for short clips.</p>
+<p><strong>Available models (MIT licence, GGML <code>.bin</code> + HuggingFace safetensors):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Params</th>
+<th>WER (normal ctx)</th>
+<th>WER (dynamic ctx)</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tiny.en</code> ACFT</td>
+<td>39 M</td>
+<td>4.96% (+0.23%)</td>
+<td>5.50%</td>
+<td>vs stock tiny.en 4.73%</td>
+</tr>
+<tr>
+<td><code>base.en</code> ACFT</td>
+<td>74 M</td>
+<td>slightly higher</td>
+<td>comparable</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>small.en</code> ACFT</td>
+<td>244 M</td>
+<td>2.88% (+0.11%)</td>
+<td>2.81%</td>
+<td>vs stock small.en 2.77%</td>
+</tr>
+<tr>
+<td><code>tiny/base/small</code> ACFT</td>
+<td>—</td>
+<td>similar</td>
+<td>comparable</td>
+<td>Multilingual variants</td>
+</tr>
+</tbody>
+</table>
+<p><strong>No medium or large variants</strong> — FUTO only trained tiny/base/small.  You can train your own from the published notebooks.</p>
+<p><strong>Why these models feel fastest/best in keyboard use:</strong>
+For a 4-second voice dictation, dynamic audio_ctx means the encoder processes 4 seconds instead of 30 — a 7.5× speedup on the encoder alone.  On a mid-range Android phone where the encoder is the bottleneck, this makes dictation feel nearly instant.  The perceived quality improvement is mostly latency, not accuracy.</p>
+<p><strong>Why this advantage does NOT transfer to RPG Watcher:</strong></p>
+<ol>
+<li>
+<p><strong>Chunk size mismatch:</strong> RPG Watcher's chunked transcription processes 2–10 minute audio segments.  Whisper internally splits any audio longer than 30 seconds into sequential 30-second frames regardless of <code>audio_ctx</code>.  The ACFT optimization only applies to the final short frame at the end of a chunk (a few seconds of remainder after the last full 30-second window) — negligible for multi-minute chunks.</p>
+</li>
+<li>
+<p><strong>No large model available:</strong> TTRPG sessions have invented proper nouns, fantasy vocabulary, accents, and cross-talk.  The recommended minimum is <code>small</code>; <code>medium</code> or <code>large-v3-turbo</code> are meaningfully better for entity fidelity.  FUTO provides nothing above <code>small</code>.</p>
+</li>
+<li>
+<p><strong>Slightly higher WER on full-context audio:</strong> When running with a normal fixed 30-second context (which is what multi-minute chunks use for all but their final frame), ACFT models score marginally <em>worse</em> on standard benchmarks than stock Whisper models, not better.</p>
+</li>
+<li>
+<p><strong>faster-whisper handles this better:</strong> faster-whisper with <code>vad_filter=True</code> already skips silent frames using Silero VAD, achieving a similar practical speedup to ACFT on typical TTRPG audio (long silences between speakers) without the WER trade-off or the model size limitation.</p>
+</li>
+</ol>
+<p><strong>Verdict for RPG Watcher:</strong>  The FUTO ACFT models are well-executed and MIT-licensed, but they are purpose-built for real-time short-utterance keyboard dictation.  For RPG Watcher's multi-minute chunked session transcription, they offer no latency benefit and have no large-model variants.  <strong>Do not substitute for standard Whisper models in this use case.</strong></p>
+<p><strong>When to revisit:</strong> If RPG Watcher ever gains a real-time streaming transcription mode (e.g. live caption display during a session, processing utterances as they are spoken rather than in bulk chunks), the ACFT models become genuinely relevant — dynamic audio_ctx would allow encoding each utterance as it ends rather than waiting for a 30-second window to fill.  Track as deferred Q11.</p>
+<hr />
+<h2 id="deferred-queries">Deferred Queries<a class="headerlink" href="#deferred-queries" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Target milestone</th>
+<th>Query</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Q8</td>
+<td>v0.5</td>
+<td>Evaluate <code>faster-whisper</code> as a third backend (CTranslate2-based; similar speed to whisper.cpp with Python API)</td>
+</tr>
+<tr>
+<td>Q9</td>
+<td>v0.6</td>
+<td>Add <code>WHISPER_LANGUAGE</code> env var for explicit language selection</td>
+</tr>
+<tr>
+<td>Q10</td>
+<td>v0.6</td>
+<td>Measure quality difference between 48 kHz stereo vs pre-downsampled 16 kHz mono for TTRPG audio</td>
+</tr>
+<tr>
+<td>Q11</td>
+<td>v0.5+</td>
+<td>Re-evaluate FUTO ACFT models if real-time per-utterance streaming transcription is ever added (where the latency advantage actually applies)</td>
+</tr>
+<tr>
+<td>Q13</td>
+<td>v0.5+</td>
+<td>Benchmark SpeechBrain ECAPA-TDNN embedding latency on session audio to determine whether voice profile updates can run in the same <code>asyncio.to_thread</code> pass as transcription</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tabs", "navigation.sections", "navigation.top", "search.highlight", "search.share", "content.code.annotate", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

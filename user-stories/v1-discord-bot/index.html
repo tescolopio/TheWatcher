@@ -1,0 +1,2185 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A privacy-first Discord bot for TTRPG session recording, transcription, and AI-powered summarisation — all running locally on your own hardware.
+">
+      
+      
+        <meta name="author" content="3D Tech Solutions">
+      
+      
+        <link rel="canonical" href="https://tescolopio.github.io/rpgwatcher/user-stories/v1-discord-bot/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>User Stories — v1.0 Discord Bot Track - RPG Watcher</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="purple">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#user-stories-v10-discord-bot-track" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="RPG Watcher" class="md-header__button md-logo" aria-label="RPG Watcher" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            RPG Watcher
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              User Stories — v1.0 Discord Bot Track
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="purple"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="deep-purple" data-md-color-accent="purple"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/tescolopio/rpgwatcher" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    tescolopio/rpgwatcher
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../deployment/local/" class="md-tabs__link">
+          
+  
+  
+  Getting Started
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../architecture/" class="md-tabs__link">
+          
+  
+  
+  Architecture
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../research/discord-voice/" class="md-tabs__link">
+          
+  
+  
+  Research
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../milestones/v0.2-foundation/" class="md-tabs__link">
+          
+  
+  
+  Milestones
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../roadmap/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Roadmap
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../contributing/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Contributing
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="RPG Watcher" class="md-nav__button md-logo" aria-label="RPG Watcher" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    RPG Watcher
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/tescolopio/rpgwatcher" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    tescolopio/rpgwatcher
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Getting Started
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deployment/local/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Local Deployment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deployment/docker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker Deployment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADRs
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ADRs
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adr/0001-local-only-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Local-Only Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adr/0002-pycord-discord-library/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pycord Discord Library
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adr/0003-dual-whisper-backends/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dual Whisper Backends
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adr/0004-ollama-for-llm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ollama for LLM
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adr/0005-obsidian-markdown-notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Obsidian Markdown Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Research
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../research/discord-voice/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Discord Voice
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../research/whisper-backends/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Whisper Backends
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../research/llm-models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LLM Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Milestones
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Milestones
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../milestones/v0.2-foundation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v0.2 Foundation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../milestones/v0.3-reliability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v0.3 Reliability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../milestones/v0.4-ux-campaigns/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v0.4 UX & Campaigns
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../roadmap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roadmap
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contributing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contributing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#recording-core-pipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recording &amp; Core Pipeline
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Recording &amp; Core Pipeline">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#us-001-start-recording-a-session-implemented" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        US-001 — Start recording a session ✅ Implemented
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#us-002-stop-recording-and-receive-session-notes-implemented" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        US-002 — Stop recording and receive session notes ✅ Implemented
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#us-003-player-joins-the-session-late" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        US-003 — Player joins the session late
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#us-004-player-disconnects-and-reconnects-mid-session" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        US-004 — Player disconnects and reconnects mid-session
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#setup-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Setup &amp; Configuration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Setup &amp; Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#us-005-first-time-installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        US-005 — First-time installation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#us-006-configure-the-obsidian-vault-path" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        US-006 — Configure the Obsidian vault path
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#us-007-check-bot-status-and-active-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        US-007 — Check bot status and active configuration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#us-008-bot-restarts-without-losing-an-in-progress-recording" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        US-008 — Bot restarts without losing an in-progress recording
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#error-recovery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Error Recovery
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Error Recovery">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#us-009-ollama-is-unreachable-when-the-session-ends" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        US-009 — Ollama is unreachable when the session ends
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#us-010-disk-nearly-full-when-recording-starts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        US-010 — Disk nearly full when recording starts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#us-011-pipeline-fails-mid-processing-after-recording-ends" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        US-011 — Pipeline fails mid-processing after recording ends
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#user-experience-discord-output" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        User Experience &amp; Discord Output
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="User Experience &amp; Discord Output">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#us-012-see-live-pipeline-progress-in-discord" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        US-012 — See live pipeline progress in Discord
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#us-013-open-the-session-note-directly-from-discord" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        US-013 — Open the session note directly from Discord
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#us-014-set-an-active-campaign-for-note-organisation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        US-014 — Set an active campaign for note organisation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#us-015-change-the-llm-model-without-editing-the-env-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        US-015 — Change the LLM model without editing the .env file
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#us-016-summary-too-long-for-a-single-discord-message" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        US-016 — Summary too long for a single Discord message
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#speaker-identification-character-mapping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Speaker Identification &amp; Character Mapping
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Speaker Identification &amp; Character Mapping">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#us-017-register-a-character-name" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        US-017 — Register a character name
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#us-018-transcript-lines-are-attributed-to-the-correct-speaker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        US-018 — Transcript lines are attributed to the correct speaker
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#us-019-invented-proper-nouns-are-spelled-consistently-across-sessions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        US-019 — Invented proper nouns are spelled consistently across sessions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#us-020-character-changes-between-sessions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        US-020 — Character changes between sessions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#audio-quality" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Audio Quality
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Audio Quality">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#us-021-mic-check-before-the-session-starts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        US-021 — Mic check before the session starts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#us-022-loud-user-doesnt-drown-out-others" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        US-022 — Loud user doesn't drown out others
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#multi-server-access-control" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Multi-Server &amp; Access Control
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Multi-Server &amp; Access Control">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#us-023-two-discord-servers-record-simultaneously" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        US-023 — Two Discord servers record simultaneously
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#us-024-restrict-recording-to-specific-roles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        US-024 — Restrict recording to specific roles
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#us-025-bot-refuses-a-second-simultaneous-recording-in-the-same-guild" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        US-025 — Bot refuses a second simultaneous recording in the same guild
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#distribution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Distribution
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Distribution">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#us-026-install-via-docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        US-026 — Install via Docker
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#us-027-upgrade-to-a-new-version" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        US-027 — Upgrade to a new version
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#documentation-polish" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Documentation &amp; Polish
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Documentation &amp; Polish">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#us-028-new-user-follows-setup-guide-start-to-finish" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        US-028 — New user follows setup guide start to finish
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#us-029-troubleshoot-whispercpp-not-working" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        US-029 — Troubleshoot whisper.cpp not working
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#us-030-configuration-is-stable-across-the-v10-api-surface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        US-030 — Configuration is stable across the v1.0 API surface
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="user-stories-v10-discord-bot-track">User Stories — v1.0 Discord Bot Track<a class="headerlink" href="#user-stories-v10-discord-bot-track" title="Permanent link">&para;</a></h1>
+<p>Stories covering the v0.1 MVP through the stable v1.0 release.
+See <a href="../">index.md</a> for personas and the ID system.</p>
+<hr />
+<h2 id="recording-core-pipeline">Recording &amp; Core Pipeline<a class="headerlink" href="#recording-core-pipeline" title="Permanent link">&para;</a></h2>
+<h3 id="us-001-start-recording-a-session-implemented">US-001 — Start recording a session  ✅ Implemented<a class="headerlink" href="#us-001-start-recording-a-session-implemented" title="Permanent link">&para;</a></h3>
+<p><strong>As a</strong> GM (Sam),
+<strong>I want to</strong> type <code>/watch</code> in a Discord channel to make the bot join my voice channel and begin recording,
+<strong>so that</strong> the session is captured without me having to set up any external software.</p>
+<p><strong>Acceptance criteria:</strong>
+- [ ] Bot joins the voice channel the invoking user is currently in
+- [ ] Bot sends a confirmation message: "🎙️ Recording started in <strong>#channel-name</strong>"
+- [ ] If the invoking user is not in a voice channel, bot replies with a clear error and does not crash
+- [ ] If a recording is already active in this guild, bot replies with an error indicating which channel is being recorded
+- [ ] Recording begins capturing all participants present at the time of <code>/watch</code> and any who join afterward</p>
+<p><strong>Milestone:</strong> v0.1
+<strong>Notes:</strong> Current implementation uses <code>PCMSink</code>; per-user WAV separation is planned for v0.5 (US-017).</p>
+<hr />
+<h3 id="us-002-stop-recording-and-receive-session-notes-implemented">US-002 — Stop recording and receive session notes  ✅ Implemented<a class="headerlink" href="#us-002-stop-recording-and-receive-session-notes-implemented" title="Permanent link">&para;</a></h3>
+<p><strong>As a</strong> GM (Sam),
+<strong>I want to</strong> type <code>/unwatch</code> to stop recording and automatically receive a structured session summary,
+<strong>so that</strong> the notes are ready without any manual post-processing.</p>
+<p><strong>Acceptance criteria:</strong>
+- [ ] Bot leaves the voice channel
+- [ ] Bot sends a "processing" status message immediately (not after processing completes)
+- [ ] Full pipeline runs: WAV save → transcription → LLM summarisation → Obsidian note write
+- [ ] On success, bot posts a confirmation message with the note filename and vault path
+- [ ] On success, the Markdown note exists on disk with correct YAML front-matter and all five required sections
+- [ ] If <code>/unwatch</code> is called when no recording is active, bot replies with a clear error</p>
+<p><strong>Milestone:</strong> v0.1
+<strong>Notes:</strong> Status message sequencing confirmed correct in bot.py <code>_on_recording_finished</code>; see discord-voice.md Q4.</p>
+<hr />
+<h3 id="us-003-player-joins-the-session-late">US-003 — Player joins the session late<a class="headerlink" href="#us-003-player-joins-the-session-late" title="Permanent link">&para;</a></h3>
+<p><strong>As a</strong> player (Alex),
+<strong>I want to</strong> join the voice channel after the session has already started and have my audio captured from that point forward,
+<strong>so that</strong> arriving a few minutes late does not prevent me from appearing in the session notes.</p>
+<p><strong>Acceptance criteria:</strong>
+- [ ] Audio from a late-joining user is captured from the moment they join
+- [ ] Their audio is correctly time-aligned in the merged WAV (not shifted to t=0)
+- [ ] The session note does not incorrectly attribute their early silence to speech
+- [ ] No error or crash occurs when a new user joins mid-recording</p>
+<p><strong>Milestone:</strong> v0.3
+<strong>Notes:</strong> Current <code>PCMSink</code> drops silence — a user joining at t=10min has their WAV bytes starting at position 0, causing mis-alignment.  Fix: join-timestamp pre-padding.  See discord-voice.md Q2 (CRITICAL finding).</p>
+<hr />
+<h3 id="us-004-player-disconnects-and-reconnects-mid-session">US-004 — Player disconnects and reconnects mid-session<a class="headerlink" href="#us-004-player-disconnects-and-reconnects-mid-session" title="Permanent link">&para;</a></h3>
+<p><strong>As a</strong> player (Alex),
+<strong>I want to</strong> disconnect from voice and reconnect (e.g. due to a network drop) without the recording being corrupted or the bot crashing,
+<strong>so that</strong> a brief connection issue does not ruin the session notes.</p>
+<p><strong>Acceptance criteria:</strong>
+- [ ] Bot continues recording other participants when one disconnects
+- [ ] When the disconnected user reconnects, their audio resumes being captured
+- [ ] Audio from both their original and reconnected segments is included in the final output
+- [ ] No error is logged at WARN level or above solely due to the disconnect/reconnect</p>
+<p><strong>Milestone:</strong> v0.3
+<strong>Notes:</strong> Confirmed in discord-voice.md Q5 that audio is retained on disconnect.  The pre-padding fix for US-003 must also handle the reconnect case (second join timestamp).</p>
+<hr />
+<h2 id="setup-configuration">Setup &amp; Configuration<a class="headerlink" href="#setup-configuration" title="Permanent link">&para;</a></h2>
+<h3 id="us-005-first-time-installation">US-005 — First-time installation<a class="headerlink" href="#us-005-first-time-installation" title="Permanent link">&para;</a></h3>
+<p><strong>As a</strong> GM (Sam),
+<strong>I want to</strong> install RPG Watcher on my home server by following a single README section,
+<strong>so that</strong> I can have the bot running in a real voice session within 30 minutes of first discovering the project.</p>
+<p><strong>Acceptance criteria:</strong>
+- [ ] <code>README.md</code> contains a "Quick Start" section covering: Python version, <code>pip install</code>, <code>.env</code> setup, Ollama pull, bot token, invite URL generation
+- [ ] <code>.env.example</code> contains every supported environment variable with a description and example value
+- [ ] Following the Quick Start on a clean machine (Python 3.11+, no prior deps) produces a running bot in under 30 minutes
+- [ ] The first <code>/watch</code> → <code>/unwatch</code> cycle produces a Markdown note without further intervention</p>
+<p><strong>Milestone:</strong> v0.2
+<strong>Notes:</strong> Ties to US-028 (full setup guide in v0.9 docs).</p>
+<hr />
+<h3 id="us-006-configure-the-obsidian-vault-path">US-006 — Configure the Obsidian vault path<a class="headerlink" href="#us-006-configure-the-obsidian-vault-path" title="Permanent link">&para;</a></h3>
+<p><strong>As a</strong> GM (Sam),
+<strong>I want to</strong> tell the bot where my Obsidian vault is located so notes are written there automatically,
+<strong>so that</strong> I never have to manually move or copy files after a session.</p>
+<p><strong>Acceptance criteria:</strong>
+- [ ] <code>OBSIDIAN_VAULT_PATH</code> env var is documented in <code>.env.example</code> with a clear example
+- [ ] <code>OBSIDIAN_NOTES_FOLDER</code> env var sets a sub-folder within the vault (default: <code>Session Notes</code>)
+- [ ] If the vault path does not exist, bot logs a clear error at startup and refuses to start rather than silently failing later
+- [ ] Notes are written to <code>&lt;OBSIDIAN_VAULT_PATH&gt;/&lt;OBSIDIAN_NOTES_FOLDER&gt;/YYYY-MM-DD — Session Title.md</code></p>
+<p><strong>Milestone:</strong> v0.2</p>
+<hr />
+<h3 id="us-007-check-bot-status-and-active-configuration">US-007 — Check bot status and active configuration<a class="headerlink" href="#us-007-check-bot-status-and-active-configuration" title="Permanent link">&para;</a></h3>
+<p><strong>As a</strong> GM (Sam),
+<strong>I want to</strong> type <code>/status</code> to see what the bot is currently configured to use,
+<strong>so that</strong> I can confirm the right Whisper backend and Ollama model are active before starting an important session.</p>
+<p><strong>Acceptance criteria:</strong>
+- [ ] <code>/status</code> replies with an embed showing: bot latency, Ollama connectivity (✅/❌ + model name), active Whisper backend, current <code>WHISPER_MODEL</code>, vault path, available disk space (MB and % used on the relevant drive)
+- [ ] If Ollama is unreachable, the embed shows ❌ with a hint (e.g. "Is Ollama running? <code>ollama serve</code>")
+- [ ] Response is ephemeral (only Sam sees it)
+- [ ] Command completes in under 3 seconds</p>
+<p><strong>Milestone:</strong> v0.3</p>
+<hr />
+<h3 id="us-008-bot-restarts-without-losing-an-in-progress-recording">US-008 — Bot restarts without losing an in-progress recording<a class="headerlink" href="#us-008-bot-restarts-without-losing-an-in-progress-recording" title="Permanent link">&para;</a></h3>
+<p><strong>As a</strong> GM (Sam),
+<strong>I want to</strong> be warned if the bot process restarts or crashes while recording is active,
+<strong>so that</strong> I know to check for a partial audio file rather than assuming the session is lost.</p>
+<p><strong>Acceptance criteria:</strong>
+- [ ] Active recording state (guild ID, channel ID, start time) is persisted to SQLite before any audio is written
+- [ ] On bot startup, if a <code>recording</code> state entry exists in the database, a warning is posted to a configurable alert channel (or logged prominently)
+- [ ] The partial WAV file is never deleted automatically after a crash; it remains in <code>RECORDINGS_DIR</code>
+- [ ] <code>/sessions</code> command lists the interrupted session with status <code>interrupted</code> and the path to the partial WAV</p>
+<p><strong>Milestone:</strong> v0.3</p>
+<hr />
+<h2 id="error-recovery">Error Recovery<a class="headerlink" href="#error-recovery" title="Permanent link">&para;</a></h2>
+<h3 id="us-009-ollama-is-unreachable-when-the-session-ends">US-009 — Ollama is unreachable when the session ends<a class="headerlink" href="#us-009-ollama-is-unreachable-when-the-session-ends" title="Permanent link">&para;</a></h3>
+<p><strong>As a</strong> GM (Sam),
+<strong>I want to</strong> receive the raw transcript as a fallback note even when the LLM summariser fails,
+<strong>so that</strong> no session data is ever silently discarded because of a service dependency being down.</p>
+<p><strong>Acceptance criteria:</strong>
+- [ ] If the Ollama call fails (connection refused, timeout, or HTTP error), a fallback note is written to the vault tagged <code>#needs-summary</code> with the raw transcript as the note body
+- [ ] Bot posts a Discord message explaining what happened and where the fallback note is
+- [ ] After <code>OLLAMA_MAX_RETRIES</code> attempts with exponential back-off, the fallback path is taken (not an infinite loop)
+- [ ] The WAV file is retained until the user explicitly cleans it up
+- [ ] Once Ollama comes back online, Sam can re-run summarisation against the fallback note's transcript (a future <code>/retry-summary</code> command; the fallback note is designed to make this easy)</p>
+<p><strong>Milestone:</strong> v0.3</p>
+<hr />
+<h3 id="us-010-disk-nearly-full-when-recording-starts">US-010 — Disk nearly full when recording starts<a class="headerlink" href="#us-010-disk-nearly-full-when-recording-starts" title="Permanent link">&para;</a></h3>
+<p><strong>As a</strong> GM (Sam),
+<strong>I want to</strong> be warned before a session starts if there is not enough disk space to store the recording,
+<strong>so that</strong> I am not 3 hours into a session only to have the bot fail silently or crash.</p>
+<p><strong>Acceptance criteria:</strong>
+- [ ] On <code>/watch</code>, bot checks available disk space on the <code>RECORDINGS_DIR</code> volume
+- [ ] If available space is below <code>MIN_FREE_DISK_MB</code> (default 500 MB), <code>/watch</code> is refused with a clear message: "⚠️ Only 312 MB free. I need at least 500 MB to record safely. Free up space or lower <code>MIN_FREE_DISK_MB</code>."
+- [ ] Estimate of required space shown in the warning (e.g. "A 3-hour session uses approx 1.0 GB")
+- [ ] If the check cannot be performed (permission error), <code>watch</code> proceeds but a warning is logged</p>
+<p><strong>Milestone:</strong> v0.3</p>
+<hr />
+<h3 id="us-011-pipeline-fails-mid-processing-after-recording-ends">US-011 — Pipeline fails mid-processing after recording ends<a class="headerlink" href="#us-011-pipeline-fails-mid-processing-after-recording-ends" title="Permanent link">&para;</a></h3>
+<p><strong>As a</strong> GM (Sam),
+<strong>I want to</strong> always have the WAV file available after a session ends even if transcription or summarisation fails,
+<strong>so that</strong> I can re-run the pipeline manually once the issue is fixed without re-recording.</p>
+<p><strong>Acceptance criteria:</strong>
+- [ ] WAV file is written to <code>RECORDINGS_DIR</code> as the very first step of <code>_on_recording_finished</code>, before transcription begins
+- [ ] If transcription fails, bot posts a Discord message with the WAV path and the error
+- [ ] If summarisation fails, bot posts a message with the transcript text (or path to a saved transcript file) and the error
+- [ ] WAV file is never automatically deleted unless all pipeline stages have completed successfully
+- [ ] A <code>KEEP_WAV=true</code> env var (default: <code>false</code>) forces WAV files to be retained even after successful pipeline runs</p>
+<p><strong>Milestone:</strong> v0.3</p>
+<hr />
+<h2 id="user-experience-discord-output">User Experience &amp; Discord Output<a class="headerlink" href="#user-experience-discord-output" title="Permanent link">&para;</a></h2>
+<h3 id="us-012-see-live-pipeline-progress-in-discord">US-012 — See live pipeline progress in Discord<a class="headerlink" href="#us-012-see-live-pipeline-progress-in-discord" title="Permanent link">&para;</a></h3>
+<p><strong>As a</strong> player (Alex),
+<strong>I want to</strong> see the bot update a single message in real time as it processes the session,
+<strong>so that</strong> I know what stage the pipeline is at and roughly how long it will take.</p>
+<p><strong>Acceptance criteria:</strong>
+- [ ] A single Discord message is posted when <code>/unwatch</code> is called and then edited (not replaced) as each stage completes
+- [ ] Stage labels: 💾 Saving audio… → 🔤 Transcribing… → 🧠 Summarising… → 📝 Writing note… → ✅ Done
+- [ ] Each completed stage shows a checkmark and the time it took (e.g. "🔤 Transcribed in 1m 42s")
+- [ ] If a stage fails, the message updates with ❌ and a brief error description
+- [ ] A Discord "typing" indicator is shown while each stage runs</p>
+<p><strong>Milestone:</strong> v0.4</p>
+<hr />
+<h3 id="us-013-open-the-session-note-directly-from-discord">US-013 — Open the session note directly from Discord<a class="headerlink" href="#us-013-open-the-session-note-directly-from-discord" title="Permanent link">&para;</a></h3>
+<p><strong>As a</strong> GM (Sam),
+<strong>I want to</strong> click a button in the completion Discord message to open the note in Obsidian immediately,
+<strong>so that</strong> I can review or annotate the notes while the session is still fresh.</p>
+<p><strong>Acceptance criteria:</strong>
+- [ ] Completion embed includes an "Open in Obsidian" button using an <code>obsidian://open?vault=…&amp;file=…</code> deep link URI
+- [ ] The URI is URL-encoded correctly (spaces, special characters in vault/file names handled)
+- [ ] Button is shown only when <code>OBSIDIAN_VAULT_PATH</code> is configured
+- [ ] Clicking the button on a machine that does not have Obsidian installed fails gracefully (handled at the OS level; no bot action required)</p>
+<p><strong>Milestone:</strong> v0.4</p>
+<hr />
+<h3 id="us-014-set-an-active-campaign-for-note-organisation">US-014 — Set an active campaign for note organisation<a class="headerlink" href="#us-014-set-an-active-campaign-for-note-organisation" title="Permanent link">&para;</a></h3>
+<p><strong>As a</strong> GM (Sam),
+<strong>I want to</strong> tell the bot which campaign is currently running so that all subsequent session notes are organised under that campaign,
+<strong>so that</strong> my vault stays clean across multiple concurrent campaigns.</p>
+<p><strong>Acceptance criteria:</strong>
+- [ ] <code>/campaign set &lt;name&gt;</code> stores the campaign name per-guild in the database
+- [ ] While a campaign is active, notes are written to <code>&lt;OBSIDIAN_NOTES_FOLDER&gt;/&lt;campaign-name&gt;/YYYY-MM-DD — Session Title.md</code>
+- [ ] Note YAML front-matter includes <code>campaign: &lt;name&gt;</code>
+- [ ] <code>/campaign clear</code> removes the active campaign; notes revert to the flat folder
+- [ ] <code>/campaign</code> (no subcommand) shows the currently active campaign or "No campaign active"
+- [ ] Campaign name is shown in the pipeline progress embed</p>
+<p><strong>Milestone:</strong> v0.4</p>
+<hr />
+<h3 id="us-015-change-the-llm-model-without-editing-the-env-file">US-015 — Change the LLM model without editing the <code>.env</code> file<a class="headerlink" href="#us-015-change-the-llm-model-without-editing-the-env-file" title="Permanent link">&para;</a></h3>
+<p><strong>As a</strong> GM (Sam),
+<strong>I want to</strong> switch the active Ollama model from a Discord command,
+<strong>so that</strong> I can try a different model for one session without restarting the bot or editing config files.</p>
+<p><strong>Acceptance criteria:</strong>
+- [ ] <code>/config set model &lt;model-name&gt;</code> updates the active model for this guild, stored in the database
+- [ ] Per-guild config overrides the global <code>.env</code> value for that guild only
+- [ ] <code>/config show</code> lists all current per-guild settings vs global defaults
+- [ ] If the model name is not available in Ollama, bot warns "⚠️ Model 'xyz' not found in Ollama. Available: mistral, llama3.1…" (pulls from <code>ollama list</code>)
+- [ ] <code>/config</code> is restricted to users with the "Manage Server" permission</p>
+<p><strong>Milestone:</strong> v0.4</p>
+<hr />
+<h3 id="us-016-summary-too-long-for-a-single-discord-message">US-016 — Summary too long for a single Discord message<a class="headerlink" href="#us-016-summary-too-long-for-a-single-discord-message" title="Permanent link">&para;</a></h3>
+<p><strong>As a</strong> player (Alex),
+<strong>I want to</strong> read the full session summary in Discord even for a long 4-hour session,
+<strong>so that</strong> I don't have to open Obsidian just to see what happened.</p>
+<p><strong>Acceptance criteria:</strong>
+- [ ] If summary text exceeds 4 096 characters (Discord embed limit), it is split across multiple embeds (paginated)
+- [ ] Each page is labelled "Summary (1/3)", "Summary (2/3)", etc.
+- [ ] Section headings are never split across pages — a page break occurs before a heading, not mid-section
+- [ ] The final embed always includes the "Open in Obsidian" button (US-013)</p>
+<p><strong>Milestone:</strong> v0.4</p>
+<hr />
+<h2 id="speaker-identification-character-mapping">Speaker Identification &amp; Character Mapping<a class="headerlink" href="#speaker-identification-character-mapping" title="Permanent link">&para;</a></h2>
+<h3 id="us-017-register-a-character-name">US-017 — Register a character name<a class="headerlink" href="#us-017-register-a-character-name" title="Permanent link">&para;</a></h3>
+<p><strong>As a</strong> player (Alex),
+<strong>I want to</strong> register my character's name with the bot once,
+<strong>so that</strong> every future session note attributes my dialogue to my character rather than my Discord username.</p>
+<p><strong>Acceptance criteria:</strong>
+- [ ] <code>/register-character character:&lt;name&gt;</code> stores the mapping <code>user_id → character name</code> per guild in the database
+- [ ] Optional <code>player:&lt;ooc-name&gt;</code> parameter stores the out-of-character player name
+- [ ] <code>/characters</code> lists all registered characters for this guild
+- [ ] <code>/register-character character:&lt;new-name&gt;</code> updates an existing registration (no duplicate entries)
+- [ ] Character name is included in the "cast list" injected into the LLM system prompt at summarisation time
+- [ ] A <code>/unregister-character</code> command removes the registration</p>
+<p><strong>Milestone:</strong> v0.5</p>
+<hr />
+<h3 id="us-018-transcript-lines-are-attributed-to-the-correct-speaker">US-018 — Transcript lines are attributed to the correct speaker<a class="headerlink" href="#us-018-transcript-lines-are-attributed-to-the-correct-speaker" title="Permanent link">&para;</a></h3>
+<p><strong>As a</strong> GM (Sam),
+<strong>I want to</strong> see each line of the raw transcript labelled with the speaker's character name,
+<strong>so that</strong> the LLM summariser can correctly attribute decisions, actions, and dialogue.</p>
+<p><strong>Acceptance criteria:</strong>
+- [ ] Each user's audio is transcribed separately (per-user WAV via WaveSink); results are sorted by utterance start timestamp
+- [ ] Each transcript line is prefixed: <code>[Theron Ashveil]: "I draw my sword."</code>
+- [ ] If a user has no registered character, their Discord display name is used as the fallback label
+- [ ] The full labelled transcript is included in the Obsidian note under a <code>## Raw Transcript</code> section
+- [ ] The <code>initial_prompt</code> passed to the Whisper backend includes the character's name and the session vocabulary (US-019)</p>
+<p><strong>Milestone:</strong> v0.5</p>
+<hr />
+<h3 id="us-019-invented-proper-nouns-are-spelled-consistently-across-sessions">US-019 — Invented proper nouns are spelled consistently across sessions<a class="headerlink" href="#us-019-invented-proper-nouns-are-spelled-consistently-across-sessions" title="Permanent link">&para;</a></h3>
+<p><strong>As a</strong> GM (Sam),
+<strong>I want to</strong> add world-specific vocabulary (character names, place names, item names) once, so that Whisper stops misspelling them every session,
+<strong>so that</strong> the notes are clean and consistent without manual editing after every session.</p>
+<p><strong>Acceptance criteria:</strong>
+- [ ] After each session, named entities are extracted from the LLM summary and added to a per-guild <code>vocabulary.json</code> with a frequency counter
+- [ ] Before transcription, the top-20 most frequent terms are built into an <code>initial_prompt</code> string: "Known names and terms: Theron Ashveil, Mirethaal, the Sundering Blade."
+- [ ] <code>/vocab add &lt;word&gt;</code> manually adds a term to the guild vocabulary
+- [ ] <code>/vocab list</code> displays the current vocabulary with frequency counts
+- [ ] <code>/vocab remove &lt;word&gt;</code> removes an incorrect entry
+- [ ] After 3 sessions, a term that was originally transcribed inconsistently converges to the canonical spelling</p>
+<p><strong>Milestone:</strong> v0.5</p>
+<hr />
+<h3 id="us-020-character-changes-between-sessions">US-020 — Character changes between sessions<a class="headerlink" href="#us-020-character-changes-between-sessions" title="Permanent link">&para;</a></h3>
+<p><strong>As a</strong> player (Alex),
+<strong>I want to</strong> update my registered character when my character dies, retires, or I start a new campaign,
+<strong>so that</strong> the notes for the new campaign use my new character's name, not the old one.</p>
+<p><strong>Acceptance criteria:</strong>
+- [ ] <code>/register-character</code> with a new name overwrites the previous registration for that user in that guild
+- [ ] Old sessions' notes are not retroactively changed (they were written with the old name at the time)
+- [ ] If the campaign is changed (US-014), the character registry is campaign-scoped: registrations carry over by default but can be set per-campaign with <code>/register-character campaign:&lt;name&gt; character:&lt;name&gt;</code></p>
+<p><strong>Milestone:</strong> v0.5</p>
+<hr />
+<h2 id="audio-quality">Audio Quality<a class="headerlink" href="#audio-quality" title="Permanent link">&para;</a></h2>
+<h3 id="us-021-mic-check-before-the-session-starts">US-021 — Mic check before the session starts<a class="headerlink" href="#us-021-mic-check-before-the-session-starts" title="Permanent link">&para;</a></h3>
+<p><strong>As a</strong> GM (Sam),
+<strong>I want to</strong> record a quick 5-second clip and hear it back in Discord,
+<strong>so that</strong> I can confirm everyone's mic is working and the bot is capturing audio correctly before committing to a 4-hour session.</p>
+<p><strong>Acceptance criteria:</strong>
+- [ ] <code>/preview</code> joins the voice channel, records for 5 seconds, leaves, and sends an audio file (<code>.ogg</code> or <code>.mp3</code>) as a Discord attachment
+- [ ] The preview clip includes all users currently in the voice channel (mixed)
+- [ ] Command completes and posts the clip within 15 seconds of invocation
+- [ ] If the bot is already recording (via <code>/watch</code>), <code>/preview</code> is rejected with an error</p>
+<p><strong>Milestone:</strong> v0.6</p>
+<hr />
+<h3 id="us-022-loud-user-doesnt-drown-out-others">US-022 — Loud user doesn't drown out others<a class="headerlink" href="#us-022-loud-user-doesnt-drown-out-others" title="Permanent link">&para;</a></h3>
+<p><strong>As a</strong> player (Alex),
+<strong>I want to</strong> be heard clearly even when another player speaks loudly or has a hot mic,
+<strong>so that</strong> my contributions are captured in the transcript rather than clipped out by distortion.</p>
+<p><strong>Acceptance criteria:</strong>
+- [ ] Each per-user audio track is RMS-normalised to a target level before mixing (with WaveSink, v0.5)
+- [ ] The normalisation target is configurable (<code>NORMALISE_TARGET_DBFS</code>, default −18 dBFS)
+- [ ] A per-user track that is entirely silence is not normalised (avoids amplifying noise floor)
+- [ ] The mixed WAV has no hard-clipping artefacts for typical 4-person sessions</p>
+<p><strong>Milestone:</strong> v0.6</p>
+<hr />
+<h2 id="multi-server-access-control">Multi-Server &amp; Access Control<a class="headerlink" href="#multi-server-access-control" title="Permanent link">&para;</a></h2>
+<h3 id="us-023-two-discord-servers-record-simultaneously">US-023 — Two Discord servers record simultaneously<a class="headerlink" href="#us-023-two-discord-servers-record-simultaneously" title="Permanent link">&para;</a></h3>
+<p><strong>As a</strong> server admin (Jordan),
+<strong>I want to</strong> run a single RPG Watcher instance that serves multiple Discord servers simultaneously without the sessions interfering with each other,
+<strong>so that</strong> I don't need to run a separate bot process per guild.</p>
+<p><strong>Acceptance criteria:</strong>
+- [ ] All active recording state is keyed by <code>guild_id</code>; state from Guild A is never visible to Guild B
+- [ ] Two guilds can be in the <code>recording</code> state at the same time without errors
+- [ ] Per-guild configuration (model, campaign, character registry, vocabulary) is completely isolated
+- [ ] A pipeline failure in one guild does not affect an active recording in another</p>
+<p><strong>Milestone:</strong> v0.7</p>
+<hr />
+<h3 id="us-024-restrict-recording-to-specific-roles">US-024 — Restrict recording to specific roles<a class="headerlink" href="#us-024-restrict-recording-to-specific-roles" title="Permanent link">&para;</a></h3>
+<p><strong>As a</strong> server admin (Jordan),
+<strong>I want to</strong> configure which roles are allowed to start and stop recordings,
+<strong>so that</strong> random server members cannot trigger a recording or expose voice channel audio.</p>
+<p><strong>Acceptance criteria:</strong>
+- [ ] <code>ALLOWED_ROLE_IDS</code> env var (comma-separated Discord role IDs) restricts <code>/watch</code> and <code>/unwatch</code>
+- [ ] If set, users without one of the allowed roles receive an ephemeral "You don't have permission to do this" reply
+- [ ] If not set, any server member can use the commands (existing behaviour)
+- [ ] Bot startup logs the effective access control policy ("Restricted to roles: 123, 456" or "Open to all members")
+- [ ] <code>/config</code> (for changing model, campaign, etc.) is always restricted to "Manage Server" permission regardless of <code>ALLOWED_ROLE_IDS</code></p>
+<p><strong>Milestone:</strong> v0.7</p>
+<hr />
+<h3 id="us-025-bot-refuses-a-second-simultaneous-recording-in-the-same-guild">US-025 — Bot refuses a second simultaneous recording in the same guild<a class="headerlink" href="#us-025-bot-refuses-a-second-simultaneous-recording-in-the-same-guild" title="Permanent link">&para;</a></h3>
+<p><strong>As a</strong> GM (Sam),
+<strong>I want to</strong> be clearly told if a recording is already in progress when I try to start another one,
+<strong>so that</strong> accidental double-recording attempts don't silently produce corrupt output.</p>
+<p><strong>Acceptance criteria:</strong>
+- [ ] If <code>/watch</code> is invoked while a recording is already active in the same guild, the bot replies with: "⚠️ Already recording in <strong>#channel-name</strong> (started at 7:34 PM). Use <code>/unwatch</code> to stop it first."
+- [ ] The guard is enforced even if the previous <code>/watch</code> was issued by a different user
+- [ ] The check is race-condition safe (no two concurrent <code>/watch</code> calls can both succeed)</p>
+<p><strong>Milestone:</strong> v0.7</p>
+<hr />
+<h2 id="distribution">Distribution<a class="headerlink" href="#distribution" title="Permanent link">&para;</a></h2>
+<h3 id="us-026-install-via-docker">US-026 — Install via Docker<a class="headerlink" href="#us-026-install-via-docker" title="Permanent link">&para;</a></h3>
+<p><strong>As a</strong> server admin (Jordan),
+<strong>I want to</strong> run RPG Watcher in a Docker container using a single <code>docker-compose up</code> command,
+<strong>so that</strong> I don't need to manage a Python environment, Ollama, or Whisper separately — just a compose file.</p>
+<p><strong>Acceptance criteria:</strong>
+- [ ] <code>docker-compose.yml</code> defines two services: <code>rpgwatcher</code> (the bot) and <code>ollama</code>
+- [ ] The <code>rpgwatcher</code> image is available at <code>ghcr.io/3d-tech-solutions/rpgwatcher:&lt;version&gt;</code>
+- [ ] All configuration is passed via environment variables in <code>docker-compose.yml</code>; no file edits inside the container required
+- [ ] The Obsidian vault directory is mounted as a bind mount so notes appear on the host machine
+- [ ] <code>docker compose up -d</code> on a machine with Docker installed and a valid <code>.env</code> file produces a running, functional bot</p>
+<p><strong>Milestone:</strong> v0.8</p>
+<hr />
+<h3 id="us-027-upgrade-to-a-new-version">US-027 — Upgrade to a new version<a class="headerlink" href="#us-027-upgrade-to-a-new-version" title="Permanent link">&para;</a></h3>
+<p><strong>As a</strong> GM (Sam),
+<strong>I want to</strong> upgrade RPG Watcher to a new version without losing my configuration, session history, or character registry,
+<strong>so that</strong> I can benefit from new features without having to re-set-up from scratch.</p>
+<p><strong>Acceptance criteria:</strong>
+- [ ] <code>CHANGELOG.md</code> clearly describes breaking changes, if any, for each release
+- [ ] Database schema migrations are applied automatically on startup (e.g. via <code>alembic</code> or a simple migration runner)
+- [ ] No configuration keys in <code>.env</code> are silently dropped; unrecognised keys produce a startup warning
+- [ ] Docker upgrade path is documented: <code>docker compose pull &amp;&amp; docker compose up -d</code>
+- [ ] pip upgrade path is documented: <code>pip install --upgrade rpgwatcher</code></p>
+<p><strong>Milestone:</strong> v0.8</p>
+<hr />
+<h2 id="documentation-polish">Documentation &amp; Polish<a class="headerlink" href="#documentation-polish" title="Permanent link">&para;</a></h2>
+<h3 id="us-028-new-user-follows-setup-guide-start-to-finish">US-028 — New user follows setup guide start to finish<a class="headerlink" href="#us-028-new-user-follows-setup-guide-start-to-finish" title="Permanent link">&para;</a></h3>
+<p><strong>As a</strong> GM (Sam),
+<strong>I want to</strong> follow a single "First Time Setup" guide that takes me from zero to a completed session note,
+<strong>so that</strong> I don't have to piece together information from multiple README sections, ADRs, and source comments.</p>
+<p><strong>Acceptance criteria:</strong>
+- [ ] Guide covers in order: prerequisites (Python, Ollama, Discord bot application), installation, <code>.env</code> configuration, bot invite, first <code>/watch</code> → <code>/unwatch</code> cycle, finding the note in Obsidian
+- [ ] Each step includes the exact command to run (copy-pasteable)
+- [ ] Guide has a "What just happened?" callout after the first successful session explaining the pipeline
+- [ ] Guide is linked from the main <code>README.md</code> and from the MkDocs site navigation</p>
+<p><strong>Milestone:</strong> v0.9</p>
+<hr />
+<h3 id="us-029-troubleshoot-whispercpp-not-working">US-029 — Troubleshoot whisper.cpp not working<a class="headerlink" href="#us-029-troubleshoot-whispercpp-not-working" title="Permanent link">&para;</a></h3>
+<p><strong>As a</strong> GM (Sam),
+<strong>I want to</strong> find a troubleshooting guide that lists the most common <code>whisper.cpp</code> failure modes and their fixes,
+<strong>so that</strong> I don't have to dig through GitHub issues to figure out why my transcription is returning empty results.</p>
+<p><strong>Acceptance criteria:</strong>
+- [ ] Troubleshooting guide includes at minimum: binary path not found, model file not found, <code>--output-txt -</code> writing to file named <code>-</code> instead of stdout, binary named <code>main</code> vs <code>whisper-cli</code>, permission denied on binary
+- [ ] Each failure mode includes: symptom (what the user sees in Discord), diagnosis (what log line to look for), fix (exact command or config change)
+- [ ] Guide links to the relevant section of <code>docs/research/whisper-backends.md</code> for background
+- [ ] Guide is accessible from the MkDocs site under "Troubleshooting"</p>
+<p><strong>Milestone:</strong> v0.9
+<strong>Notes:</strong> The model path bug and <code>--output-txt -</code> bug are documented in whisper-backends.md Q4 and Q5.</p>
+<hr />
+<h3 id="us-030-configuration-is-stable-across-the-v10-api-surface">US-030 — Configuration is stable across the v1.0 API surface<a class="headerlink" href="#us-030-configuration-is-stable-across-the-v10-api-surface" title="Permanent link">&para;</a></h3>
+<p><strong>As a</strong> GM (Sam),
+<strong>I want to</strong> know which command names, env-var names, and note schema fields are guaranteed not to change in future minor versions,
+<strong>so that</strong> I can build scripts or Obsidian templates that depend on them without fear of breakage.</p>
+<p><strong>Acceptance criteria:</strong>
+- [ ] A "Public API" section in the docs explicitly lists: slash command names, all <code>SCREAMING_SNAKE_CASE</code> env vars, Obsidian note YAML front-matter keys, and the Python module public functions
+- [ ] Any future change to a listed item requires a major version bump (v2.0)
+- [ ] <code>CHANGELOG.md</code> labels changes as <code>[API]</code> when they touch the declared public surface
+- [ ] Breaking changes require a migration guide</p>
+<p><strong>Milestone:</strong> v1.0</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tabs", "navigation.sections", "navigation.top", "search.highlight", "search.share", "content.code.annotate", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
