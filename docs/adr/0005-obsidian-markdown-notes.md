@@ -7,7 +7,7 @@
 
 ## Context
 
-After the AI summary is generated, it must be persisted somewhere the user can read, search, and link it to other notes.  TheWatcher targets the tabletop RPG community, where players and GMs frequently maintain campaign wikis, session logs, and world-building notes.
+After the AI summary is generated, it must be persisted somewhere the user can read, search, and link it to other notes.  RPG Watcher targets the tabletop RPG community, where players and GMs frequently maintain campaign wikis, session logs, and world-building notes.
 
 The question: what format and application should session notes target?
 

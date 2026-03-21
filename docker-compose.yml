@@ -1,7 +1,7 @@
-# docker-compose.yml – TheWatcher + Ollama local stack
+# docker-compose.yml – RPG Watcher + Ollama local stack
 #
 # Services:
-#   thewatcher  – the Discord bot (built from Dockerfile)
+#   rpgwatcher  – the Discord bot (built from Dockerfile)
 #   ollama      – local LLM server for session summarisation
 #
 # Volumes:
@@ -19,8 +19,8 @@
 version: "3.9"
 
 services:
-  # ── TheWatcher bot ──────────────────────────────────────────────────────────
-  thewatcher:
+  # ── RPG Watcher bot ──────────────────────────────────────────────────────────
+  rpgwatcher:
     build:
       context: .
       target: runner
@@ -30,7 +30,7 @@ services:
     environment:
       OLLAMA_BASE_URL: http://ollama:11434
       RECORDINGS_DIR: /app/recordings
-      THEWATCHER_DB: /app/data/thewatcher.db
+      RPGWATCHER_DB: /app/data/rpgwatcher.db
       LOG_FORMAT: json
     volumes:
       - recordings:/app/recordings
@@ -53,7 +53,7 @@ services:
       - ollama_data:/root/.ollama
     networks:
       - internal
-    # Expose port 11434 only on localhost; thewatcher uses the internal network.
+    # Expose port 11434 only on localhost; rpgwatcher uses the internal network.
     ports:
       - "127.0.0.1:11434:11434"
     # Uncomment to enable GPU acceleration:

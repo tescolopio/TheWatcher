@@ -7,7 +7,7 @@
 
 ## Context
 
-TheWatcher needs to connect to the Discord Gateway, join voice channels, and capture per-user audio.  The choice of Discord library determines:
+RPG Watcher needs to connect to the Discord Gateway, join voice channels, and capture per-user audio.  The choice of Discord library determines:
 
 - How the bot registers and handles slash commands
 - Whether per-user PCM audio capture is available at all

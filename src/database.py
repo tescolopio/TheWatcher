@@ -1,4 +1,4 @@
-"""Lightweight SQLite persistence layer for TheWatcher.
+"""Lightweight SQLite persistence layer for RPG Watcher.
 
 Three tables:
 - ``sessions``      – one row per recording session; status flows through
@@ -6,8 +6,8 @@ Three tables:
 - ``guild_config``  – per-guild key/value overrides (set via ``/config``).
 - ``characters``    – per-guild-per-user character name registry (``/character``).
 
-The database file location defaults to ``thewatcher.db`` in the working
-directory; override with ``THEWATCHER_DB`` env var.
+The database file location defaults to ``rpgwatcher.db`` in the working
+directory; override with ``RPGWATCHER_DB`` env var.
 """
 
 import logging
@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
 
 def _db_path() -> Path:
     """Return the resolved path for the SQLite database file."""
-    path = Path(os.getenv("THEWATCHER_DB", "thewatcher.db"))
+    path = Path(os.getenv("RPGWATCHER_DB", "rpgwatcher.db"))
     path.parent.mkdir(parents=True, exist_ok=True)
     return path
 

@@ -1,4 +1,4 @@
-# ── TheWatcher – multi-stage Docker build ─────────────────────────────────────
+# ── RPGWatcher – multi-stage Docker build ─────────────────────────────────────
 #
 # Stage 1: builder
 #   Installs Python wheel dependencies into /install so the final image does
@@ -10,8 +10,8 @@
 #   Runs as a non-root user for security.
 #
 # Usage:
-#   docker build -t thewatcher .
-#   docker run --env-file .env thewatcher
+#   docker build -t rpgwatcher .
+#   docker run --env-file .env rpgwatcher
 
 # ── Stage 1: builder ──────────────────────────────────────────────────────────
 FROM python:3.12-slim AS builder
@@ -58,7 +58,7 @@ USER watcher
 
 # Default environment (overridden via --env-file or docker-compose environment:)
 ENV RECORDINGS_DIR=/app/recordings \
-    THEWATCHER_DB=/app/data/thewatcher.db \
+    RPGWATCHER_DB=/app/data/rpgwatcher.db \
     LOG_FORMAT=json \
     PYTHONUNBUFFERED=1
 

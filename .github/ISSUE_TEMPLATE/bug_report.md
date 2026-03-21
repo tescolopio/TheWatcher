@@ -26,7 +26,7 @@ labels: bug
 
 | Field | Value |
 |-------|-------|
-| TheWatcher version / commit | |
+| RPG Watcher version / commit | |
 | OS | |
 | Python version (`python --version`) | |
 | py-cord version | |

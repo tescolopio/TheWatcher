@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to TheWatcher are documented in this file.
+All notable changes to RPG Watcher are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
@@ -50,10 +50,10 @@ _Nothing yet — see the [roadmap](docs/roadmap.md) for what's coming next._
 ### Added
 
 - **`Dockerfile`** — multi-stage build (`builder` stage installs Python deps; `runner` stage uses `python:3.12-slim` + `ffmpeg` + `libopus0`); non-root `watcher` user; `/app/recordings` and `/app/data` volume mount points
-- **`docker-compose.yml`** — `thewatcher` service (built from local `Dockerfile`) + `ollama` service (`ollama/ollama:latest`, port `127.0.0.1:11434`); named volumes `recordings`, `db_data`, `ollama_data`; `internal` bridge network; `${OBSIDIAN_VAULT_PATH}` bind-mount for vault
+- **`docker-compose.yml`** — `rpgwatcher` service (built from local `Dockerfile`) + `ollama` service (`ollama/ollama:latest`, port `127.0.0.1:11434`); named volumes `recordings`, `db_data`, `ollama_data`; `internal` bridge network; `${OBSIDIAN_VAULT_PATH}` bind-mount for vault
 - **`docs/deployment/docker.md`** — comprehensive Docker deployment guide covering quick-start, GHCR image usage, volume management, GPU acceleration, and troubleshooting
 - **`.github/workflows/release.yml`** — release pipeline (see v1.0 entry) publishes image to `ghcr.io/tescolopio/rpgwatcher` on every `v*.*.*` tag
-- Default container env vars: `RECORDINGS_DIR=/app/recordings`, `THEWATCHER_DB=/app/data/thewatcher.db`, `LOG_FORMAT=json`
+- Default container env vars: `RECORDINGS_DIR=/app/recordings`, `RPGWATCHER_DB=/app/data/rpgwatcher.db`, `LOG_FORMAT=json`
 
 ---
 
@@ -148,7 +148,7 @@ _Nothing yet — see the [roadmap](docs/roadmap.md) for what's coming next._
 - **`/status` command** — displays bot latency, Ollama connectivity, Whisper backend in use, vault path, and available disk space
 - **Structured JSON logging** — opt-in via `LOG_FORMAT=json`; every log record emits a JSON object; recording sessions attach a correlation ID to all log lines
 - **Orphaned-session recovery** — `on_ready` marks any sessions left in `RECORDING` state as `FAILED` after a bot restart
-- `THEWATCHER_DB` env var to configure the SQLite file path (default `thewatcher.db`)
+- `RPGWATCHER_DB` env var to configure the SQLite file path (default `rpgwatcher.db`)
 - **`tests/test_database.py`** — 32+ unit tests for all database operations
 - `tests/test_summarizer.py` — appended retry-logic tests
 
@@ -164,7 +164,7 @@ _Nothing yet — see the [roadmap](docs/roadmap.md) for what's coming next._
 
 ### Added
 
-- **`pyproject.toml`** (PEP 621) — single source of truth for project metadata and dependencies, replacing ad-hoc `requirements*.txt` files; exposes a `thewatcher` console-script entry point
+- **`pyproject.toml`** (PEP 621) — single source of truth for project metadata and dependencies, replacing ad-hoc `requirements*.txt` files; exposes a `rpgwatcher` console-script entry point
 - **`src/py.typed`** — PEP 561 marker enabling downstream consumers to benefit from the package's type annotations
 - **`ruff`** configuration in `pyproject.toml` — replaces flake8 / black for linting and formatting
 - **`.pre-commit-config.yaml`** — runs `ruff`, `mypy --strict`, and `pytest` on staged/pushed files; also includes standard pre-commit-hooks (trailing whitespace, YAML/TOML validation, merge-conflict detection)

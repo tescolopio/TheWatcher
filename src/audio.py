@@ -1,4 +1,4 @@
-"""Audio preprocessing helpers for TheWatcher (v0.6+).
+"""Audio preprocessing helpers for RPG Watcher (v0.6+).
 
 Provides pure-Python (no external dependencies) implementations of:
 

@@ -31,8 +31,8 @@ from src.database import (
 @pytest.fixture(autouse=True)
 def _isolated_db(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """Point the module at a fresh temp-dir database for every test."""
-    db = tmp_path / "test_thewatcher.db"
-    monkeypatch.setenv("THEWATCHER_DB", str(db))
+    db = tmp_path / "test_rpgwatcher.db"
+    monkeypatch.setenv("RPGWATCHER_DB", str(db))
     init_db()
 
 
@@ -42,7 +42,7 @@ def _isolated_db(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
 def test_init_db_creates_tables(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """init_db creates all three expected tables."""
     db_path = tmp_path / "fresh.db"
-    monkeypatch.setenv("THEWATCHER_DB", str(db_path))
+    monkeypatch.setenv("RPGWATCHER_DB", str(db_path))
     init_db()
 
     conn = sqlite3.connect(str(db_path))

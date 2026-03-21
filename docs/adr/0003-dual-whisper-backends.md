@@ -14,7 +14,7 @@ Whisper speech recognition is available in two forms relevant to this project:
 
 Neither option is universally better: `openai-whisper` has zero extra setup steps, while `whisper.cpp` can be 5–10× faster on the same hardware and does not require a PyTorch installation (which pulls in ~2–3 GB of wheels).
 
-The question: should TheWatcher support one backend or both?
+The question: should RPG Watcher support one backend or both?
 
 ---
 

@@ -13,7 +13,7 @@ Only the latest release receives security fixes.  Please upgrade before reportin
 
 ## Scope
 
-TheWatcher is a **local-only** bot; by design it makes no outbound network connections except to the two services you configure yourself:
+RPG Watcher is a **local-only** bot; by design it makes no outbound network connections except to the two services you configure yourself:
 
 - **Ollama** (`OLLAMA_BASE_URL`) — loopback or LAN only
 - **Discord Gateway** — standard Discord bot connection

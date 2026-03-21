@@ -3,7 +3,7 @@
 **Status:** 🔬 Active — all queries open; work begins after v1.0 ships  
 **Informs:** [roadmap.md v1.1–v2.0](../roadmap.md#beyond-v10--standalone-application-vision-), `src/` (future platform-abstraction refactor)
 
-> This document covers the engineering challenges specific to transforming TheWatcher from a Discord-centric bot into a self-contained application that works for any group, on any voice platform, without requiring Discord. Queries are grouped by the roadmap phase in which they must be resolved.
+> This document covers the engineering challenges specific to transforming RPG Watcher from a Discord-centric bot into a self-contained application that works for any group, on any voice platform, without requiring Discord. Queries are grouped by the roadmap phase in which they must be resolved.
 
 ---
 
@@ -120,7 +120,7 @@ class AudioSource(Protocol):
 
 **Milestone:** v1.3
 
-**Context:** For Discord sessions, speaker attribution is free — `sink.audio_data` keys are Discord `user_id` values. For standalone mic/loopback capture, TheWatcher loses this advantage and must determine who is speaking from acoustic features alone. This is a fundamentally different and harder problem. The question is whether a diarization library can run alongside faster-whisper on a constrained 8 GB system without unacceptable latency or RAM pressure.
+**Context:** For Discord sessions, speaker attribution is free — `sink.audio_data` keys are Discord `user_id` values. For standalone mic/loopback capture, RPG Watcher loses this advantage and must determine who is speaking from acoustic features alone. This is a fundamentally different and harder problem. The question is whether a diarization library can run alongside faster-whisper on a constrained 8 GB system without unacceptable latency or RAM pressure.
 
 **Query:** Measure WER delta and peak RAM overhead when adding a speaker diarization stage to the faster-whisper pipeline, comparing `pyannote-audio 3.x` against `tinydiarize` (the embedded diarization model in faster-whisper).
 
@@ -155,7 +155,7 @@ class AudioSource(Protocol):
 
 **Hypothesis:** Both APIs support `http://localhost` as a valid `redirect_uri` for "desktop application" OAuth2 client types. A built-in FastAPI endpoint (`GET /oauth/callback?code=...&state=...`) can act as the redirect URI. The flow:
 1. User clicks "Connect Notion" in the Web UI settings
-2. TheWatcher opens the Notion OAuth2 authorization URL in the user's default browser with `redirect_uri=http://localhost:7432/oauth/callback`
+2. RPG Watcher opens the Notion OAuth2 authorization URL in the user's default browser with `redirect_uri=http://localhost:7432/oauth/callback`
 3. User approves in browser; Notion redirects to `localhost:7432/oauth/callback?code=...`
 4. FastAPI handler exchanges the code for an access token using the user's own Notion integration client credentials
 5. Token is stored in the local SQLite database (encrypted with a key derived from a user-set passphrase or the machine's hardware ID)

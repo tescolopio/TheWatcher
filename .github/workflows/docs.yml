@@ -1,4 +1,4 @@
-# ── TheWatcher — Docs Deployment (GitHub Pages) ────────────────────────────────
+# ── RPG Watcher — Docs Deployment (GitHub Pages) ────────────────────────────────
 #
 # Builds the MkDocs Material site and deploys it to the gh-pages branch
 # on every push to main and on every release tag.

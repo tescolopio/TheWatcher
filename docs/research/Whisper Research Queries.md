@@ -158,7 +158,7 @@ A critical deployment hurdle is the 2024 renaming of the whisper.cpp binaries. E
 | Benchmark Tool | whisper-bench | Measures performance on local silicon.46 |
 | Real-time Stream | whisper-stream | Requires SDL2 for microphone/capture support.46 |
 
-Systems like "TheWatcher" must handle fallback logic to detect if a user has configured an older binary version or a newer CLI standard.49 Furthermore, when calling these binaries via a Python subprocess, the \--output-txt \- flag is standard for reading the result from stdout.14 It is vital to use the \--no-timestamps or \-nt flag if the raw text is required without segment prefixes, as stdout historically included bracketed time ranges by default.14
+Systems like "RPG Watcher" must handle fallback logic to detect if a user has configured an older binary version or a newer CLI standard.49 Furthermore, when calling these binaries via a Python subprocess, the \--output-txt \- flag is standard for reading the result from stdout.14 It is vital to use the \--no-timestamps or \-nt flag if the raw text is required without segment prefixes, as stdout historically included bracketed time ranges by default.14
 
 ### **Discord Audio Capture via Pycord Sinks**
 

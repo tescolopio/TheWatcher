@@ -7,17 +7,17 @@
 
 ## Context
 
-TheWatcher is intended for tabletop RPG groups who want to capture and summarise their voice sessions.  Session recordings contain private conversations, character voices, real names, and in some cases sensitive personal information shared in the social context of a game.
+RPG Watcher is intended for tabletop RPG groups who want to capture and summarise their voice sessions.  Session recordings contain private conversations, character voices, real names, and in some cases sensitive personal information shared in the social context of a game.
 
 The majority of comparable tools (Otter.ai, Fireflies.ai, Discord bots calling OpenAI, etc.) send audio data to cloud APIs for transcription and summarisation.  This requires trusting third-party services with private recordings, creates a subscription cost, and introduces an internet-connectivity dependency.
 
-The core question: should TheWatcher ever send audio, transcripts, or summaries to any external service?
+The core question: should RPG Watcher ever send audio, transcripts, or summaries to any external service?
 
 ---
 
 ## Decision
 
-**TheWatcher will never transmit audio, transcripts, or summaries to any service outside the user's own machine or local network.**
+**RPG Watcher will never transmit audio, transcripts, or summaries to any service outside the user's own machine or local network.**
 
 Specifically:
 - Transcription is performed by Whisper running locally — either via the `whisper.cpp` binary or the `openai-whisper` Python package.

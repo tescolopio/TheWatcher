@@ -1,4 +1,4 @@
-# TheWatcher
+# RPG Watcher
 
 ![CI](https://github.com/tescolopio/rpgwatcher/actions/workflows/ci.yml/badge.svg)
 
@@ -117,7 +117,7 @@ All configuration is via environment variables (loaded from `.env`):
 | `OLLAMA_MODEL` | `mistral` | Ollama model name |
 | `OBSIDIAN_VAULT_PATH` | *(required)* | Absolute path to the root of your Obsidian vault |
 | `OBSIDIAN_NOTES_FOLDER` | `Session Notes` | Sub-folder inside the vault for session notes |
-| `RECORDINGS_DIR` | `/tmp/thewatcher_recordings` | Temporary directory for WAV recordings |
+| `RECORDINGS_DIR` | `/tmp/rpgwatcher_recordings` | Temporary directory for WAV recordings |
 
 ---
 

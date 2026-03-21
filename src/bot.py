@@ -1,4 +1,4 @@
-"""TheWatcher – Discord bot entry point.
+"""RPG Watcher – Discord bot entry point.
 
 Slash commands provided:
   /watch           – join a voice channel and start recording (v0.1+)
@@ -16,7 +16,7 @@ Slash commands provided:
 Run with:
     python -m src.bot
 or after installing the package:
-    thewatcher
+    rpgwatcher
 """
 
 import asyncio
@@ -140,7 +140,7 @@ async def on_ready() -> None:
 
 def _free_disk_mb(directory: Optional[str] = None) -> int:
     """Return available disk space in megabytes for *directory*."""
-    path = directory or os.getenv("RECORDINGS_DIR", "/tmp/thewatcher_recordings")
+    path = directory or os.getenv("RECORDINGS_DIR", "/tmp/rpgwatcher_recordings")
     check_path = path if os.path.exists(path) else "/"
     return int(shutil.disk_usage(check_path).free // (1024 * 1024))
 
@@ -479,7 +479,7 @@ async def watch(interaction: discord.Interaction) -> None:
         return
 
     # v0.3 – disk space guard
-    recordings_dir = os.getenv("RECORDINGS_DIR", "/tmp/thewatcher_recordings")
+    recordings_dir = os.getenv("RECORDINGS_DIR", "/tmp/rpgwatcher_recordings")
     if _free_disk_mb(recordings_dir) < _MIN_FREE_DISK_MB:
         await interaction.response.send_message(
             f"⚠️ Not enough free disk space (need {_MIN_FREE_DISK_MB} MB). "
@@ -574,11 +574,11 @@ async def status(interaction: discord.Interaction) -> None:
     base_url = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
     ollama_ok = await _check_ollama(base_url)
     vault_path = os.getenv("OBSIDIAN_VAULT_PATH", "")
-    recordings_dir = os.getenv("RECORDINGS_DIR", "/tmp/thewatcher_recordings")
+    recordings_dir = os.getenv("RECORDINGS_DIR", "/tmp/rpgwatcher_recordings")
     disk_mb = _free_disk_mb(recordings_dir)
     disk_emoji = "🟢" if disk_mb >= _MIN_FREE_DISK_MB else "🔴"
 
-    embed = discord.Embed(title="📊 TheWatcher Status", color=discord.Color.blurple())
+    embed = discord.Embed(title="📊 RPG Watcher Status", color=discord.Color.blurple())
     embed.add_field(name="🏓 Latency", value=f"{latency_ms} ms", inline=True)
     embed.add_field(
         name="🤖 Ollama",

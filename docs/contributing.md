@@ -1,4 +1,4 @@
-# Contributing to TheWatcher
+# Contributing to RPG Watcher
 
 Thank you for your interest in contributing!  This document covers how to set up your development environment, run tests, and submit changes.
 
@@ -28,8 +28,8 @@ This project follows the [Contributor Covenant Code of Conduct](https://www.cont
 1. **Fork** the repository on GitHub, then clone your fork:
 
    ```bash
-   git clone https://github.com/<your-username>/TheWatcher.git
-   cd TheWatcher
+   git clone https://github.com/<your-username>/RPG Watcher.git
+   cd RPG Watcher
    ```
 
 2. **Verify prerequisites:**

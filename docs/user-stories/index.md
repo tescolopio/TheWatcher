@@ -1,6 +1,6 @@
 # User Stories — Index
 
-This folder contains the full user story backlog for TheWatcher, organised by release track.
+This folder contains the full user story backlog for RPG Watcher, organised by release track.
 
 | File | Track | Milestones |
 |------|-------|------------|

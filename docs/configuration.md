@@ -55,8 +55,8 @@ Sub-folder (relative to `OBSIDIAN_VAULT_PATH`) where session notes are saved.  I
 | | |
 |--|--|
 | **Type** | absolute filesystem path |
-| **Default** | `/tmp/thewatcher_recordings` |
-| **Example** | `RECORDINGS_DIR=/var/data/thewatcher` |
+| **Default** | `/tmp/rpgwatcher_recordings` |
+| **Example** | `RECORDINGS_DIR=/var/data/rpgwatcher` |
 
 Directory where WAV files are written after a `/unwatch`.  The bot creates this directory if it does not exist.
 
@@ -150,8 +150,8 @@ OBSIDIAN_VAULT_PATH=/absolute/path/to/your/vault
 
 # ── Recording ─────────────────────────────────────────────────────────────────
 
-# Directory for temporary WAV files (default: /tmp/thewatcher_recordings)
-# RECORDINGS_DIR=/tmp/thewatcher_recordings
+# Directory for temporary WAV files (default: /tmp/rpgwatcher_recordings)
+# RECORDINGS_DIR=/tmp/rpgwatcher_recordings
 
 # ── Transcription ─────────────────────────────────────────────────────────────
 

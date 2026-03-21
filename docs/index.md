@@ -1,12 +1,12 @@
-# TheWatcher Documentation
+# RPG Watcher Documentation
 
-Welcome to the TheWatcher documentation.  Use the links below to navigate.
+Welcome to the RPG Watcher documentation.  Use the links below to navigate.
 
 ---
 
 ## Overview
 
-TheWatcher is an open-source, **privacy-first** Discord bot that records your tabletop RPG voice sessions, transcribes them entirely on your own hardware, and generates a structured Markdown summary that lands directly in your Obsidian vault.
+RPG Watcher is an open-source, **privacy-first** Discord bot that records your tabletop RPG voice sessions, transcribes them entirely on your own hardware, and generates a structured Markdown summary that lands directly in your Obsidian vault.
 
 ```
 Voice channel → PCMSink recording → Whisper (local) → Ollama (local) → Obsidian vault
@@ -102,6 +102,6 @@ Further milestone detail docs will be added as earlier milestones approach compl
 
 ## Project Links
 
-- [GitHub Repository](https://github.com/tescolopio/TheWatcher)
-- [Issue Tracker](https://github.com/tescolopio/TheWatcher/issues)
-- [Discussions](https://github.com/tescolopio/TheWatcher/discussions)
+- [GitHub Repository](https://github.com/tescolopio/RPG Watcher)
+- [Issue Tracker](https://github.com/tescolopio/RPG Watcher/issues)
+- [Discussions](https://github.com/tescolopio/RPG Watcher/discussions)

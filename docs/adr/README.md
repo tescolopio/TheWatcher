@@ -1,6 +1,6 @@
 # Architecture Decision Records
 
-This directory captures significant architectural and technology decisions made during the design and development of TheWatcher.
+This directory captures significant architectural and technology decisions made during the design and development of RPG Watcher.
 
 Each ADR is a short document that explains **what** was decided, **why** it was decided that way, and what **alternatives** were considered and rejected.  Once accepted, an ADR is immutable — if a decision is reversed, a new ADR supersedes it and the old one is marked as superseded.
 

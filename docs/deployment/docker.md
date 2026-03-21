@@ -1,6 +1,6 @@
 # Docker Deployment Guide
 
-This guide covers running TheWatcher using Docker and `docker compose`.  Everything — the bot, Ollama, and persistent storage — runs in containers on your own hardware.  No audio, transcripts, or summaries leave your machine.
+This guide covers running RPG Watcher using Docker and `docker compose`.  Everything — the bot, Ollama, and persistent storage — runs in containers on your own hardware.  No audio, transcripts, or summaries leave your machine.
 
 ---
 
@@ -45,7 +45,7 @@ This starts two services:
 
 | Service | What it does |
 |---------|-------------|
-| `thewatcher` | The Discord bot (built from the local `Dockerfile`) |
+| `rpgwatcher` | The Discord bot (built from the local `Dockerfile`) |
 | `ollama` | Local LLM server — runs `mistral` by default |
 
 ### 3. Pull the LLM model
@@ -61,10 +61,10 @@ Subsequent restarts reuse the cached weights from the `ollama_data` volume.
 ### 4. Verify the bot is running
 
 ```bash
-docker compose logs -f thewatcher
+docker compose logs -f rpgwatcher
 ```
 
-You should see a JSON log line containing `"logged_in_as": "TheWatcher#1234"`.  The bot should appear online in your Discord server.
+You should see a JSON log line containing `"logged_in_as": "RPG Watcher#1234"`.  The bot should appear online in your Discord server.
 
 ---
 
@@ -84,7 +84,7 @@ To use the pre-built image in `docker-compose.yml`, replace the `build:` block w
 
 ```yaml
 services:
-  thewatcher:
+  rpgwatcher:
     image: ghcr.io/tescolopio/rpgwatcher:latest
     # remove the build: block
 ```
@@ -101,7 +101,7 @@ The compose file enforces these container-specific overrides regardless of `.env
 |----------|------------------|-------------|
 | `OLLAMA_BASE_URL` | `http://ollama:11434` | Internal hostname of the Ollama service |
 | `RECORDINGS_DIR` | `/app/recordings` | WAV file storage (named volume) |
-| `THEWATCHER_DB` | `/app/data/thewatcher.db` | SQLite database path (named volume) |
+| `RPGWATCHER_DB` | `/app/data/rpgwatcher.db` | SQLite database path (named volume) |
 | `LOG_FORMAT` | `json` | Structured JSON logging |
 
 Full reference: [configuration.md](../configuration.md)
@@ -113,7 +113,7 @@ Full reference: [configuration.md](../configuration.md)
 | Volume | Mounted at | Contains |
 |--------|-----------|---------|
 | `recordings` | `/app/recordings` | Per-session WAV files |
-| `db_data` | `/app/data` | SQLite database (`thewatcher.db`) |
+| `db_data` | `/app/data` | SQLite database (`rpgwatcher.db`) |
 | `ollama_data` | `/root/.ollama` | Ollama model weights |
 
 Volumes survive container restarts and upgrades.  To reset state (⚠️ destructive):
@@ -124,17 +124,17 @@ docker compose down -v    # removes all named volumes
 
 ---
 
-## Updating TheWatcher
+## Updating RPG Watcher
 
 ```bash
 # Pull the latest image (if using ghcr.io)
-docker compose pull thewatcher
+docker compose pull rpgwatcher
 
 # Or rebuild from source
-docker compose build thewatcher
+docker compose build rpgwatcher
 
 # Restart with the new image
-docker compose up -d thewatcher
+docker compose up -d rpgwatcher
 ```
 
 The database schema is backward-compatible across minor versions (SQLite `CREATE TABLE IF NOT EXISTS`).  Check `CHANGELOG.md` before updating across major versions.
@@ -165,7 +165,7 @@ Check service health:
 
 ```bash
 docker compose ps
-docker compose logs thewatcher --tail 50
+docker compose logs rpgwatcher --tail 50
 docker compose logs ollama --tail 20
 ```
 
@@ -226,7 +226,7 @@ The release pipeline builds `linux/amd64` and `linux/arm64` images.  To build lo
 docker buildx create --use --name multi-platform
 docker buildx build \
   --platform linux/amd64,linux/arm64 \
-  --tag thewatcher:local \
+  --tag rpgwatcher:local \
   --load \
   .
 ```

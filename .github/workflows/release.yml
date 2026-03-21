@@ -1,4 +1,4 @@
-# ── TheWatcher — Release Pipeline ─────────────────────────────────────────────
+# ── RPG Watcher — Release Pipeline ─────────────────────────────────────────────
 #
 # Triggered on semantic-version tags (e.g. v1.0.0, v1.2.3).
 #

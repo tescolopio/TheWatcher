@@ -83,7 +83,7 @@ See [index.md](index.md) for personas and the ID system.
 ### US-005 — First-time installation
 
 **As a** GM (Sam),
-**I want to** install TheWatcher on my home server by following a single README section,
+**I want to** install RPG Watcher on my home server by following a single README section,
 **so that** I can have the bot running in a real voice session within 30 minutes of first discovering the project.
 
 **Acceptance criteria:**
@@ -392,7 +392,7 @@ See [index.md](index.md) for personas and the ID system.
 ### US-023 — Two Discord servers record simultaneously
 
 **As a** server admin (Jordan),
-**I want to** run a single TheWatcher instance that serves multiple Discord servers simultaneously without the sessions interfering with each other,
+**I want to** run a single RPG Watcher instance that serves multiple Discord servers simultaneously without the sessions interfering with each other,
 **so that** I don't need to run a separate bot process per guild.
 
 **Acceptance criteria:**
@@ -442,12 +442,12 @@ See [index.md](index.md) for personas and the ID system.
 ### US-026 — Install via Docker
 
 **As a** server admin (Jordan),
-**I want to** run TheWatcher in a Docker container using a single `docker-compose up` command,
+**I want to** run RPG Watcher in a Docker container using a single `docker-compose up` command,
 **so that** I don't need to manage a Python environment, Ollama, or Whisper separately — just a compose file.
 
 **Acceptance criteria:**
-- [ ] `docker-compose.yml` defines two services: `thewatcher` (the bot) and `ollama`
-- [ ] The `thewatcher` image is available at `ghcr.io/3d-tech-solutions/thewatcher:<version>`
+- [ ] `docker-compose.yml` defines two services: `rpgwatcher` (the bot) and `ollama`
+- [ ] The `rpgwatcher` image is available at `ghcr.io/3d-tech-solutions/rpgwatcher:<version>`
 - [ ] All configuration is passed via environment variables in `docker-compose.yml`; no file edits inside the container required
 - [ ] The Obsidian vault directory is mounted as a bind mount so notes appear on the host machine
 - [ ] `docker compose up -d` on a machine with Docker installed and a valid `.env` file produces a running, functional bot
@@ -459,7 +459,7 @@ See [index.md](index.md) for personas and the ID system.
 ### US-027 — Upgrade to a new version
 
 **As a** GM (Sam),
-**I want to** upgrade TheWatcher to a new version without losing my configuration, session history, or character registry,
+**I want to** upgrade RPG Watcher to a new version without losing my configuration, session history, or character registry,
 **so that** I can benefit from new features without having to re-set-up from scratch.
 
 **Acceptance criteria:**
@@ -467,7 +467,7 @@ See [index.md](index.md) for personas and the ID system.
 - [ ] Database schema migrations are applied automatically on startup (e.g. via `alembic` or a simple migration runner)
 - [ ] No configuration keys in `.env` are silently dropped; unrecognised keys produce a startup warning
 - [ ] Docker upgrade path is documented: `docker compose pull && docker compose up -d`
-- [ ] pip upgrade path is documented: `pip install --upgrade thewatcher`
+- [ ] pip upgrade path is documented: `pip install --upgrade rpgwatcher`
 
 **Milestone:** v0.8
 

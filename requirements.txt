@@ -1,4 +1,4 @@
-# Runtime dependencies for TheWatcher
+# Runtime dependencies for RPG Watcher
 
 # Discord bot framework with voice recording support (py-cord includes discord.sinks)
 py-cord[voice]>=2.3.0,<3.0.0

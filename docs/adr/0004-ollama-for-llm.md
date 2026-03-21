@@ -7,7 +7,7 @@
 
 ## Context
 
-TheWatcher needs to take a raw voice transcript and produce a structured, TTRPG-flavoured Markdown summary.  This is a natural-language generation task that benefits from a large language model.
+RPG Watcher needs to take a raw voice transcript and produce a structured, TTRPG-flavoured Markdown summary.  This is a natural-language generation task that benefits from a large language model.
 
 Given ADR-0001 (local-only architecture), the LLM must run on the user's own hardware.  The question is how to manage model download, serving, and a Python client.
 

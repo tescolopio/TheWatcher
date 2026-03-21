@@ -1,4 +1,4 @@
-# TheWatcher — Roadmap
+# RPG Watcher — Roadmap
 
 > **Privacy-first session companion for TTRPG groups — starting as a Discord bot, evolving into a standalone application that works for anyone, anywhere, on any device.**
 
@@ -41,7 +41,7 @@ The core pipeline is functional end-to-end.
 
 #### Packaging
 - [x] Add `pyproject.toml` (PEP 621) replacing ad-hoc `requirements*.txt` as the single source of truth for metadata and dependencies
-- [x] Expose a `thewatcher` console-script entry point
+- [x] Expose a `rpgwatcher` console-script entry point
 - [x] Add `py.typed` marker and configure `mypy` for strict type checking
 
 #### Code quality
@@ -178,22 +178,22 @@ The core pipeline is functional end-to-end.
 
 ## v0.8 — Packaging & Distribution  ✅
 
-**Goal:** Users who are not Python developers can install and run TheWatcher without touching `pip` directly.
+**Goal:** Users who are not Python developers can install and run RPG Watcher without touching `pip` directly.
 
 ### Tasks
 
 #### Docker
 - [x] Add `Dockerfile` (multi-stage build; final image based on `python:3.12-slim`)
 - [x] Add `docker-compose.yml` that starts the bot alongside an Ollama container
-- [x] Publish image to GitHub Container Registry on every tagged release (`ghcr.io/tescolopio/thewatcher`)
+- [x] Publish image to GitHub Container Registry on every tagged release (`ghcr.io/tescolopio/rpgwatcher`)
 - [x] Document Docker deployment in `docs/deployment/docker.md`
 
 #### pip package
-- [ ] Publish to PyPI under `thewatcher` (or `the-watcher`) on every tagged release via a GitHub Actions release workflow
-- [ ] Verify `pip install thewatcher && thewatcher` works end-to-end on a clean environment
+- [ ] Publish to PyPI under `rpgwatcher` (or `the-watcher`) on every tagged release via a GitHub Actions release workflow
+- [ ] Verify `pip install rpgwatcher && rpgwatcher` works end-to-end on a clean environment
 
 #### System packages (stretch)
-- [ ] Homebrew formula (`brew install thewatcher`)
+- [ ] Homebrew formula (`brew install rpgwatcher`)
 - [ ] `.deb` / `.rpm` packages via `fpm`
 
 ---
@@ -281,7 +281,7 @@ The core pipeline is functional end-to-end.
 
 ## Beyond v1.0 — Standalone Application Vision  🔭
 
-> **The long-term goal:** TheWatcher evolves from a Discord-first bot into a universal session companion.  Any group playing any TTRPG, in any voice platform, in any location, on any device, can run a session through TheWatcher and receive a structured, speaker-attributed session note — entirely on their own hardware, with no accounts, no cloud services, and no subscription.
+> **The long-term goal:** RPG Watcher evolves from a Discord-first bot into a universal session companion.  Any group playing any TTRPG, in any voice platform, in any location, on any device, can run a session through RPG Watcher and receive a structured, speaker-attributed session note — entirely on their own hardware, with no accounts, no cloud services, and no subscription.
 
 The v1.x phase is architectural: separating the recording/transcription/summary/output pipeline from Discord as a specific transport, so each layer can be swapped or extended independently.
 
@@ -302,7 +302,7 @@ The v1.x phase is architectural: separating the recording/transcription/summary/
   ```
 - [ ] Refactor `bot.py` so the Discord sink implements `AudioSource`; the pipeline (`finish_recording → transcribe → summarize → write_note`) takes an `AudioSource`, not a `PCMSink`
 - [ ] Implement a `FileUploadSource` — accepts a pre-recorded audio file (WAV, MP3, OGG) and returns it as a single-speaker `AudioData` entry; this is the first non-Discord source
-- [ ] Add a CLI entry point (`thewatcher process <file>`) that runs the full pipeline from a local file without starting the bot
+- [ ] Add a CLI entry point (`rpgwatcher process <file>`) that runs the full pipeline from a local file without starting the bot
 - [ ] Define an `OutputAdapter` abstract interface for note destinations; refactor `obsidian.py` to implement it
 - [ ] All pipeline unit tests now test against the abstract interfaces, not Discord types
 
@@ -310,7 +310,7 @@ The v1.x phase is architectural: separating the recording/transcription/summary/
 
 ### v1.2 — Local Web UI & Session Dashboard  🔭
 
-**Goal:** Users manage TheWatcher through a browser rather than Discord slash commands.  The bot is optional; the web UI is the primary interface.
+**Goal:** Users manage RPG Watcher through a browser rather than Discord slash commands.  The bot is optional; the web UI is the primary interface.
 
 #### Key tasks
 
@@ -326,7 +326,7 @@ The v1.x phase is architectural: separating the recording/transcription/summary/
 
 ### v1.3 — Extended Audio Sources  🔭
 
-**Goal:** TheWatcher captures audio from any platform, not just Discord voice channels.
+**Goal:** RPG Watcher captures audio from any platform, not just Discord voice channels.
 
 #### Candidate sources (research required — see below)
 
@@ -334,7 +334,7 @@ The v1.x phase is architectural: separating the recording/transcription/summary/
 |--------|-----------|-------------------|------------|
 | **File upload** | `FileUploadSource` (v1.1) | Single track unless multi-track file | Low \u2014 Done in v1.1 |
 | **In-person mic** | `sounddevice` / `pyaudio` system mic capture | Mixed; speaker diarization required | Medium |
-| **Virtual audio cable** | Route Zoom/Teams/Meet output to a virtual device; TheWatcher reads it | Mixed; diarization required | Medium |
+| **Virtual audio cable** | Route Zoom/Teams/Meet output to a virtual device; RPG Watcher reads it | Mixed; diarization required | Medium |
 | **Zoom SDK** | Official Zoom Meeting SDK \u2014 per-participant audio streams | Per-participant (like Discord) | High (account + approval required) |
 | **System audio loopback** | OS-level audio capture (WASAPI loopback on Windows, BlackHole on macOS) | Mixed; diarization required | Medium |
 | **Uploaded multi-track** | `.zip` or multi-channel WAV from Zencastr/Craig/Cleanfeed | Per-participant | Low |
@@ -346,7 +346,7 @@ The v1.x phase is architectural: separating the recording/transcription/summary/
 - [ ] `SystemMicSource` — capture from a selected input device via `sounddevice`; run Silero VAD to segment by speech; diarize using stored voice profiles
 - [ ] `LoopbackSource` — system audio loopback (Windows WASAPI, macOS BlackHole, Linux PulseAudio monitor); same VAD + diarization pipeline
 - [ ] Audio source selector in Web UI (Discord channel / microphone / loopback / file upload)
-- [ ] Document in-person setup: laptop in the middle of the table, `thewatcher record --source=mic`
+- [ ] Document in-person setup: laptop in the middle of the table, `rpgwatcher record --source=mic`
 
 ---
 
@@ -378,7 +378,7 @@ The v1.x phase is architectural: separating the recording/transcription/summary/
 
 ### v2.0 — Standalone Application Release  🔭
 
-**Goal:** TheWatcher ships as a self-contained application.  A user who has never heard of Discord, Obsidian, or Python can download it, double-click an installer, and have a working session recorder in 5 minutes.
+**Goal:** RPG Watcher ships as a self-contained application.  A user who has never heard of Discord, Obsidian, or Python can download it, double-click an installer, and have a working session recorder in 5 minutes.
 
 #### What "standalone" means
 
@@ -404,7 +404,7 @@ The v1.x phase is architectural: separating the recording/transcription/summary/
 
 #### The v2.0 user story
 
-> Sarah wants to record her weekly D&D group.  They play on Roll20 with audio in Google Meet.  She downloads TheWatcher, runs the installer, opens her browser to `localhost:7432`, clicks "New Session", selects "System Audio (Loopback)" as the source, hits Record.  The bot labels each speaker by voice profile (enrolled once per player during the first session).  When the session ends, a structured Markdown note with speaker-attributed dialogue and a full session summary is written to her Obsidian vault automatically — and also posted to her campaign's Notion page.  Nothing left her machine except the Notion note she explicitly opted into.
+> Sarah wants to record her weekly D&D group.  They play on Roll20 with audio in Google Meet.  She downloads RPG Watcher, runs the installer, opens her browser to `localhost:7432`, clicks "New Session", selects "System Audio (Loopback)" as the source, hits Record.  The bot labels each speaker by voice profile (enrolled once per player during the first session).  When the session ends, a structured Markdown note with speaker-attributed dialogue and a full session summary is written to her Obsidian vault automatically — and also posted to her campaign's Notion page.  Nothing left her machine except the Notion note she explicitly opted into.
 
 ---
 

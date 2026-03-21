@@ -34,13 +34,13 @@ _SAMPLE_WIDTH = 2  # bytes per channel sample (16-bit)
 
 def _get_recordings_dir() -> Path:
     """Return (and create if needed) the local directory for saved recordings."""
-    recordings_dir = Path(os.getenv("RECORDINGS_DIR", "/tmp/thewatcher_recordings"))
+    recordings_dir = Path(os.getenv("RECORDINGS_DIR", "/tmp/rpgwatcher_recordings"))
     recordings_dir.mkdir(parents=True, exist_ok=True)
     return recordings_dir
 
 
 class RecordingSink(PCMSink):
-    """PCMSink subclass used as the recording sink for TheWatcher sessions."""
+    """PCMSink subclass used as the recording sink for RPG Watcher sessions."""
 
 
 def merge_audio_data(

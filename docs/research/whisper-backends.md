@@ -19,7 +19,7 @@
 
 ## Background (Established Facts)
 
-[Whisper](https://github.com/openai/whisper) is OpenAI's speech recognition model (MIT licence).  Two local implementations are relevant to TheWatcher:
+[Whisper](https://github.com/openai/whisper) is OpenAI's speech recognition model (MIT licence).  Two local implementations are relevant to RPG Watcher:
 
 | Implementation | Language | GPU required? | Install |
 |---------------|----------|--------------|---------|
@@ -76,7 +76,7 @@ WER figures are from the [OpenAI Whisper paper](https://arxiv.org/abs/2212.04356
 | medium | ~2.1 GB |
 | large | ~3.9 GB |
 
-**Matrix still needed — measure on TheWatcher’s actual target hardware:**
+**Matrix still needed — measure on RPG Watcher’s actual target hardware:**
 
 The benchmark harness in the original Q1 spec remains valid; run it for the models/backends you plan to recommend and fill this in:
 
@@ -225,7 +225,7 @@ Record detected language metadata from `result["language"]` (openai-whisper Pyth
 
 `faster-whisper` is a CTranslate2-based reimplementation of Whisper that should replace `openai-whisper` as the Python fallback.  It uses the same model names and is a near drop-in replacement.
 
-**Why it is better than `openai-whisper` for TheWatcher:**
+**Why it is better than `openai-whisper` for RPG Watcher:**
 
 | Feature | openai-whisper | faster-whisper |
 |---------|---------------|----------------|
@@ -353,7 +353,7 @@ See [llm-models.md](llm-models.md) Q8 for context window analysis.
 
 ### The key insight: Discord already does speaker separation
 
-Conventional speaker diarization problems ("who is speaking when?") are solved by algorithms like pyannote because they start from a *single mixed audio stream* and must figure out speaker boundaries from acoustic differences alone.  TheWatcher never faces this problem.
+Conventional speaker diarization problems ("who is speaking when?") are solved by algorithms like pyannote because they start from a *single mixed audio stream* and must figure out speaker boundaries from acoustic differences alone.  RPG Watcher never faces this problem.
 
 `sink.audio_data` is `dict[int, AudioData]` keyed by **Discord `user_id`**.  Each entry is that user's audio, and nothing else.  We know exactly who is speaking at every moment.  No diarization library is needed.  The architecture is simpler than it first appears.
 
@@ -470,7 +470,7 @@ Users can also add words manually:
 
 ### Phase 3 — Voice Profile Enrollment (v0.5+)
 
-**Goal:** Identify speakers even when Discord metadata is unavailable — for example, post-processing an audio file captured outside of TheWatcher, or verifying that the voice speaking matches the registered user.
+**Goal:** Identify speakers even when Discord metadata is unavailable — for example, post-processing an audio file captured outside of RPG Watcher, or verifying that the voice speaking matches the registered user.
 
 **Mechanism:** Speaker embedding models (e.g. [SpeechBrain ECAPA-TDNN](https://huggingface.co/speechbrain/spkrec-ecapa-voxceleb), MIT licence) compress a speech segment into a fixed-length embedding vector.  Cosine similarity between embeddings measures speaker similarity.
 
@@ -482,7 +482,7 @@ Users can also add words manually:
 
 **How it gets better over time:**  Each session, compute embeddings for all of a user’s audio and average them into a running centroid.  After 5+ sessions, the centroid represents their voice much more robustly than a single 30-second enrollment.
 
-**Practical note for TheWatcher:**  Phase 3 is **not required** for the core feature — Discord user_id already uniquely identifies speakers.  The main use case is a future "post-process an existing recording" feature where per-user audio tracks aren’t available.  Implementing Phases 1 and 2 delivers the full user-facing value with no ML training pipeline.
+**Practical note for RPG Watcher:**  Phase 3 is **not required** for the core feature — Discord user_id already uniquely identifies speakers.  The main use case is a future "post-process an existing recording" feature where per-user audio tracks aren’t available.  Implementing Phases 1 and 2 delivers the full user-facing value with no ML training pipeline.
 
 ---
 
@@ -529,7 +529,7 @@ bash models/download-ggml-model.sh base
 
 ---
 
-### Q12 — FUTO Whisper ACFT models: are they better for TheWatcher? 💭 Answered by design analysis
+### Q12 — FUTO Whisper ACFT models: are they better for RPG Watcher? 💭 Answered by design analysis
 
 **What FUTO ACFT is:**
 [FUTO](https://futo.org) developed an open-source fine-tuning technique called **ACFT (Audio Context Fine-Tuning)** for Whisper models.  The problem they solved: Whisper's encoder always processes a fixed 30-second window, even if the spoken audio is only 3 seconds long — the rest is padded with silence.  On a phone, encoding 27 seconds of nothing is slow.  ACFT fine-tunes the model to tolerate a `dynamic audio_ctx` parameter in whisper.cpp so the encoder only processes the audio that actually exists, dramatically reducing latency for short clips.
@@ -548,9 +548,9 @@ bash models/download-ggml-model.sh base
 **Why these models feel fastest/best in keyboard use:**
 For a 4-second voice dictation, dynamic audio_ctx means the encoder processes 4 seconds instead of 30 — a 7.5× speedup on the encoder alone.  On a mid-range Android phone where the encoder is the bottleneck, this makes dictation feel nearly instant.  The perceived quality improvement is mostly latency, not accuracy.
 
-**Why this advantage does NOT transfer to TheWatcher:**
+**Why this advantage does NOT transfer to RPG Watcher:**
 
-1. **Chunk size mismatch:** TheWatcher's chunked transcription processes 2–10 minute audio segments.  Whisper internally splits any audio longer than 30 seconds into sequential 30-second frames regardless of `audio_ctx`.  The ACFT optimization only applies to the final short frame at the end of a chunk (a few seconds of remainder after the last full 30-second window) — negligible for multi-minute chunks.
+1. **Chunk size mismatch:** RPG Watcher's chunked transcription processes 2–10 minute audio segments.  Whisper internally splits any audio longer than 30 seconds into sequential 30-second frames regardless of `audio_ctx`.  The ACFT optimization only applies to the final short frame at the end of a chunk (a few seconds of remainder after the last full 30-second window) — negligible for multi-minute chunks.
 
 2. **No large model available:** TTRPG sessions have invented proper nouns, fantasy vocabulary, accents, and cross-talk.  The recommended minimum is `small`; `medium` or `large-v3-turbo` are meaningfully better for entity fidelity.  FUTO provides nothing above `small`.
 
@@ -558,9 +558,9 @@ For a 4-second voice dictation, dynamic audio_ctx means the encoder processes 4 
 
 4. **faster-whisper handles this better:** faster-whisper with `vad_filter=True` already skips silent frames using Silero VAD, achieving a similar practical speedup to ACFT on typical TTRPG audio (long silences between speakers) without the WER trade-off or the model size limitation.
 
-**Verdict for TheWatcher:**  The FUTO ACFT models are well-executed and MIT-licensed, but they are purpose-built for real-time short-utterance keyboard dictation.  For TheWatcher's multi-minute chunked session transcription, they offer no latency benefit and have no large-model variants.  **Do not substitute for standard Whisper models in this use case.**
+**Verdict for RPG Watcher:**  The FUTO ACFT models are well-executed and MIT-licensed, but they are purpose-built for real-time short-utterance keyboard dictation.  For RPG Watcher's multi-minute chunked session transcription, they offer no latency benefit and have no large-model variants.  **Do not substitute for standard Whisper models in this use case.**
 
-**When to revisit:** If TheWatcher ever gains a real-time streaming transcription mode (e.g. live caption display during a session, processing utterances as they are spoken rather than in bulk chunks), the ACFT models become genuinely relevant — dynamic audio_ctx would allow encoding each utterance as it ends rather than waiting for a 30-second window to fill.  Track as deferred Q11.
+**When to revisit:** If RPG Watcher ever gains a real-time streaming transcription mode (e.g. live caption display during a session, processing utterances as they are spoken rather than in bulk chunks), the ACFT models become genuinely relevant — dynamic audio_ctx would allow encoding each utterance as it ends rather than waiting for a 30-second window to fill.  Track as deferred Q11.
 
 ---
 

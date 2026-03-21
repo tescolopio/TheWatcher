@@ -1,6 +1,6 @@
 # Local Deployment Guide
 
-This guide walks through everything needed to run TheWatcher on your own machine.  For Docker deployment, see [deployment/docker.md](docker.md).
+This guide walks through everything needed to run RPG Watcher on your own machine.  For Docker deployment, see [deployment/docker.md](docker.md).
 
 ---
 
@@ -18,7 +18,7 @@ This guide walks through everything needed to run TheWatcher on your own machine
 ## Step 1 — Create a Discord Bot
 
 1. Open <https://discord.com/developers/applications> and click **New Application**.
-2. Name it (e.g. "TheWatcher") and click **Create**.
+2. Name it (e.g. "RPG Watcher") and click **Create**.
 3. Select **Bot** in the left sidebar:
    - Click **Reset Token** and copy the token — you will need it for `.env`.
    - Scroll down to **Privileged Gateway Intents** and enable:
@@ -36,7 +36,7 @@ This guide walks through everything needed to run TheWatcher on your own machine
 
 ---
 
-## Step 2 — Install TheWatcher
+## Step 2 — Install RPG Watcher
 
 ```bash
 git clone https://github.com/tescolopio/rpgwatcher.git
@@ -131,7 +131,7 @@ You should see output like:
 
 ```
 2026-03-03 10:00:00 [INFO] discord.client: Logging in using static token
-2026-03-03 10:00:01 [INFO] __main__: Logged in as TheWatcher#1234 (ID: 123456789)
+2026-03-03 10:00:01 [INFO] __main__: Logged in as RPG Watcher#1234 (ID: 123456789)
 2026-03-03 10:00:01 [INFO] __main__: Synced 2 slash command(s).
 ```
 
@@ -151,20 +151,20 @@ You should see output like:
 
 ### systemd (Linux)
 
-Create `/etc/systemd/system/thewatcher.service`:
+Create `/etc/systemd/system/rpgwatcher.service`:
 
 ```ini
 [Unit]
-Description=TheWatcher Discord Bot
+Description=RPG Watcher Discord Bot
 After=network-online.target ollama.service
 Wants=network-online.target
 
 [Service]
 Type=simple
-User=thewatcher          # create a dedicated user: useradd -r thewatcher
-WorkingDirectory=/opt/thewatcher
-ExecStart=/opt/thewatcher/.venv/bin/python -m src.bot
-EnvironmentFile=/opt/thewatcher/.env
+User=rpgwatcher          # create a dedicated user: useradd -r rpgwatcher
+WorkingDirectory=/opt/rpgwatcher
+ExecStart=/opt/rpgwatcher/.venv/bin/python -m src.bot
+EnvironmentFile=/opt/rpgwatcher/.env
 Restart=on-failure
 RestartSec=10
 
@@ -174,13 +174,13 @@ WantedBy=multi-user.target
 
 ```bash
 sudo systemctl daemon-reload
-sudo systemctl enable --now thewatcher
-sudo journalctl -u thewatcher -f   # follow logs
+sudo systemctl enable --now rpgwatcher
+sudo journalctl -u rpgwatcher -f   # follow logs
 ```
 
 ### macOS launchd
 
-Create `~/Library/LaunchAgents/dev.3dtechsolutions.thewatcher.plist`:
+Create `~/Library/LaunchAgents/dev.3dtechsolutions.rpgwatcher.plist`:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -188,15 +188,15 @@ Create `~/Library/LaunchAgents/dev.3dtechsolutions.thewatcher.plist`:
 <plist version="1.0">
 <dict>
     <key>Label</key>
-    <string>dev.3dtechsolutions.thewatcher</string>
+    <string>dev.3dtechsolutions.rpgwatcher</string>
     <key>ProgramArguments</key>
     <array>
-        <string>/path/to/thewatcher/.venv/bin/python</string>
+        <string>/path/to/rpgwatcher/.venv/bin/python</string>
         <string>-m</string>
         <string>src.bot</string>
     </array>
     <key>WorkingDirectory</key>
-    <string>/path/to/thewatcher</string>
+    <string>/path/to/rpgwatcher</string>
     <key>EnvironmentVariables</key>
     <dict>
         <key>DISCORD_BOT_TOKEN</key>
@@ -208,15 +208,15 @@ Create `~/Library/LaunchAgents/dev.3dtechsolutions.thewatcher.plist`:
     <key>KeepAlive</key>
     <true/>
     <key>StandardOutPath</key>
-    <string>/tmp/thewatcher.log</string>
+    <string>/tmp/rpgwatcher.log</string>
     <key>StandardErrorPath</key>
-    <string>/tmp/thewatcher.err</string>
+    <string>/tmp/rpgwatcher.err</string>
 </dict>
 </plist>
 ```
 
 ```bash
-launchctl load ~/Library/LaunchAgents/dev.3dtechsolutions.thewatcher.plist
+launchctl load ~/Library/LaunchAgents/dev.3dtechsolutions.rpgwatcher.plist
 ```
 
 ---

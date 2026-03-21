@@ -64,7 +64,7 @@ Discord's client-side Voice Activity Detection (VAD) suppresses Opus packet tran
 
 **Source:** `discord/sinks/core.py` — `AudioData.write()` performs a straight `self.file.write(data)` with no timestamp tracking.
 
-**Consequence for TheWatcher — every multi-user session is affected:**
+**Consequence for RPG Watcher — every multi-user session is affected:**
 
 If User A speaks from t=0, and User B joins at t=10 min:
 - `audio_data[A_id]` contains ~30 min of bytes
@@ -98,7 +98,7 @@ for user_id, audio in audio_data.items():
     pcm_tracks.append(silence + audio.file.read())
 ```
 
-**Until fixed:** TheWatcher is reliable only for groups where all players are already in the voice channel before `/watch` is called and nobody disconnects.
+**Until fixed:** RPG Watcher is reliable only for groups where all players are already in the voice channel before `/watch` is called and nobody disconnects.
 
 ---
 
@@ -151,10 +151,10 @@ Alternatively: inject synthetic PCM using a test harness that fills `sink.audio_
 
 **Reasoning:**
 
-- `ffmpeg` is used by py-cord exclusively when creating audio *source* objects for playback (e.g. `discord.FFmpegPCMAudio`).  TheWatcher never plays audio.
-- TheWatcher's `merge_audio_data()` and `finish_recording()` use only Python's built-in `wave` and `struct` modules — no `ffmpeg` dependency.
+- `ffmpeg` is used by py-cord exclusively when creating audio *source* objects for playback (e.g. `discord.FFmpegPCMAudio`).  RPG Watcher never plays audio.
+- RPG Watcher's `merge_audio_data()` and `finish_recording()` use only Python's built-in `wave` and `struct` modules — no `ffmpeg` dependency.
 - `faster-whisper` (the recommended transcription upgrade — see whisper-backends.md) explicitly documents that it does **not** require `ffmpeg` on the system because it uses PyAV.
-- `openai-whisper` uses `ffmpeg` to load non-WAV formats, but TheWatcher always passes a `.wav` file output from Python's `wave` module.
+- `openai-whisper` uses `ffmpeg` to load non-WAV formats, but RPG Watcher always passes a `.wav` file output from Python's `wave` module.
 
 **Remaining uncertainty:** py-cord's `voice_client.py` may attempt to call `ffmpeg` at connection time for audio playback infrastructure even when unused.  This needs one empirical test: start the bot without `ffmpeg` on `PATH` and run a full session.
 

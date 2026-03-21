@@ -40,7 +40,7 @@ Your Bot Instance   ──►  Local Whisper  ──►  Local Ollama  ──►
 ### 3.1 Voice Audio
 
 - **What:** Raw PCM audio captured from all speakers in a Discord voice channel during an active recording session (between `/watch` and `/unwatch`).
-- **How it is stored:** Mixed into a single WAV file on disk in `RECORDINGS_DIR` (default: `/tmp/thewatcher_recordings`). Per-speaker WAV files are also written temporarily when character names are registered.
+- **How it is stored:** Mixed into a single WAV file on disk in `RECORDINGS_DIR` (default: `/tmp/rpgwatcher_recordings`). Per-speaker WAV files are also written temporarily when character names are registered.
 - **Retention:** Files remain on disk until the Operator manually deletes them or clears the directory. The Software does not automatically delete audio files.
 
 ### 3.2 Transcripts

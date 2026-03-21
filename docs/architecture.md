@@ -1,6 +1,6 @@
 # Architecture
 
-TheWatcher is a single-process Python application.  This document describes the data flow, module responsibilities, and extension points so contributors can understand the codebase quickly.
+RPG Watcher is a single-process Python application.  This document describes the data flow, module responsibilities, and extension points so contributors can understand the codebase quickly.
 
 ---
 
@@ -192,7 +192,7 @@ See [configuration.md](configuration.md) for the full reference with types, defa
 ## Directory Layout
 
 ```
-TheWatcher/
+RPG Watcher/
 ├── src/
 │   ├── __init__.py
 │   ├── bot.py          ← entry point, slash commands
